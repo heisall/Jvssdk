@@ -1,0 +1,371 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AD5FB7351A52AFBE00A85CCE /* JVCCloudSEESDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = AD5FB7341A52AFBE00A85CCE /* JVCCloudSEESDK.h */; };
+		AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */; };
+		AD5FB73D1A52AFBE00A85CCE /* libJVCCloudSEESDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AD5FB73E1A52AFBE00A85CCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD5FB7291A52AFBD00A85CCE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD5FB7301A52AFBD00A85CCE;
+			remoteInfo = JVCCloudSEESDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AD5FB72F1A52AFBD00A85CCE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				AD5FB7351A52AFBE00A85CCE /* JVCCloudSEESDK.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJVCCloudSEESDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5FB7341A52AFBE00A85CCE /* JVCCloudSEESDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDK.h; sourceTree = "<group>"; };
+		AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEESDK.m; sourceTree = "<group>"; };
+		AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JVCCloudSEESDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5FB7421A52AFBE00A85CCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AD5FB72E1A52AFBD00A85CCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD5FB7391A52AFBE00A85CCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD5FB73D1A52AFBE00A85CCE /* libJVCCloudSEESDK.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AD5FB7281A52AFBD00A85CCE = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7331A52AFBD00A85CCE /* JVCCloudSEESDK */,
+				AD5FB7401A52AFBE00A85CCE /* JVCCloudSEESDKTests */,
+				AD5FB7321A52AFBD00A85CCE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AD5FB7321A52AFBD00A85CCE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */,
+				AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD5FB7331A52AFBD00A85CCE /* JVCCloudSEESDK */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7341A52AFBE00A85CCE /* JVCCloudSEESDK.h */,
+				AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */,
+			);
+			path = JVCCloudSEESDK;
+			sourceTree = "<group>";
+		};
+		AD5FB7401A52AFBE00A85CCE /* JVCCloudSEESDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7411A52AFBE00A85CCE /* Supporting Files */,
+			);
+			path = JVCCloudSEESDKTests;
+			sourceTree = "<group>";
+		};
+		AD5FB7411A52AFBE00A85CCE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7421A52AFBE00A85CCE /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD5FB7451A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDK" */;
+			buildPhases = (
+				AD5FB72D1A52AFBD00A85CCE /* Sources */,
+				AD5FB72E1A52AFBD00A85CCE /* Frameworks */,
+				AD5FB72F1A52AFBD00A85CCE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JVCCloudSEESDK;
+			productName = JVCCloudSEESDK;
+			productReference = AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		AD5FB73B1A52AFBE00A85CCE /* JVCCloudSEESDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD5FB7481A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDKTests" */;
+			buildPhases = (
+				AD5FB7381A52AFBE00A85CCE /* Sources */,
+				AD5FB7391A52AFBE00A85CCE /* Frameworks */,
+				AD5FB73A1A52AFBE00A85CCE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD5FB73F1A52AFBE00A85CCE /* PBXTargetDependency */,
+			);
+			name = JVCCloudSEESDKTests;
+			productName = JVCCloudSEESDKTests;
+			productReference = AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AD5FB7291A52AFBD00A85CCE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = chenzhenyang;
+				TargetAttributes = {
+					AD5FB7301A52AFBD00A85CCE = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					AD5FB73B1A52AFBE00A85CCE = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = AD5FB72C1A52AFBD00A85CCE /* Build configuration list for PBXProject "JVCCloudSEESDK" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AD5FB7281A52AFBD00A85CCE;
+			productRefGroup = AD5FB7321A52AFBD00A85CCE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */,
+				AD5FB73B1A52AFBE00A85CCE /* JVCCloudSEESDKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD5FB73A1A52AFBE00A85CCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AD5FB72D1A52AFBD00A85CCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD5FB7381A52AFBE00A85CCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AD5FB73F1A52AFBE00A85CCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */;
+			targetProxy = AD5FB73E1A52AFBE00A85CCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AD5FB7431A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		AD5FB7441A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		AD5FB7461A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AD5FB7471A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		AD5FB7491A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = JVCCloudSEESDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AD5FB74A1A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = JVCCloudSEESDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD5FB72C1A52AFBD00A85CCE /* Build configuration list for PBXProject "JVCCloudSEESDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7431A52AFBE00A85CCE /* Debug */,
+				AD5FB7441A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD5FB7451A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7461A52AFBE00A85CCE /* Debug */,
+				AD5FB7471A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		AD5FB7481A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7491A52AFBE00A85CCE /* Debug */,
+				AD5FB74A1A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AD5FB7291A52AFBD00A85CCE /* Project object */;
+}

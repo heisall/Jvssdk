@@ -13,11 +13,13 @@
 #define TYPE_3GMO_UDP     5 //连接手机码流
 #define TYPE_3GMOHOME_UDP 6 //采用PC身份连接 可以连接和PC一样的码流
 
-
 #define JVN_REQ_CHECK       0x10//请求录像检索
 #define JVN_CMD_PLAYSTOP    0x36//停止播放
 #define JVN_CMD_PLAYPAUSE   0x37//暂停播放
 #define JVN_CMD_PLAYGOON    0x38//继续播放
+#define JVN_REQ_CHAT        0x40//请求语音聊天
+#define JVN_CMD_CHATSTOP    0x43//停止语音聊天
+#define JVN_REQ_TEXT        0x50//请求文本聊天
 #define JVN_CMD_VIDEO       0x70//实时监控
 #define JVN_RSP_PLAYOVER    0x32//回放完成
 
@@ -30,22 +32,23 @@ static  NSString  * const KJVCRemotePlayBackType     = @"Type";           //远�
 //连接返回的状态信息
 enum JVCConnectResult{
     
-    JVCConnectResultSucceed                        = 1,  //连接成功
-    JVCConnectResultDisconnect                     = 2,  //断开连接成功
-    JVCConnectResultFailed                  = 4,  //连接失败
-    JVCConnectResultExceptionDisconnected          = 6,  //连接异常断开
-    JVCConnectResultServiceStop                    = 7,  //服务停止
-    JVCConnectResultDisconnectFailed               = 8,  //断开连接失败
-    JVCConnectResultYstServiceStop                 = 9,  //云视通服务停止
-    JVCConnectResultVerifyFailed                   = 10, //身份验证失败
-    JVCConnectResultConnectMaxNumber               = 11, //超过连接最大数
-    JVCConnectResultNotExistChannel                = 12, //通道不存在
+    JVCConnectResultSucceed               = 1,//连接成功
+    JVCConnectResultDisconnect            = 2,//断开连接成功
+    JVCConnectResultFailed                = 4,//连接失败
+    JVCConnectResultExceptionDisconnected = 6,//连接异常断开
+    JVCConnectResultServiceStop           = 7,//服务停止
+    JVCConnectResultDisconnectFailed      = 8,//断开连接失败
+    JVCConnectResultYstServiceStop        = 9,//云视通服务停止
+    JVCConnectResultVerifyFailed          = 10,//身份验证失败
+    JVCConnectResultConnectMaxNumber      = 11,//超过连接最大数
+    JVCConnectResultNotExistChannel       = 12,//通道不存在
 };
 
 //远程操作的类型
 enum JVCRemoteOperationType {
     
     JVCRemoteOperationTypeYTO                     = 0, //云台操作
+    JVCRemoteOperationTypeVoiceIntercom           = 4, //语音对讲
     JVCRemoteOperationTypeRemotePlaybackSEEK      = 6, //远程回放快进
 };
 
@@ -78,6 +81,29 @@ enum JVCRemotePlayBackVideoStateType {
     JVCRemotePlayBackVideoStateTypeEnd     = 102, //远程回放结束
     JVCRemotePlayBackVideoStateTypeFailed  = 103, //远程回放失败
     JVCRemotePlayBackVideoStateTypeTimeOut = 104, //远程回放超时
+};
+
+//语音对讲状态
+enum JVCVoiceInterStateType {
+    
+    JVCVoiceInterStateType_Succeed  = 0,
+    JVCVoiceInterStateType_End      = 1,
+    
+};
+
+//语音对讲请求
+enum JVCTextChatType {
+    
+    JVCTextChatType_Succeed                = 82,
+    JVCTextChatType_Stop                   = 83,
+    JVCTextChatType_setTalkModel           = 1007,  //设置家用IPC的语音对讲模式
+};
+
+//设备设备的对讲模式
+enum JVCHomeIPCTalkType {
+    
+    JVCHomeIPCTalkTypeTalk    = 1, // 1:设备播放声音，不采集声音
+    JVCHomeIPCTalkTypeNoTalk  = 0, // 0:设备采集 不播放声音
 };
 
 #endif

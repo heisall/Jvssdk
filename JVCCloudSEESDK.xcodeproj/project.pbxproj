@@ -35,10 +35,10 @@
 		AD5FB7AC1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79A1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m */; };
 		AD5FB7AD1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79B1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m */; };
 		AD5FB7AE1A52B1DC00A85CCE /* JVCPlaySoundHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */; };
-		AD5FB7AF1A52B1DC00A85CCE /* JVCVoiceIntercomHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A01A52B1DC00A85CCE /* JVCVoiceIntercomHelper.m */; };
 		AD5FB7B01A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */; };
 		AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A41A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m */; };
 		AD5FB7B21A52B1DC00A85CCE /* JVCStruct2Dic.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */; };
+		ADBEA03C1A8893FF00753852 /* JVCVoiceIntercomHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,8 +120,6 @@
 		AD5FB79C1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEENetworkGeneralHelper.h; sourceTree = "<group>"; };
 		AD5FB79D1A52B1DC00A85CCE /* JVCPlaySoundHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCPlaySoundHelper.h; sourceTree = "<group>"; };
 		AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCPlaySoundHelper.m; sourceTree = "<group>"; };
-		AD5FB79F1A52B1DC00A85CCE /* JVCVoiceIntercomHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVoiceIntercomHelper.h; sourceTree = "<group>"; };
-		AD5FB7A01A52B1DC00A85CCE /* JVCVoiceIntercomHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCVoiceIntercomHelper.m; sourceTree = "<group>"; };
 		AD5FB7A11A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEEManagerHelper.h; sourceTree = "<group>"; };
 		AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEEManagerHelper.m; sourceTree = "<group>"; };
 		AD5FB7A31A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESendGeneralHelper.h; sourceTree = "<group>"; };
@@ -129,6 +127,8 @@
 		AD5FB7A51A52B1DC00A85CCE /* JVCStruct2Dic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCStruct2Dic.h; sourceTree = "<group>"; };
 		AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCStruct2Dic.m; sourceTree = "<group>"; };
 		AD5FB8F81A53833F00A85CCE /* JVCCloudSEESDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDK.h; sourceTree = "<group>"; };
+		ADBEA03A1A8893FF00753852 /* JVCVoiceIntercomHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVoiceIntercomHelper.h; sourceTree = "<group>"; };
+		ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCVoiceIntercomHelper.m; sourceTree = "<group>"; };
 		ADE7C9761A53F49E006B7144 /* JVCCloudSEESDKMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDKMacro.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -304,10 +304,10 @@
 				AD5FB79A1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m */,
 				AD5FB79B1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m */,
 				AD5FB79C1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.h */,
+				ADBEA03A1A8893FF00753852 /* JVCVoiceIntercomHelper.h */,
+				ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */,
 				AD5FB79D1A52B1DC00A85CCE /* JVCPlaySoundHelper.h */,
 				AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */,
-				AD5FB79F1A52B1DC00A85CCE /* JVCVoiceIntercomHelper.h */,
-				AD5FB7A01A52B1DC00A85CCE /* JVCVoiceIntercomHelper.m */,
 				AD5FB7A11A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.h */,
 				AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */,
 				AD5FB7A31A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.h */,
@@ -409,7 +409,6 @@
 				AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */,
 				AD5FB7AA1A52B1DC00A85CCE /* JVCQueueHelper.mm in Sources */,
 				AD5FB7771A52B17F00A85CCE /* AQRecorder.mm in Sources */,
-				AD5FB7AF1A52B1DC00A85CCE /* JVCVoiceIntercomHelper.m in Sources */,
 				AD5FB7761A52B17F00A85CCE /* AQPlayer.mm in Sources */,
 				AD5FB7B01A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m in Sources */,
 				AD5FB7881A52B1C200A85CCE /* JVCRecordVideoInter.mm in Sources */,
@@ -420,6 +419,7 @@
 				AD5FB7AE1A52B1DC00A85CCE /* JVCPlaySoundHelper.m in Sources */,
 				AD5FB78B1A52B1C200A85CCE /* data_queue.mm in Sources */,
 				AD5FB7A91A52B1DC00A85CCE /* JVCAudioQueueHelper.mm in Sources */,
+				ADBEA03C1A8893FF00753852 /* JVCVoiceIntercomHelper.m in Sources */,
 				AD5FB7A71A52B1DC00A85CCE /* JVCRecordVideoHelper.m in Sources */,
 				AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */,
 				AD5FB7AC1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m in Sources */,

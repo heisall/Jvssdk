@@ -30,6 +30,23 @@
  */
 -(void)videoDataCallBackMath:(int)nLocalChannel  withPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber;
 
+/**
+ *  开始请求文本聊天的回调
+ *
+ *  @param nLocalChannel 本地显示窗口的编号
+ *  @param nDeviceType   设备的类型
+ *  @param isNvrDevice   是否是NVR设备
+ */
+-(void)RequestTextChatCallback:(int)nLocalChannel withDeviceType:(int)nDeviceType withIsNvrDevice:(BOOL)isNvrDevice;
+
+/**
+ *  文本聊天请求的结果回调
+ *
+ *  @param nLocalChannel 本地本地显示窗口的编号
+ *  @param nStatus       文本聊天的状态
+ */
+-(void)RequestTextChatStatusCallBack:(int)nLocalChannel withStatus:(int)nStatus;
+
 @end
 
 //远程回放协议
@@ -63,10 +80,25 @@
 
 @end
 
+@protocol JVCAudioDelegate <NSObject>
+
+@optional
+
+/**
+ *  语音对讲的回调
+ *
+ *  @param VoiceInterState 对讲的状态
+ */
+-(void)VoiceInterComCallBack:(int)VoiceInterState;
+
+@end
+
+
 @interface JVCCloudSEESDK : NSObject
 
 @property(nonatomic,assign)id <JVCCloudSEESDKDelegate>            jvcCloudSEESDKDelegate;         //视频、连接信息
 @property(nonatomic,assign)id <JVCRemotePlaybackVideoDelegate>    jvcRemotePlaybackVideoDelegate; //远程回放
+@property(nonatomic,assign)id <JVCAudioDelegate>                  jvcAudioDelegate;               //音频代理
 
 /**
  *  单例 (所有操作请先初始化SDK)

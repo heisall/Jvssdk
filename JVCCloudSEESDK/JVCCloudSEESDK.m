@@ -61,19 +61,6 @@
 //
 //@end
 
-@protocol ystNetWorkAudioDelegate <NSObject>
-
-@optional
-
-/**
- *  语音对讲的回调
- *
- *  @param VoiceInterState 对讲的状态
- */
--(void)VoiceInterComCallBack:(int)VoiceInterState;
-
-@end
-
 @protocol ystNetWorkHelpRemoteOperationDelegate <NSObject>
 
 @optional
@@ -140,16 +127,15 @@
 
 @end
 
-@interface JVCCloudSEESDK () {
+@interface JVCCloudSEESDK () <JVCCloudSEEManagerHelperDelegate>{
     
     NSMutableString *remoteDownSavePath;
     BOOL            isInitSdk;            //YES:已经初始化过
     
         
-//    id <ystNetWorkHelpDelegate>                      ystNWHDelegate;     //视频
+//    id <ystNetWorkHelpDelegate>                      ystNWHDelegate;   //视频
     id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;    //远程请求操作
-    id <ystNetWorkAudioDelegate>                     ystNWADelegate;     //音频
-//    id <ystNetWorkHelpRemotePlaybackVideoDelegate>   ystNWRPVDelegate;   //远程回放
+//    id <ystNetWorkHelpRemotePlaybackVideoDelegate>   ystNWRPVDelegate; //远程回放
     id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
     id <ystNetWorkHelpVideoDelegate>                 videoDelegate;      //录像
     id <JVCCloudSEENetworkHelperCaptureDelegate>     jvcCloudSEENetworkHelperCaptureDelegate; //抓拍
@@ -157,7 +143,6 @@
 }
 
 @property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
-@property(nonatomic,assign)id <ystNetWorkAudioDelegate>                     ystNWADelegate;
 @property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;
 @property(nonatomic,assign)id <ystNetWorkHelpVideoDelegate>                 videoDelegate;
 @property(nonatomic,assign)id <JVCCloudSEENetworkHelperCaptureDelegate>     jvcCloudSEENetworkHelperCaptureDelegate; //抓拍
@@ -258,7 +243,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
 
 @synthesize jvcCloudSEESDKDelegate;
 @synthesize ystNWRODelegate;
-@synthesize ystNWADelegate;
+@synthesize jvcAudioDelegate;
 @synthesize jvcRemotePlaybackVideoDelegate;
 @synthesize ystNWTDDelegate;
 @synthesize videoDelegate;
@@ -275,7 +260,7 @@ JVCCloudSEEManagerHelper *jvChannel[kJVCCloudSEENetworkHelperWithConnectMaxNumbe
 NSMutableArray           *amOpenGLViews;       //存放的与个jvChannel相同数量的OpenGL对象
 
 static const int          kDisconnectTimeDelay     = 500;  //单位毫秒
-static JVCCloudSEESDK *jvcCloudSEENetworkHelper = nil;
+static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
 
 /**
  *  单例
@@ -813,11 +798,11 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             [currentChannelObj startPopVideoDataThread];
             
             
-//            if (jvcCloudSEENetworkHelper.ystNWHDelegate != nil && [jvcCloudSEENetworkHelper.ystNWHDelegate respondsToSelector:@selector(RequestTextChatCallback:withDeviceType:withIsNvrDevice:)]) {
-//                
-//                [jvcCloudSEENetworkHelper.ystNWHDelegate RequestTextChatCallback:currentChannelObj.nShowWindowID+1 withDeviceType:currentChannelObj.nConnectDeviceType withIsNvrDevice:currentChannelObj.isNvrDevice];
-//            }
-//            
+            if (jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate respondsToSelector:@selector(RequestTextChatCallback:withDeviceType:withIsNvrDevice:)]) {
+                
+                [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate RequestTextChatCallback:currentChannelObj.nShowWindowID+1 withDeviceType:currentChannelObj.nConnectDeviceType withIsNvrDevice:currentChannelObj.isNvrDevice];
+            }
+            
 //            if (jvcCloudSEENetworkHelper.ystNWHDelegate != nil && [jvcCloudSEENetworkHelper.ystNWHDelegate respondsToSelector:@selector(RequestTextChatIs05DeviceCallback:withDeviceModel:)]) {
 //                
 //                [jvcCloudSEENetworkHelper.ystNWHDelegate RequestTextChatIs05DeviceCallback:currentChannelObj.nShowWindowID+1 withDeviceModel:JVCVideoDecoderHelperObj.isDecoderModel];
@@ -1133,10 +1118,10 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand];
             
-            if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
-                
-                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
-            }
+//            if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
+//                
+//                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+//            }
             
         }
             break;
@@ -1175,7 +1160,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             if (currentChannelObj.isVoiceIntercom) {
                 
-                [currentChannelObj setVoiceIntercomMode:!remoteOperationCommand];
+                [currentChannelObj setVoiceIntercomMode:remoteOperationCommand];
                 
                 [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand];
             }
@@ -1261,9 +1246,9 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
     
     [currentChannelObj retain];
     
-    if (self.ystNWADelegate !=nil && [self.ystNWADelegate respondsToSelector:@selector(VoiceInterComCallBack:)]) {
+    if (self.jvcAudioDelegate !=nil && [self.jvcAudioDelegate respondsToSelector:@selector(VoiceInterComCallBack:)]) {
         
-        [self.ystNWADelegate VoiceInterComCallBack:nVoiceInterStateType];
+        [self.jvcAudioDelegate VoiceInterComCallBack:nVoiceInterStateType];
     }
     
     if (nVoiceInterStateType == VoiceInterStateType_Succeed) {
@@ -1543,10 +1528,10 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
         case JVN_RSP_TEXTACCEPT:
         case JVN_CMD_TEXTSTOP:{
             
-//            if (jvcCloudSEENetworkHelper.ystNWHDelegate != nil && [jvcCloudSEENetworkHelper.ystNWHDelegate respondsToSelector:@selector(RequestTextChatStatusCallBack:withStatus:)]) {
-//                
-//                [jvcCloudSEENetworkHelper.ystNWHDelegate RequestTextChatStatusCallBack:currentChannelObj.nShowWindowID+1 withStatus:uchType];
-//            }
+            if (jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate respondsToSelector:@selector(RequestTextChatStatusCallBack:withStatus:)]) {
+                
+                [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate RequestTextChatStatusCallBack:currentChannelObj.nShowWindowID+1 withStatus:uchType];
+            }
         }
             break;
             

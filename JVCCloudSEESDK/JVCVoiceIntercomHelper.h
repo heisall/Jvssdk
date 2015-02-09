@@ -26,11 +26,14 @@
 @interface JVCVoiceIntercomHelper : JVCPlaySoundHelper <receiveAudioDataDelegate>{
 
    int      nAudioCollectionType;     //语音对讲音频采集的类型
+   BOOL     isTalkMode;               // FALSE:双向对讲 TRUE:单向对讲
     
     id <JVCVoiceIntercomHelperDeleage>  jvcVoiceIntercomHelperDeleage;
 }
 
 @property (nonatomic,assign) int  nAudioCollectionType;
+@property (nonatomic,assign) BOOL isTalkMode;
+@property (nonatomic,assign) BOOL isRecoderState; //YES:采集发送 NO:采集不发送 
 @property (nonatomic,assign) id<JVCVoiceIntercomHelperDeleage> jvcVoiceIntercomHelperDeleage;
 
 
@@ -57,11 +60,5 @@
  */
 -(BOOL)encoderLocalRecorderData:(char *)Audiodata nEncodeAudioOutdataSize:(int *)nEncodeAudioOutdataSize encodeOutAudioData:(char *)encodeOutAudioData encodeOutAudioDataSize:(int)encodeOutAudioDataSize;
 
-/**
- *  设置音频采集的模式
- *
- *  @param state YES:采集不发送 NO:采集发送
- */
--(void)setRecordState:(BOOL)state;
 
 @end

@@ -9,18 +9,13 @@
 #import "JVCVoiceIntercomHelper.h"
 #import "JVCCloudSEENetworkMacro.h"
 
-@interface JVCVoiceIntercomHelper (){
-
-      int ntalkMode;  //YES:采集不发送 NO:采集发送
-}
-
-@end
 
 @implementation JVCVoiceIntercomHelper
 
 
 @synthesize   nAudioCollectionType;
 @synthesize   jvcVoiceIntercomHelperDeleage;
+@synthesize   isTalkMode;
 
 AudioFrame    *audioFrame;
 char          decodeAudioCache[76]     = {0};
@@ -76,19 +71,20 @@ char          encodeAudioOutData[1024] = {0}; //语音对讲编码后的数据
     return result;
 }
 
+
 /**
  *  设置音频采集的模式
  *
- *  @param state YES:采集不发送 NO:采集发送
+ *  @param state YES:采集发送 NO:采集不发送
  */
 -(void)setRecordState:(BOOL)state{
 
+    _isRecoderState = state;
+    
     AQSController *aqsControllerObj = [AQSController shareAQSControllerobjInstance];
     
-    ntalkMode = !state;
-    
-    [aqsControllerObj changeRecordState:ntalkMode];
-    
+    [aqsControllerObj changeRecordState:_isRecoderState];
+
 }
 
 /**
@@ -99,10 +95,14 @@ char          encodeAudioOutData[1024] = {0}; //语音对讲编码后的数据
  *  @param networkBuffer         音频数据
  *  @param nBufferSize           音频数据大小
  *
- *  @return YES 转换失败 NO:转换失败
+ *  @return YES 转换成功 NO:转换失败
  */
 -(BOOL)convertSoundBufferByNetworkBuffer:(int)nConnectDeviceType isExistStartCode:(BOOL)isExistStartCode networkBuffer:(char *)networkBuffer nBufferSize:(int)nBufferSize  {
 
+    if (self.isTalkMode && self.isRecoderState) {
+        
+        return FALSE;
+    }
     int                                   nSize               = nBufferSize;
     
     BOOL                                  isDecoderAudioState = YES;
@@ -168,7 +168,7 @@ char          encodeAudioOutData[1024] = {0}; //语音对讲编码后的数据
     /**
      *  语音对讲的播放函数
      */
-    if (isDecoderAudioState && !ntalkMode) {
+    if (isDecoderAudioState) {
         
         OpenALBufferViewcontroller *openAlObj = [OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance];
         int                     playSoundType = isAudioType == YES ? playSoundType_8k16B : playSoundType_8k8B;
@@ -324,6 +324,11 @@ char          encodeAudioOutData[1024] = {0}; //语音对讲编码后的数据
 #pragma mark AQSController Deleage
 
 -(void)receiveAudioDataCallBack:(char *)audionData audioDataSize:(long)audioDataSize{
+    
+    if (self.isTalkMode && !self.isRecoderState) {
+        
+        return;
+    }
     
     if (self.jvcVoiceIntercomHelperDeleage != nil && [self.jvcVoiceIntercomHelperDeleage respondsToSelector:@selector(sendRecordAudioData:withAudioDataSize:)] ) {
         

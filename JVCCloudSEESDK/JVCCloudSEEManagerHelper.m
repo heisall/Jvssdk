@@ -90,6 +90,7 @@ char          pcmBuffer[1024] ={0};
         memset(jvcOutVideoFrame->decoder_v, 0, sizeof(jvcOutVideoFrame->decoder_v));
         
         self.isConnectShowVideo = TRUE;
+        self.isHomeIPC          = YES;
     }
     
     return self;
@@ -455,10 +456,9 @@ char          pcmBuffer[1024] ={0};
     [self.jvcVoiceIntercomHelper openAudioDecoder:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode];
     self.isVoiceIntercom  = self.jvcVoiceIntercomHelper.isOpenDecoder;
     self.jvcVoiceIntercomHelper.jvcVoiceIntercomHelperDeleage = self;
-
-    [self setVoiceIntercomMode:self.isHomeIPC];
     
-    [self.jvcVoiceIntercomHelper setRecordState:self.isHomeIPC];
+    self.jvcVoiceIntercomHelper.isTalkMode      = self.isHomeIPC;
+    self.jvcVoiceIntercomHelper.isRecoderState  = !self.isHomeIPC;
     
     if (!self.jvcAudioQueueHelper) {
         
@@ -469,7 +469,7 @@ char          pcmBuffer[1024] ={0};
     }
     
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate  = self;
-    [self performSelectorOnMainThread:@selector(popAudioDataThread) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(popAudioDataThread) withObject:nil waitUntilDone:NO];;
 }
 
 /**

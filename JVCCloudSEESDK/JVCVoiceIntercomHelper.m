@@ -8,6 +8,7 @@
 
 #import "JVCVoiceIntercomHelper.h"
 #import "JVCCloudSEENetworkMacro.h"
+#import "JVCAudioCodecInterface.h"
 
 
 @implementation JVCVoiceIntercomHelper

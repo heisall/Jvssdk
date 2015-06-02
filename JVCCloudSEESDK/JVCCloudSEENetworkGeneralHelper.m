@@ -203,7 +203,7 @@ static const    int     kValueAndKeyLength                              = 1024*2
  *
  *  @return 视频的帧速率
  */
--(double)getPlayVideoframeFrate:(int)startCode buffer_O:(char *)buffer_O buffer_O_size:(int)buffer_O_size nAudioType:(int *)nAudionType{
+-(double)getPlayVideoframeFrate:(int)startCode buffer_O:(char *)buffer_O buffer_O_size:(int)buffer_O_size nAudioType:(int *)nAudionType wVideoCodecID:(int *)wVideoCodecID{
     
     double frameRate = kDefaultFrameRate;
     
@@ -225,6 +225,8 @@ static const    int     kValueAndKeyLength                              = 1024*2
             
             frameRate   = ((double)fileHeader->wFrameRateNum)/((double)fileHeader->wFrameRateDen);
             *nAudionType = fileHeader->wAudioCodecID;
+            
+            *wVideoCodecID = fileHeader->wVideoCodecID;
             
             free(fileHeader);
         }

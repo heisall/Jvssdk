@@ -64,6 +64,7 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
     BOOL                   isConnectShowVideo;  //连接是否显示视频 默认显示
     int                    nConnectType;        //连接类型
     BOOL                   isHomeIPC;           //是否是家用IPC YES: 是
+    int                    videoCodecID;         //视频格式
     
     JVCVideoDecoderHelper                   * decodeModelObj;      //解码器属性类
     JVCRemotePlayBackWithVideoDecoderHelper * playBackDecoderObj;  //远程回放解码器属性类
@@ -100,7 +101,8 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
 @property (nonatomic,assign) BOOL                     isVideoPause;
 @property (nonatomic,assign) BOOL                     isConnectShowVideo;
 @property (nonatomic,assign) int                      nConnectType;
-@property (nonatomic,assign) BOOL                     isHomeIPC;          
+@property (nonatomic,assign) BOOL                     isHomeIPC;
+@property (nonatomic,assign) int                      videoCodecID;
 @property (nonatomic,retain) JVCVideoDecoderHelper                     * decodeModelObj;
 @property (nonatomic,retain) JVCRemotePlayBackWithVideoDecoderHelper   * playBackDecoderObj;
 @property (nonatomic,retain) JVCQueueHelper                            * jvcQueueHelper;

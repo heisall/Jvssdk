@@ -393,6 +393,8 @@ typedef struct
 #define RC_EX_QRCODE         0x0e
 #define RC_EX_IVP            0x0f
 #define RC_EX_DOORALARM      0x10
+#define RC_EX_PTZUPDATE		 0x11
+#define RC_EX_COMTRANS		 0x12
 
 //网络设置模块 （拓展）
 #define EX_ADSL_ON         0x01    //连接ADSL消息
@@ -407,6 +409,9 @@ typedef struct
 #define EX_WIFI_CON        0x0a
 #define EX_WIFI_AP_CONFIG  0x0b
 #define EX_START_AP        0x0c    //开启AP
+#define EX_START_STA       0x0d 	//开启STA
+#define EX_COMTRANS_SEND				0x26	 //串口发
+#define EX_COMTRANS_RESV				0x27	 //串口收
 
 //账户设置模块
 #define EX_ACCOUNT_OK         0x01
@@ -417,6 +422,7 @@ typedef struct
 #define EX_ACCOUNT_MODIFY     0x06
 
 #define RC_EX_FlashJpeg	  0x0a
+#define RC_EX_COMTRANS				0x12
 
 
 //设备系统升级指令,lck20120207

@@ -1017,7 +1017,6 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     m_pstExt->acData[0]=0;
     
     JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (PAC*)&m_stPacket, 20+strlen(m_pstExt->acData));
-
 }
 
 /**
@@ -1067,5 +1066,189 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     JVC_SendData(nJVChannleID, JVN_RSP_TEXTDATA, (PAC*)&m_stPacket, 20+strlen(m_pstExt->acData));
 }
 
+/**
+ *  透传协议，
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ *  @param content         发送的内容
+ */
+-(void)RemoteComtrans:(int)nJvChannelID content:(const char *) acBuffer contentLength:(int)length{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType=RC_EXTEND;
+    m_stPacket.nPacketCount=RC_EX_COMTRANS;
+    
+    EXTEND *m_pstExt=(EXTEND*)m_stPacket.acData;
+    m_pstExt->acData[length]=0;
+    m_pstExt->nType=EX_COMTRANS_SEND;
+    m_pstExt->nParam3 =length;
+    memcpy(m_pstExt->acData,acBuffer, length);
+    
+    NSLog(@"发送的数据=%s=长度=%d==%s",acBuffer,length,m_pstExt->acData);
+    
+    JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (const char*)&m_stPacket, 20+strlen(m_pstExt->acData));
+    
+}
 
+
+
+/**
+ *  OSD显示问题
+ *
+ *  @param nPosition    显示位置
+ *  @param nTimePosition  是否隐藏
+ */
+-(void)RemoteSendOSDOperation:(int)nJvChannelID nPosition:(int) nPosition nTimePosition:(int)nTimePosition{
+    
+    
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType=RC_SETPARAM;
+    
+    m_stPacket.acData[255]=0;
+    
+    char acBuffer[256]={0};
+    sprintf(acBuffer,"[ALL];nPosition=%d;nTimePosition=%d;",nPosition,nTimePosition);
+    memcpy(m_stPacket.acData,acBuffer, strlen(acBuffer));
+    
+    JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (const char*)&m_stPacket, 20+strlen(m_stPacket.acData));
+}
+
+/**
+ *  修改设备的用户名密码
+ *
+ *  @param nJVChannleID 本地连接的通道号
+ *  @param userName     用户名
+ *  @param passWord     密码
+ */
+- (void)RemoteModifyDeviceInfo:(int)nJVChannleID  withUserName:(NSString *)userName withPassWord:(NSString *)passWord describe:(NSString *)describe
+{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType  = RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_ACCOUNT;
+    
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType = EX_ACCOUNT_MODIFY;
+    m_pstExt->nParam1 = POWER_ADMIN;
+    
+    char acBuffer[SIZE_PW+SIZE_ID+SIZE_DESCRIPT]={0};
+    
+    memcpy(acBuffer, [userName UTF8String], SIZE_ID);
+    memcpy(acBuffer+SIZE_ID, [passWord UTF8String], SIZE_PW);
+    memcpy(acBuffer+SIZE_ID+SIZE_PW, [describe UTF8String], SIZE_DESCRIPT);
+    
+    
+    memcpy(m_pstExt->acData, acBuffer,SIZE_PW+SIZE_ID+SIZE_DESCRIPT);
+    
+    JVC_SendData(nJVChannleID, JVN_RSP_TEXTDATA, (const char*)&m_stPacket, 20+sizeof(acBuffer));
+}
+
+
+/**
+ *  玩具协议开启AP请求
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenAPRequest:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_START_AP;
+    pstExt->nParam1 = 0;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
+
+
+/**
+ *  玩具协议开启AP
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenAPCmd:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_START_AP;
+    pstExt->nParam1 = 1;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
+
+/**
+ *  玩具协议开启STA
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenSTARequest:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_START_STA;
+    pstExt->nParam1 = 0;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
+
+/**
+ *  玩具协议开启STA
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenSTACmd:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_START_STA;
+    pstExt->nParam1 = 1;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
+
+/**
+ *  玩具协议获取wifi信息
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendRequestCurrentNetworkInfo:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_NW_REFRESH;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
+
+/**
+ *  玩具协议设备搜索wifi热点
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendDeviceSearchAP:(int)nJvChannelID
+{
+    PAC	packet;
+    EXTEND	*pstExt;
+    memset(&packet, 0, sizeof(PAC));
+    packet.nPacketType	= RC_EXTEND;
+    packet.nPacketCount = RC_EX_NETWORK;
+    pstExt = (EXTEND*)packet.acData;
+    pstExt->nType	= EX_WIFI_AP;
+    JVC_SendData(nJvChannelID,JVN_RSP_TEXTDATA,(unsigned char *)&packet, 20);
+}
 @end

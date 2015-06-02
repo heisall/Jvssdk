@@ -41,7 +41,7 @@ DataQueue::DataQueue(char *semName) {
         }
         
         //
-        assert(false);
+//        assert(false);
         return;
     }
 #else

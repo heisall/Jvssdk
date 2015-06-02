@@ -8,6 +8,8 @@
 
 #import "JVCVideoDecoderHelper.h"
 #import "JVCVideoDecoderInterface.h"
+#import <pthread.h>
+#import "JVCDecoderMacro.h"
 
 @interface JVCVideoDecoderHelper () {
     
@@ -33,6 +35,7 @@ char  captureImageBuffer[1280*720*3] ={0};
     pthread_mutex_destroy(&videoMutex);
     
     free(outVideoFrame);
+    outVideoFrame = NULL;
     
     [super dealloc];
 }
@@ -45,6 +48,7 @@ char  captureImageBuffer[1280*720*3] ={0};
         pthread_mutex_init(&videoMutex, nil);
         
         outVideoFrame = malloc(sizeof(DecoderOutVideoFrame));
+        memset(outVideoFrame, 0, sizeof(DecoderOutVideoFrame));
     }
     
     return self;
@@ -70,41 +74,42 @@ char  captureImageBuffer[1280*720*3] ={0};
 #pragma mark 解码器相关的处理模块
 
 /**
- *  打开解码器
+ *  打开解码器 包括H264和H265
  *
  *  @param nVideoDecodeID 解码器编号(0~15)
  */
--(void)openVideoDecoder:(int)nVideoDecodeID{
+-(void)openVideoDecoder:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID{
     
     
     if (!self.isOpenDecoder) {
         
         if (self.nVideoWidth > 0 && self.nVideoHeight > 0) {
             
-            
+            self.isOpenDecoder   = TRUE;
+            nDecoderID = nVideoDecodeID;
             if (self.isDecoderModel) {
+                //int codecID = 0;
+                //                memset(outVideoFrame->decoder_y, 0, sizeof(outVideoFrame->decoder_y));
+                //                memset(outVideoFrame->decoder_u, 0, sizeof(outVideoFrame->decoder_u));
+                //                memset(outVideoFrame->decoder_v, 0, sizeof(outVideoFrame->decoder_v));
                 
-                memset(outVideoFrame->decoder_y, 0, sizeof(outVideoFrame->decoder_y));
-                memset(outVideoFrame->decoder_u, 0, sizeof(outVideoFrame->decoder_u));
-                memset(outVideoFrame->decoder_v, 0, sizeof(outVideoFrame->decoder_v));
-                
-                JVD05_DecodeOpen(nVideoDecodeID);
+                if(wVideoCodecID == IPC_VIDEO_DECODER_H265)
+                    JVD05_DecodeOpen(nVideoDecodeID, VIDEO_DECODER_H265);
+                else
+                    JVD05_DecodeOpen(nVideoDecodeID, VIDEO_DECODER_H264);
                 
             }else {
                 
-                 JVD04_DecodeOpen(self.nVideoWidth ,self.nVideoHeight ,nVideoDecodeID);
+                JVD04_DecodeOpen(self.nVideoWidth ,self.nVideoHeight ,nVideoDecodeID);
             }
             
-            nDecoderID = nVideoDecodeID;
-            
-            self.isOpenDecoder   = TRUE;
         }
     }
     else {
         
+        // DDLogError(@"%s---videoDecoder(解码器编号：%d) 打开失败，原因解码器已存在",__FUNCTION__,nVideoDecodeID);
     }
 }
-
 /**
  *  关闭解码器
  *
@@ -145,7 +150,7 @@ char  captureImageBuffer[1280*720*3] ={0};
  *
  *  @return 解码成功返回 0 否则失败
  */
--(int)decodeOneVideoFrame:(frame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(DecoderOutVideoFrame *)VideoOutFrame {
+-(int)decodeOneVideoFrame:(frame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(DecoderOutVideoFrame **)VideoOutFrame {
     
     int ndecoderStatus = -1;
     
@@ -160,7 +165,10 @@ char  captureImageBuffer[1280*720*3] ={0};
                 
                 [self videoLock];
                 
-                ndecoderStatus = JVD05_DecodeOneFrame(nDecoderID,videoFrame->nSize,videoFrame->buf,outVideoFrame->decoder_y,outVideoFrame->decoder_u,outVideoFrame->decoder_v,0,nSystemVersion,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
+                
+                ndecoderStatus = JVD05_DecodeOneFrame(nDecoderID,videoFrame->nSize,videoFrame->buf,&outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,0,nSystemVersion,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
+                NSLog(@"ndecoderStatus =========== %d", ndecoderStatus);
+                NSLog(@"nSize ==== %d", videoFrame->nSize);
                 
                 if (outVideoFrame->nWidth <=0 || outVideoFrame->nHeight <=0) {
                     
@@ -194,13 +202,16 @@ char  captureImageBuffer[1280*720*3] ={0};
                 outVideoFrame->nHeight = self.nVideoHeight;
                 outVideoFrame->nWidth  = self.nVideoWidth;
                 
-                ndecoderStatus = JVD04_DecodeOneFrame(videoFrame->buf,videoFrame->nSize, outVideoFrame->decoder_y,outVideoFrame->decoder_u,outVideoFrame->decoder_v,nDecoderID,videoFrame->nFrameType,nSystemVersion);
+                ndecoderStatus = JVD04_DecodeOneFrame(videoFrame->buf,videoFrame->nSize, &outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,nDecoderID,videoFrame->nFrameType,nSystemVersion);
                 
-                if (self.isCaptureImage) {
+                if (self.isCaptureImage || self.IsEnableSceneImages) {
                     
                     if (self.delegate !=nil && [self.delegate respondsToSelector:@selector(decoderModelCaptureImageCallBack:)]) {
                         
-                        NSData *captureImageData=[NSData dataWithBytes:outVideoFrame->decoder_y length:self.nVideoWidth*self.nVideoHeight*2+66];
+                        yuv_rgb_04(nDecoderID,(unsigned int*)(captureImageBuffer+66),nSystemVersion);
+                        CreateBitmap_04((unsigned char *)captureImageBuffer,outVideoFrame->nWidth,outVideoFrame->nHeight,nSystemVersion);
+                        
+                        NSData *captureImageData=[NSData dataWithBytes:captureImageBuffer length:outVideoFrame->nWidth*outVideoFrame->nHeight*2+66];
                         
                         [self.delegate decoderModelCaptureImageCallBack:captureImageData];
                     }
@@ -214,14 +225,17 @@ char  captureImageBuffer[1280*720*3] ={0};
             }
         }
         
+        //NSLog(@"%s-------outVideoFrame->nWidth=%d---outVideoFrame->nHeigh=%d",__FUNCTION__,outVideoFrame->nWidth,outVideoFrame->nHeight);
     }else{
         
+        NSLog(@"%s----视频解码失败(解码器编号：%d)，原因解码器未打开",__FUNCTION__,nDecoderID);
     }
     
-    *VideoOutFrame = *outVideoFrame;
+    *VideoOutFrame = outVideoFrame;
     
     return ndecoderStatus;
 }
+
 
 /**
  *  等待I帧处理

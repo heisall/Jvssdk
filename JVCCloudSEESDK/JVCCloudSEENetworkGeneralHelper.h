@@ -73,7 +73,7 @@
  *
  *  @return 视频的帧速率
  */
--(double)getPlayVideoframeFrate:(int)startCode buffer_O:(char *)buffer_O buffer_O_size:(int)buffer_O_size nAudioType:(int *)nAudionType;
+-(double)getPlayVideoframeFrate:(int)startCode buffer_O:(char *)buffer_O buffer_O_size:(int)buffer_O_size nAudioType:(int *)nAudionType wVideoCodecID:(int *)wVideoCodecID;
 
 /**
  *  根据云视通号获取云视通组号和编号

@@ -29,6 +29,10 @@ static  NSString  * const KJVCRemotePlayBackDate     = @"time";           //远�
 static  NSString  * const KJVCRemotePlayBackDisk     = @"disk";           //远程回放检索出文件存放的磁盘
 static  NSString  * const KJVCRemotePlayBackType     = @"Type";           //远程回放检索出文件存放的类型（A:报警 M：移动 T:定时 N:手动） 部分设备存在
 
+static  NSString  * const kkeyDeviceNum              = @"LandeviceNum";   //局域网搜索的云视通号
+static  NSString  * const kkeyDeviceIP               = @"landeviceIP";    //局域网搜索的IP
+static  NSString  * const kkeyDevicePort             = @"port";           //局域网搜索的port
+
 //连接返回的状态信息
 enum JVCConnectResult{
     
@@ -105,5 +109,35 @@ enum JVCHomeIPCTalkType {
     JVCHomeIPCTalkTypeTalk    = 1, // 1:设备播放声音，不采集声音
     JVCHomeIPCTalkTypeNoTalk  = 0, // 0:设备采集 不播放声音
 };
+
+static const  int KJVCMediaColumNUm                = 3;//一行的最大值
+static const  NSString *kKYCustomPhotoAlbumName    = @"test_photo";
+static const  NSString *kKYCustomVideoAlbumName    = @"test_Video";
+
+/**
+ *  图片浏览枚举
+ */
+enum PHOTOBROWSING{
+    
+    TYPE_PHOTO   = 0,
+    TYPE_VIDEO   = 1,
+    TYPE_ANOTHER = 2,
+};
+
+enum resultType{
+    
+    RESULT_ERROR      = 0,
+    RESULT_SUCCESSFUL = 1
+    
+};
+
+enum MATH_TYPE{
+    
+    MATH_TYPE_PHOTO = 0,
+    MATH_TYPE_VIDEO = 1,
+};
+
+
+
 
 #endif

@@ -12,7 +12,7 @@
 #import "AQSController.h"
 #import "AQPlayer.h"
 #import "AQRecorder.h"
-
+#import <AVFoundation/AVFoundation.h>
 
 
 @interface AQSController (){
@@ -123,11 +123,24 @@ char *OSTypeToStr(char *buf, OSType t)
     if (errorState) printf("ERROR INITIALIZING AUDIO SESSION! %d\n", (int)errorState);
 	else
 	{
-        UInt32 category = kAudioSessionCategory_PlayAndRecord;
-		errorState = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);
+        NSString *voiceType = [[NSUserDefaults standardUserDefaults] objectForKey:@"VOICETYPE"];
+        if (voiceType.length == 0) {
+            
+            UInt32 category = kAudioSessionCategory_PlayAndRecord;
+            errorState = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);
+            NSError *error = nil;
+            [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+            errorState = AudioSessionSetActive(true);
+            if (errorState) printf("AudioSessionSetActive (true) failed");
+            
+        }else{
         
-        errorState = AudioSessionSetActive(true);
-		if (errorState) printf("AudioSessionSetActive (true) failed");
+            UInt32 category = kAudioSessionCategory_PlayAndRecord;
+            errorState = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);
+            
+            errorState = AudioSessionSetActive(true);
+            if (errorState) printf("AudioSessionSetActive (true) failed");
+        }
         
     }
 	if (recorder->IsRunning())

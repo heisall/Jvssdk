@@ -149,4 +149,71 @@
  */
 - (void)getModifyDeviceList:(int)nJVChannleID;
 
+/**
+ *  透传协议，
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ *  @param content         发送的内容
+ */
+-(void)RemoteComtrans:(int)nJvChannelID content:(const char *) acBuffer contentLength:(int)length;
+
+/**
+ *  OSD显示问题
+ *
+ *  @param nPosition    显示位置
+ *  @param nTimePosition  是否隐藏
+ */
+-(void)RemoteSendOSDOperation:(int)nJvChannelID nPosition:(int) nPosition nTimePosition:(int)nTimePosition;
+
+/**
+ *  修改设备的用户名密码
+ *
+ *  @param nJVChannleID 本地连接的通道号
+ *  @param userName     用户名
+ *  @param passWord     密码
+ */
+- (void)RemoteModifyDeviceInfo:(int)nJVChannleID  withUserName:(NSString *)userName withPassWord:(NSString *)passWord describe:(NSString *)describe;
+
+/**
+ *  玩具协议开启AP请求
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenAPRequest:(int)nJvChannelID;
+
+/**
+ *  玩具协议开启AP
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenAPCmd:(int)nJvChannelID;
+
+/**
+ *  玩具协议开启STA请求
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenSTARequest:(int)nJvChannelID;
+
+/**
+ *  玩具协议开启STA
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendOpenSTACmd:(int)nJvChannelID;
+
+/**
+ *  玩具协议获取wifi信息
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendRequestCurrentNetworkInfo:(int)nJvChannelID;
+
+/**
+ *  玩具协议设备搜索wifi热点
+ *
+ *  @param nJvChannelID    本地连接的通道号
+ */
+-(void)RemoteSendDeviceSearchAP:(int)nJvChannelID;
+
 @end

@@ -256,5 +256,24 @@ enum JVCCloudSEENetworkCaptureImageType {
 };
 
 
+static NSString const *kConnectDefaultUsername       = @"jwifiApuser";
+static NSString const *kConnectDefaultPassword       = @"^!^@#&1a**U";
+static NSString const *kConnectDefaultIP             = @"10.10.0.1";
+static const  int      kConnectDefaultPort           = 9101;
+
+enum CONNECTTYPE{
+    
+    CONNECTTYPE_YST=0,
+    CONNECTTYPE_IP=1,
+    CONNECTTYPE_Stream=2,
+    
+};
+
+typedef NS_ENUM(int , VoiceType) {
+
+    VoiceType_Speaker =0,//扬声器
+    VoiceType_Liseten =1,//听筒
+
+};
 
 #endif

@@ -39,15 +39,30 @@
 
 //解码一帧视频帧的输出结构体
 typedef struct DecoderOutVideoFrame{
-    
-    char decoder_y[1920*1280];      //解码出来的YUV数据 y
-    char decoder_u[960*540];        //解码出来的YUV数据 u
-    char decoder_v[960*540];        //解码出来的YUV数据 v
+    unsigned char *decoder_y;       //解码出来的YUV数据 y
+    unsigned char *decoder_u;       //解码出来的YUV数据 u
+    unsigned char *decoder_v;
     int  nLocalChannelID;           //连接的本地通道号
     int  nWidth;                    //解码出来的宽
     int  nHeight;                   //解码出来的高
     
 }DecoderOutVideoFrame;
+
+
+//解码一帧视频帧的输出结构体
+typedef struct DecoderOutVideoFrame2{
+    
+    //
+    char *decoder_y;      //解码出来的YUV数据 y
+    char *decoder_u;        //解码出来的YUV数据 u
+    char *decoder_v;
+    
+    int  nLocalChannelID;           //连接的本地通道号
+    int  nWidth;                    //解码出来的宽
+    int  nHeight;                   //解码出来的高
+    
+}DecoderOutVideoFrame2;
+
 
 //解码一帧视频帧的输入结构体
 typedef struct DecoderVideoFrame{
@@ -90,7 +105,7 @@ typedef struct DecoderVideoFrame{
  *
  *  @param nVideoDecodeID 解码器编号(0~15)
  */
--(void)openVideoDecoder:(int)nVideoDecodeID;
+-(void)openVideoDecoder:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID;
 
 /**
  *  关闭解码器
@@ -107,6 +122,6 @@ typedef struct DecoderVideoFrame{
  *
  *  @return 解码成功返回 0 否则失败
  */
--(int)decodeOneVideoFrame:(frame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(DecoderOutVideoFrame *)VideoOutFrame;
+-(int)decodeOneVideoFrame:(frame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(DecoderOutVideoFrame **)VideoOutFrame;
 
 @end

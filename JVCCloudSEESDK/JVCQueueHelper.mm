@@ -230,6 +230,8 @@ long long currentMillisSec() {
         if(queueFrameCount > queue_fps && isEnable) {
             
             need_jump = true;
+        }else{
+            need_jump = false;
         }
         
         if(need_jump && !frameBuffer->is_i_frame) {

@@ -11,6 +11,7 @@
 #import "JVCCloudSEENetworkMacro.h"
 #import "JVCCloudSEENetworkGeneralHelper.h"
 #import "JVNetConst.h"
+#import <pthread.h>
 
 @interface JVCPlaySoundHelper () {
     

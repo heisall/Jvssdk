@@ -10,4 +10,9 @@
 
 @interface JVCRecordVideoInter : NSObject
 
+
+void 	JP_OpenPackage(char *pszmp4file,int nlocalchannel,int fWidth,int fHeight,double fframeRate,int iAcodec, int tempID);
+void	JP_ClosePackage(int nlocalChannel);
+int JP_PackageOneFrame(unsigned char *h264Data,int nSize ,int nlocalChannel , int iPts,int iDts);
+
 @end

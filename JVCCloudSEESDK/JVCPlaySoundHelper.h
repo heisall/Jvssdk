@@ -39,11 +39,17 @@
 -(BOOL)openAudioDecoder:(int)nConnectDeviceType isExistStartCode:(BOOL)isExistStartCode;
 
 /**
+ *   打开播放器的音频解码器
+ */
+-(void)openAudioDecoderForMedia:(int)AudioType;
+
+/**
  *  关闭音频解码器
  *
  *  @return YES:成功关闭 NO:不存在
  */
 -(BOOL)closeAudioDecoder;
+
 
 /**
  *  音频解码

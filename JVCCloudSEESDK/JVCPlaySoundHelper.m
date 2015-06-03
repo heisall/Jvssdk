@@ -59,6 +59,21 @@ char          pcmOutBuffer[1024] = {0};
 }
 
 /**
+ *   打开播放器的音频解码器
+ */
+-(void)openAudioDecoderForMedia:(int)AudioType
+{
+    
+    if(!self.isOpenDecoder){
+        [self lock];
+        JAD_DecodeOpen(0,AudioType);
+        [self unLock];
+    }
+    
+    [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] initOpenAL];
+    self.isOpenDecoder = TRUE;
+}
+/**
  *   解码器打开
  *
  *  @param nConnectDeviceType 连接的设备类型
@@ -245,6 +260,35 @@ char          pcmOutBuffer[1024] = {0};
                 isDecoderAudioState = NO;
             }
             
+        }
+            break;
+            
+        case MP4_AUDIO_DECODER_SAMR:
+        {
+            unsigned char *audioPcmBuf = NULL;
+            
+            [self lock];
+            
+            JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
+            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
+            
+            JAD_DecodeOneFrame(0, networkBuffer+21,  &audioPcmBuf);
+            memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
+            
+            [self unLock];
+        }
+            break;
+            
+        case MP4_AUDIO_DECODER_ALAW:
+        case MP4_AUDIO_DECODER_ULAW:
+        {
+            unsigned char *audioPcmBuf = NULL;
+            
+            [self lock];
+            JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
+            [self unLock];
+            
+            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
         }
             break;
         default:

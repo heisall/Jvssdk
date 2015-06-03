@@ -9,6 +9,8 @@
 #import "JVCMediaPlayerHelper.h"
 #import "JVCDecoderMacro.h"
 #import "JVCMediaPlayer.h"
+#import "JVCCloudSEENetworkMacro.h"
+#import "JVCMediaPlayerDecoder.h"
 
 static JVCMediaPlayerHelper *helper = nil;
 
@@ -21,6 +23,7 @@ static JVCMediaPlayerHelper *helper = nil;
 @synthesize delegate;
 @synthesize jvcAudioQueueHelper;
 @synthesize videoHeight,videoWidth,frameRate;
+@synthesize audioType;
 
 char          pcmBuffer[1024] ={0};
 int           nLocalChannel   = 1;
@@ -64,8 +67,12 @@ int           nLocalChannel   = 1;
 //初始播放化资源，包括解码器，队列等
 - (void)MP4PlayerResourceInit:(int)videoWidth
              videoHeight:(int)videoHeight
-        dVideoframeFrate:(double)dVideoframeFrate{
+        dVideoframeFrate:(double)dVideoframeFrate
+                    videoType:(int)nVideoType
+                    audioType:(int)nAudioType{
     
+    self.delegate                            = [JVCMediaPlayer shareMediaPlayer];
+    self.audioType                           = nAudioType;
     self.videoWidth                          =  videoWidth;
     self.videoHeight                         =  videoHeight;
     self.frameRate                           =  dVideoframeFrate;
@@ -80,18 +87,22 @@ int           nLocalChannel   = 1;
     decodeModelObj.delegate                  =  self;
     [decodemodel release];
     
-    self.delegate                            = [JVCMediaPlayer shareMediaPlayer];
+    JVCQueueHelper      *jvcQueueHelperObj     = [[JVCQueueHelper alloc] init:nLocalChannel];
+    jvcQueueHelperObj.jvcQueueHelperDelegate   = self;
+    self.jvcQueueHelper                        = jvcQueueHelperObj;
+    [jvcQueueHelperObj release];
+
     
-    //初始化解码输出帧
-//    jvcOutVideoFrame = malloc(sizeof(DecoderOutVideoFrame));
-//    
-//    memset(jvcOutVideoFrame->decoder_y, 0, sizeof(jvcOutVideoFrame->decoder_y));
-//    memset(jvcOutVideoFrame->decoder_u, 0, sizeof(jvcOutVideoFrame->decoder_u));
-//    memset(jvcOutVideoFrame->decoder_v, 0, sizeof(jvcOutVideoFrame->decoder_v));
     
-    [self openVideoDecoder];
+    JVCPlaySoundHelper        *jvcPlaySoundObj = [[JVCPlaySoundHelper alloc] init];
+    self.jvcPlaySound                          = jvcPlaySoundObj;
+    [jvcPlaySoundObj release];
+
+    [self openVideoDecoder:nVideoType];
     [self resetMediaPlayerVideoDecoderParam];
     [self startPopVideoDataThread];
+    [self openAudioDecoder:nAudioType];
+    
 }
 
 //释放播放资源
@@ -119,20 +130,12 @@ int           nLocalChannel   = 1;
  *  启动缓存队列出队线程
  */
 -(void)startPopVideoDataThread{
-    
-    if (!self.jvcQueueHelper) {
-        
-        JVCQueueHelper      *jvcQueueHelperObj     = [[JVCQueueHelper alloc] init:nLocalChannel];
-        jvcQueueHelperObj.jvcQueueHelperDelegate   = self;
-        self.jvcQueueHelper                        = jvcQueueHelperObj;
-        [jvcQueueHelperObj release];
-    }
-    
+
     //设置帧率
     [self.jvcQueueHelper setDefaultFrameRate:self.frameRate withEnableJumpFrame:NO];
     
-    //[self performSelectorOnMainThread:@selector(popVideoDataThread1) withObject:nil waitUntilDone:NO];
-    [self popVideoDataThread1];
+    //[self performSelectorOnMainThread:@selector(popVideoDataThread) withObject:nil waitUntilDone:NO];
+    [self popVideoDataThread];
     
 }
 
@@ -146,7 +149,7 @@ int           nLocalChannel   = 1;
     self.decodeModelObj.isWaitIFrame = FALSE;
 }
 
--(void)popVideoDataThread1{
+-(void)popVideoDataThread{
     
     [self.jvcQueueHelper startPopDataThread];
 }
@@ -196,11 +199,11 @@ int           nLocalChannel   = 1;
 /**
  *  打开解码器
  */
--(void)openVideoDecoder{
+-(void)openVideoDecoder:(int)videoType{
     
     int nDecoderID  = nLocalChannel -1 ;
     
-    [self.decodeModelObj openVideoDecoder:nDecoderID wVideoCodecID:IPC_VIDEO_DECODER_H264];
+    [self.decodeModelObj openVideoDecoderForMP4:nDecoderID wVideoCodecID:videoType];
 }
 
 /**
@@ -251,8 +254,114 @@ int           nLocalChannel   = 1;
  *  @param nPlayBackFrametotalNumber  远程回放的总帧数
  *  @param isVideoType                YES：05 NO：04
  */
--(void)DecoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber{
+-(void)DecoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber
+{
     NSLog(@"1221212");
+}
+
+
+#pragma mark 音频监听处理模块
+
+/**
+ *  设置音频类型
+ *
+ *  @param nAudioType 音频的类型
+ */
+-(void)setAudioType:(int)nAudioType{
+
+    self.jvcPlaySound.nAudioType            = nAudioType;
+}
+
+/**
+ *   打开音频解码器
+ */
+-(void)openAudioDecoder:(int)audioType{
+
+    //[self.jvcPlaySound openAudioDecoder:4 isExistStartCode:YES];
+    
+    [self.jvcPlaySound openAudioDecoderForMedia:audioType];
+
+    if (!self.jvcAudioQueueHelper) {
+        
+        JVCAudioQueueHelper *jvcAudioQueueObj         = [[JVCAudioQueueHelper alloc] init:1];
+        self.jvcAudioQueueHelper                      = jvcAudioQueueObj;
+        [jvcAudioQueueObj release];
+    }
+    self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate  = self;
+    //[self performSelectorOnMainThread:@selector(popAudioDataThread) withObject:nil waitUntilDone:NO];
+    
+    [self popAudioDataThread];
+}
+
+-(void)popAudioDataThread{
+
+    [self.jvcAudioQueueHelper startAudioPopDataThread];
+}
+
+
+/**
+ *  关闭音频解码
+ */
+-(void)closeAudioDecoder{
+
+    self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
+    [self.jvcAudioQueueHelper exitPopDataThread];
+
+    [self.jvcPlaySound closeAudioDecoder];
+}
+
+#pragma mark 音频缓存队列处理模块
+
+/**
+ *  缓存队列的入队函数(音频)
+ *
+ *  @param videoData         视频帧数据
+ *  @param nVideoDataSize    数据数据大小
+ *  @param isVideoDataIFrame 视频是否是关键帧
+ */
+-(void)pushAudioData:(unsigned char *)audioData nAudioDataSize:(int)nAudioDataSize {
+
+    [self.jvcAudioQueueHelper jvcAudioOffer:audioData nSize:nAudioDataSize];
+}
+
+/**
+ *  缓存队列的出队入口数据
+ *
+ *  @param bufferData 队列出队的Buffer
+ *
+ */
+-(void)popAudioDataCallBack:(void *)bufferData{
+
+    frame *decoderAudioFrame = (frame *)bufferData;
+
+    BOOL isConvertStatus =  FALSE;
+    
+//    if(self.audioType == AUDIO_DECODER_SAMR){
+//        
+        isConvertStatus= [self.jvcPlaySound convertSoundBufferByNetworkBuffer:MP4_AUDIO_DECODER_SAMR isExistStartCode:YES networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+//
+//    }else if(self.audioType == AUDIO_DECODER_ALAW){
+//        isConvertStatus= [self.jvcPlaySound convertSoundBufferByNetworkBuffer:MP4_AUDIO_DECODER_ALAW isExistStartCode:YES networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+
+//    }else if(self.audioType == AUDIO_DECODER_ULAW){
+//        isConvertStatus= [self.jvcPlaySound convertSoundBufferByNetworkBuffer:MP4_AUDIO_DECODER_ULAW isExistStartCode:YES networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+//
+//    }
+
+    
+    if (isConvertStatus) {
+
+        // DDLogVerbose(@"%s--------",__FUNCTION__);
+    }
+}
+
+/**
+ *  关闭音频解码
+ */
+-(void)closeVoiceIntercomDecoder{
+
+    self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
+    [self.jvcAudioQueueHelper exitPopDataThread];
 }
 
 

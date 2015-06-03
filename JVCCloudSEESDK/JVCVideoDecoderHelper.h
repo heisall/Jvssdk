@@ -108,6 +108,13 @@ typedef struct DecoderVideoFrame{
 -(void)openVideoDecoder:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID;
 
 /**
+ *  打开解码器
+ *
+ *  @param nVideoDecodeID 解码器编号(0~15)
+ */
+-(void)openVideoDecoderForMP4:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID;
+
+/**
  *  关闭解码器
  *
  */

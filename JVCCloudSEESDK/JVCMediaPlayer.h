@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "GlView.h"
-#import "JVCRTMPMacro.h"
 #import "GlView.h"
 #import "JVCMediaPlayerHelper.h"
 

@@ -157,7 +157,11 @@ long long currentMillisSec() {
     
     if (!bm_exit) {
         
-        [NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
+        //[NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
+        
+        [self performSelectorInBackground:@selector(popDataCallBack) withObject:nil];
+        
+        //[self popDataCallBack];
     }
 }
 
@@ -165,7 +169,7 @@ long long currentMillisSec() {
  *  出队数据的回调
  */
 -(void)popDataCallBack{
-    
+    NSLog(@"popDataCallBack =====");
     playThreadExit = TRUE;
     bm_exit = TRUE;
     
@@ -175,6 +179,7 @@ long long currentMillisSec() {
     BOOL isFastPlay     = FALSE;
     
     while (TRUE) {
+        NSLog(@"popDataCallBack =====TRUE ==== ");
         
         if (!bm_exit) {
             
@@ -183,7 +188,7 @@ long long currentMillisSec() {
         
         //获取当前缓存队列中当前帧的个数
         int queueFrameCount = [self GetEnqueueDataCount];
-        
+        NSLog(@"popDataCallBack =====queueFrameCount ==== %d", queueFrameCount);
         float queue_fps = param->video_frame_fps;
         
         //当缓存区达到临界值时开启加速播放模式，如果依然排解不了拥堵现象启用跳帧模式
@@ -292,6 +297,7 @@ long long currentMillisSec() {
  */
 -(int)offer:(unsigned char *)data withFrameSize:(int)nSize withIsIFrame:(BOOL)isIFrame withIsBFrame:(BOOL)isBFrame withFrameType:(int)frameType
 {
+    NSLog(@"offer data into queue, size = %d", nSize);
 	if (dqueue==NULL || !bm_exit)
         return  OPERATION_TYPE_ERROR;
     

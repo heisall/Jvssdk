@@ -13,6 +13,9 @@
 #import "JVCPlaySoundHelper.h"
 #import "Jmp4pkg.h"
 #import "JVCMediaPlayerHelper.h"
+#import "JVCMP4Player.h"
+#import "JVCDecoderMacro.h"
+#import "JVCVideoDecoderHelper.h"
 
 static JVCMediaPlayer *player = nil;
 
@@ -115,37 +118,60 @@ void msleep(int millisSec) {
     
     MP4_INFO			mp4Info			= {0};
     
+    int vDecId, aDecId;
+    
     const char *file = [fileName cStringUsingEncoding:NSASCIIStringEncoding];
     
     upkHandle = JP_OpenUnpkg((char *)file, &mp4Info, 0);
     
     NSLog(@"file ==== %s", file);
     
+    NSLog(@"video type === %s, audio type === %s", mp4Info.szVideoMediaDataName, mp4Info.szAudioMediaDataName);
+    
+    if(strcmp(mp4Info.szVideoMediaDataName, "avc1") == 0){
+        vDecId = VIDEO_DECODER_H264;
+    }else if(strcmp(mp4Info.szVideoMediaDataName, "hev1") == 0){
+        vDecId = VIDEO_DECODER_H265;
+    }
+    
+    if(strcmp(mp4Info.szAudioMediaDataName, "samr") == 0){
+        aDecId = AUDIO_DECODER_SAMR;
+    }else if(strcmp(mp4Info.szAudioMediaDataName, "alaw")==0){
+        aDecId = AUDIO_DECODER_ALAW;
+    }else if(strcmp(mp4Info.szAudioMediaDataName, "ulaw")==0){
+        aDecId = AUDIO_DECODER_ULAW;
+    }
+    
     //初始化播放帮助类
-    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MP4PlayerResourceInit:mp4Info.iFrameWidth videoHeight:mp4Info.iFrameHeight dVideoframeFrate:mp4Info.dFrameRate];
+    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MP4PlayerResourceInit:mp4Info.iFrameWidth videoHeight:mp4Info.iFrameHeight dVideoframeFrate:mp4Info.dFrameRate videoType:vDecId  audioType:aDecId];
     
     AV_UNPKT			AvUnpkt			= {0};
-
-    AvUnpkt.iType = JVS_UPKT_VIDEO;
     
     int sampleID;
 
     for(sampleID=1; sampleID<=mp4Info.iNumVideoSamples; sampleID++){
+        AvUnpkt.iType = JVS_UPKT_VIDEO;
         AvUnpkt.iSampleId	= sampleID;
         //解封装的帧数据放在AvUnpkt里面
         int ret = JP_UnpkgOneFrame(upkHandle, &AvUnpkt);
         
         NSLog(@"sampleID === %d, itype == %d, nsize == %d", sampleID, AvUnpkt.iType, AvUnpkt.iSize);
-        sleep(1/25);
+        
         //放到缓存队列里面
         if(AvUnpkt.iType == JVS_UPKT_VIDEO){
             if(AvUnpkt.bKeyFrame){
                 [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushVideoData:AvUnpkt.pData nVideoDataSize:AvUnpkt.iSize isVideoDataIFrame:YES isVideoDataBFrame:NO frameType:0x01];
+                
             }else{
                 [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushVideoData:AvUnpkt.pData nVideoDataSize:AvUnpkt.iSize isVideoDataIFrame:NO isVideoDataBFrame:YES frameType:0x02];
             }
- 
         }
+        msleep(40);
+//        AvUnpkt.iType = JVS_UPKT_AUDIO;
+//        AvUnpkt.iSampleId	= sampleID;
+//        int ret2 = JP_UnpkgOneFrame(upkHandle, &AvUnpkt);
+//        NSLog(@"ret2 == %d, sampleID === %d, itype == %d, nsize == %d",ret2, sampleID, AvUnpkt.iType, AvUnpkt.iSize);
+//        [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushAudioData:AvUnpkt.pData nAudioDataSize:AvUnpkt.iSize];
     }
 }
 
@@ -173,11 +199,6 @@ void msleep(int millisSec) {
         }
         
         [glView decoder:decoderOutVideoFrame->decoder_y imageBufferU:decoderOutVideoFrame->decoder_u imageBufferV:(char*)decoderOutVideoFrame->decoder_v decoderFrameWidth:decoderOutVideoFrame->nWidth decoderFrameHeight:decoderOutVideoFrame->nHeight];
-        
-        
-        //            //            NSLog(@"==end====");
-        //
-        //            currentChannelObj.isDisplayVideo = YES;
         
     });
     

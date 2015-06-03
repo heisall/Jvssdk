@@ -92,8 +92,7 @@ enum JVCVoiceInterStateType {
     
     JVCVoiceInterStateType_Succeed  = 0,
     JVCVoiceInterStateType_End      = 1,
-    
-};
+    };
 
 //语音对讲请求
 enum JVCTextChatType {

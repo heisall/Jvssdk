@@ -38,6 +38,7 @@ JVCAudioQueueHelperDelegate>{
     int                                     videoWidth;
     int                                     videoHeight;
     double                                  frameRate;
+    int                                     audioType;
 }
 
 @property (nonatomic,retain) JVCVideoDecoderHelper              *decodeModelObj;
@@ -48,7 +49,7 @@ JVCAudioQueueHelperDelegate>{
 @property (nonatomic) int                                videoWidth;
 @property (nonatomic) int                                videoHeight;
 @property (nonatomic) double                             frameRate;
-
+@property (nonatomic) int                                audioType;
 
 /**
  *  单例
@@ -60,13 +61,12 @@ JVCAudioQueueHelperDelegate>{
 //初始播放化资源，包括解码器，队列等
 - (void)MP4PlayerResourceInit:(int)videoWidth
              videoHeight:(int)videoHeight
-        dVideoframeFrate:(double)dVideoframeFrate;
+        dVideoframeFrate:(double)dVideoframeFrate
+                    videoType:(int)videoType
+                    audioType:(int)audioType;
 
 //释放播放资源
 - (void)MP4PlayerResourceRelease;
-
-
-
 
 
 /**
@@ -109,7 +109,7 @@ JVCAudioQueueHelperDelegate>{
 /**
  *  打开解码器
  */
--(void)openVideoDecoder;
+-(void)openVideoDecoder:(int)videoType;
 
 /**
  *  关闭解码器
@@ -132,5 +132,36 @@ JVCAudioQueueHelperDelegate>{
  *  场景图像
  */
 -(void)startWithSceneImage;
+
+
+#pragma mark 音频监听处理模块
+
+/**
+ *  设置音频类型
+ *
+ *  @param nAudioType 音频的类型
+ */
+-(void)setAudioType:(int)nAudioType;
+
+/**
+ *   打开音频解码器
+ */
+-(void)openAudioDecoder;
+
+/**
+ *  关闭音频解码
+ */
+-(void)closeAudioDecoder;
+
+#pragma mark 音频缓存队列处理模块
+
+/**
+ *  缓存队列的入队函数(音频)
+ *
+ *  @param videoData         视频帧数据
+ *  @param nVideoDataSize    数据数据大小
+ *  @param isVideoDataIFrame 视频是否是关键帧
+ */
+-(void)pushAudioData:(unsigned char *)audioData nAudioDataSize:(int)nAudioDataSize;
 
 @end

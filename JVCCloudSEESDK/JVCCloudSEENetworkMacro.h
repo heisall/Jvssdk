@@ -49,6 +49,9 @@ enum DEVICEMODEL{
     DEVICEMODEL_HardwareCard_950  = 2,         //硬压缩卡 950
     DEVICEMODEL_HardwareCard_951  = 3,         //硬压缩卡 951
     DEVICEMODEL_IPC               = 4,         //IPC
+    MP4_AUDIO_DECODER_SAMR        = 5,         //MP4音频 samr
+    MP4_AUDIO_DECODER_ALAW        = 6,         //MP4音频 alaw
+    MP4_AUDIO_DECODER_ULAW        = 7          //MP4音频 ulaw
     
 };
 

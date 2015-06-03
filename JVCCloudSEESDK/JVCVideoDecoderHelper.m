@@ -110,6 +110,36 @@ char  captureImageBuffer[1280*720*3] ={0};
         // DDLogError(@"%s---videoDecoder(解码器编号：%d) 打开失败，原因解码器已存在",__FUNCTION__,nVideoDecodeID);
     }
 }
+
+/**
+ *  打开解码器 包括H264和H265
+ *
+ *  @param nVideoDecodeID 解码器编号(0~15)
+ */
+-(void)openVideoDecoderForMP4:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID{
+    
+    
+    if (!self.isOpenDecoder) {
+        
+        if (self.nVideoWidth > 0 && self.nVideoHeight > 0) {
+            
+            self.isOpenDecoder   = TRUE;
+            nDecoderID = nVideoDecodeID;
+            if (self.isDecoderModel) {
+                JVD05_DecodeOpen(nVideoDecodeID, wVideoCodecID);
+                
+            }else {
+                
+                JVD04_DecodeOpen(self.nVideoWidth ,self.nVideoHeight ,nVideoDecodeID);
+            }
+            
+        }
+    }
+    else {
+        
+        // DDLogError(@"%s---videoDecoder(解码器编号：%d) 打开失败，原因解码器已存在",__FUNCTION__,nVideoDecodeID);
+    }
+}
 /**
  *  关闭解码器
  *

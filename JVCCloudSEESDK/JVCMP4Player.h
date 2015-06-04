@@ -11,32 +11,32 @@
 
 #import "JVCDecoderMacro.h"
 
-#define VIDEO_TYPE_COUNT 2
-struct // decided by mp4-upk
-{
-    char upk[8];	// mp4-upk
-    int	 enc;		// dec
-}vDecMediaType[VIDEO_TYPE_COUNT] =
-{
-    {"avc1", VIDEO_DECODER_H264},
-    {"hev1", VIDEO_DECODER_H265}
-};
+//#define VIDEO_TYPE_COUNT 2
+//struct // decided by mp4-upk
+//{
+//    char upk[8];	// mp4-upk
+//    int	 enc;		// dec
+//}vDecMediaType[VIDEO_TYPE_COUNT] =
+//{
+//    {"avc1", VIDEO_DECODER_H264},
+//    {"hev1", VIDEO_DECODER_H265}
+//};
+//
+//#define AUDIO_TYPE_COUNT 3
+//
+//struct // decided by mp4-upk
+//{
+//    char upk[8];	// mp4-upk
+//    int	 enc;		// dec
+//}aDecMediaType[AUDIO_TYPE_COUNT] =
+//{
+//    {"samr", JVS_ACODEC_SAMR},
+//    {"alaw", JVS_ACODEC_ALAW},
+//    {"ulaw", JVS_ACODEC_ULAW}
+//};
 
-#define AUDIO_TYPE_COUNT 3
 
-struct // decided by mp4-upk
-{
-    char upk[8];	// mp4-upk
-    int	 enc;		// dec
-}aDecMediaType[AUDIO_TYPE_COUNT] =
-{
-    {"samr", JVS_ACODEC_SAMR},
-    {"alaw", JVS_ACODEC_ALAW},
-    {"ulaw", JVS_ACODEC_ULAW}
-};
-
-
-typedef struct videoFrame{
+typedef struct VideoFrame{
     
     unsigned char * buf;
     int             nSize;
@@ -44,7 +44,7 @@ typedef struct videoFrame{
     bool            is_b_frame; //是否是B帧
     int             nFrameType;
     
-}videoFrame;
+}VideoFrame;
 
 
 //解码一帧视频帧的输出结构体
@@ -57,6 +57,7 @@ typedef struct OutVideoFrame{
     int  nHeight;                   //解码出来的高
     
 }OutVideoFrame;
+
 
 
 #endif

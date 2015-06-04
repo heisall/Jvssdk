@@ -121,7 +121,7 @@ static OpenALBufferViewcontroller *_OpenALBufferViewcontroller = nil;
 
     alGetSourcei(outSourceID, AL_BUFFERS_PROCESSED, &processed);
     alGetSourcei(outSourceID, AL_BUFFERS_QUEUED, &queued);
-    
+    NSLog(@"processed = %d, queued = %d", processed, queued);
     while(processed--)
     {
         alSourceUnqueueBuffers(outSourceID, 1, &buff);

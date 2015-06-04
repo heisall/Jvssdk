@@ -1,5 +1,5 @@
 //
-//  JVCMediaPlayerDecoder.h
+//  JVCMediaVideoDecoder.h
 //  JVCCloudSEESDK
 //
 //  Created by Yale on 15/6/3.
@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "JVCMP4Player.h"
 
-@interface JVCMediaPlayerDecoder : NSObject
 
+@interface JVCMediaVideoDecoder : NSObject
 
 /**
  *  视频解码上锁，防止解码时关闭解码器
@@ -48,6 +48,7 @@
  *
  *  @return 解码成功返回 0 否则失败
  */
--(int)decodeOneVideoFrame:(videoFrame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(OutVideoFrame **)VideoOutFrame;
+-(int)decodeOneVideoFrame:(VideoFrame *)videoFrame nSystemVersion:(int)nSystemVersion VideoOutFrame:(OutVideoFrame **)VideoOutFrame;
+
 
 @end

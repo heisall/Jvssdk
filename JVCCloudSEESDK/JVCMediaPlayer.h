@@ -12,16 +12,14 @@
 #import "GlView.h"
 #import "JVCMediaPlayerHelper.h"
 
-@interface JVCMediaPlayer : NSObject<JVCMP4PlayerHelperDelegate>
+@interface JVCMediaPlayer : NSObject<MediaPlayerVideoDelegate>
 {
     UIView     *showView;             // 显示的视频窗口
     GlView     *glView;
-    BOOL       isConning;             //是否还在连接
 }
 
 @property (nonatomic,retain) UIView  *showView;     // 显示的视频窗口
 @property (nonatomic,retain) GlView  *glView;
-@property (nonatomic)        BOOL    isConning;
 
 
 /**

@@ -17,16 +17,16 @@
 #import "JVCDecoderMacro.h"
 #import "JVCVideoDecoderHelper.h"
 
+@interface JVCMediaPlayer  () {
+    VideoFrame *bufferFrame;
+}
+@end
+
 static JVCMediaPlayer *player = nil;
 
-@implementation JVCMediaPlayer{
-    
-    DecoderOutVideoFrame  *jvcOutVideoFrame;
-}
-
+@implementation JVCMediaPlayer
 @synthesize showView;
 @synthesize glView;
-@synthesize isConning;
 
 /**
  *  单例
@@ -87,8 +87,7 @@ static JVCMediaPlayer *player = nil;
         glView = nil;
         self.showView = nil;
         
-        [JVCMediaPlayerHelper shareMediaPlayerHelper].delegate =nil;
-        [[JVCMediaPlayerHelper shareMediaPlayerHelper] MP4PlayerResourceRelease];
+        [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerResourceRelease];
     }
 }
 
@@ -106,6 +105,7 @@ void msleep(int millisSec) {
         select(0, NULL, NULL, NULL, &tt);
     }
 }
+
 
 /**
  *  播放MP4文件
@@ -143,35 +143,26 @@ void msleep(int millisSec) {
     }
     
     //初始化播放帮助类
-    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MP4PlayerResourceInit:mp4Info.iFrameWidth videoHeight:mp4Info.iFrameHeight dVideoframeFrate:mp4Info.dFrameRate videoType:vDecId  audioType:aDecId];
+    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerResourceInit:mp4Info.iFrameWidth videoHeight:mp4Info.iFrameHeight dVideoframeFrate:mp4Info.dFrameRate videoType:vDecId  audioType:aDecId];
     
-    AV_UNPKT			AvUnpkt			= {0};
-    
+    AV_UNPKT			VideoUnpkt			= {0};
+    AV_UNPKT            AudioUnpkt          = {0};
     int sampleID;
 
     for(sampleID=1; sampleID<=mp4Info.iNumVideoSamples; sampleID++){
-        AvUnpkt.iType = JVS_UPKT_VIDEO;
-        AvUnpkt.iSampleId	= sampleID;
+        VideoUnpkt.iType = JVS_UPKT_VIDEO;
+        VideoUnpkt.iSampleId	= sampleID;
         //解封装的帧数据放在AvUnpkt里面
-        int ret = JP_UnpkgOneFrame(upkHandle, &AvUnpkt);
+        JP_UnpkgOneFrame(upkHandle, &VideoUnpkt);
+        [self decodeVideoFrameAndPlay:VideoUnpkt];
         
-        NSLog(@"sampleID === %d, itype == %d, nsize == %d", sampleID, AvUnpkt.iType, AvUnpkt.iSize);
+        AudioUnpkt.iType = JVS_UPKT_AUDIO;
+        AudioUnpkt.iSampleId	= sampleID;
+        JP_UnpkgOneFrame(upkHandle, &AudioUnpkt);
+        [self decodeAudioFrameAndPlay:AudioUnpkt];
         
-        //放到缓存队列里面
-        if(AvUnpkt.iType == JVS_UPKT_VIDEO){
-            if(AvUnpkt.bKeyFrame){
-                [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushVideoData:AvUnpkt.pData nVideoDataSize:AvUnpkt.iSize isVideoDataIFrame:YES isVideoDataBFrame:NO frameType:0x01];
-                
-            }else{
-                [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushVideoData:AvUnpkt.pData nVideoDataSize:AvUnpkt.iSize isVideoDataIFrame:NO isVideoDataBFrame:YES frameType:0x02];
-            }
-        }
-        msleep(40);
-//        AvUnpkt.iType = JVS_UPKT_AUDIO;
-//        AvUnpkt.iSampleId	= sampleID;
-//        int ret2 = JP_UnpkgOneFrame(upkHandle, &AvUnpkt);
-//        NSLog(@"ret2 == %d, sampleID === %d, itype == %d, nsize == %d",ret2, sampleID, AvUnpkt.iType, AvUnpkt.iSize);
-//        [[JVCMediaPlayerHelper shareMediaPlayerHelper] pushAudioData:AvUnpkt.pData nAudioDataSize:AvUnpkt.iSize];
+        NSLog(@"sampleID ==== %d", sampleID);
+        //msleep(20);
     }
 }
 
@@ -182,7 +173,7 @@ void msleep(int millisSec) {
  *  @param nPlayBackFrametotalNumber  远程回放的总帧数
  *  @param isVideoType                YES：05 NO：04
  */
--(void)MP4DecoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
+-(void)DecoderOutVideoFrameCallBack:(OutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
     
     dispatch_sync(dispatch_get_main_queue(), ^{
         
@@ -204,5 +195,45 @@ void msleep(int millisSec) {
     
 }
 
+
+- (void)decodeVideoFrameAndPlay:(AV_UNPKT )AvUnpkt{
+    
+    
+    bufferFrame  = (VideoFrame *)malloc(AvUnpkt.iSize);
+    memset(bufferFrame, 0, AvUnpkt.iSize);
+    
+    if (AvUnpkt.iSize > 0) {
+        
+        bufferFrame->nSize      = AvUnpkt.iSize;
+        bufferFrame->is_i_frame = AvUnpkt.bKeyFrame?YES:NO;
+        bufferFrame->is_b_frame = AvUnpkt.bKeyFrame?NO:YES;
+        bufferFrame->nFrameType = AvUnpkt.bKeyFrame?0x01:0x02;
+        
+        bufferFrame->buf = (unsigned char *)malloc(sizeof(unsigned char)*AvUnpkt.iSize);
+        
+        memcpy(bufferFrame->buf, AvUnpkt.pData, AvUnpkt.iSize);
+        
+    }else{
+        
+        bufferFrame->nSize      = 0;
+        bufferFrame->is_i_frame = FALSE;
+        bufferFrame->buf = NULL;
+        bufferFrame->is_b_frame = FALSE;
+    }
+    
+    
+    int status = [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerDecoderOneVideoFrame:bufferFrame];
+    
+    if(status>-1)
+        free(bufferFrame);
+    NSLog(@"status === %d", status);
+    
+}
+
+- (void)decodeAudioFrameAndPlay:(AV_UNPKT )AvUnpkt{
+    
+    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerDecoderOneAudioFrame:(AvUnpkt.pData) nBufferSize:AvUnpkt.iSize];
+    
+}
 @end
 

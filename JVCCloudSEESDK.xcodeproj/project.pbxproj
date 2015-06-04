@@ -11,9 +11,8 @@
 		36509EBC1B1D9B9A00DEB1BA /* libJVDecodeAmrAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36509EB91B1D9B1A00DEB1BA /* libJVDecodeAmrAudio.a */; };
 		365520C81B1BE66F000F1FF9 /* liblibmp4pkt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365520C31B1BE65A000F1FF9 /* liblibmp4pkt.a */; };
 		365520DC1B1C5CA2000F1FF9 /* libJDEC05.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365520D91B1C5C94000F1FF9 /* libJDEC05.a */; };
-		365520E11B1C60C4000F1FF9 /* JVCRTMPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 365520DE1B1C60C4000F1FF9 /* JVCRTMPHelper.m */; };
-		365520E21B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 365520E01B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.m */; };
-		367AEF1E1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF1D1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.m */; };
+		367AEF211B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */; };
+		367AEF241B1EF036001CA7B6 /* JVCMediaAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */; };
 		36E0AD811B184E41006AF0B4 /* JVCMediaPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */; };
 		36E0AD841B184E56006AF0B4 /* JVCMediaPlayerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */; };
 		63BBB1261AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BBB1251AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m */; };
@@ -131,12 +130,10 @@
 		365520BD1B1BE65A000F1FF9 /* libmp4pkt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libmp4pkt.xcodeproj; path = ../libmp4pkt/libmp4pkt.xcodeproj; sourceTree = "<group>"; };
 		365520CD1B1BEB42000F1FF9 /* Jmp4pkg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Jmp4pkg.h; sourceTree = "<group>"; };
 		365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JDEC05.xcodeproj; path = ../JDEC05/JDEC05.xcodeproj; sourceTree = "<group>"; };
-		365520DD1B1C60C4000F1FF9 /* JVCRTMPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCRTMPHelper.h; sourceTree = "<group>"; };
-		365520DE1B1C60C4000F1FF9 /* JVCRTMPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCRTMPHelper.m; sourceTree = "<group>"; };
-		365520DF1B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCRTMPPlayerHelper.h; sourceTree = "<group>"; };
-		365520E01B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCRTMPPlayerHelper.m; sourceTree = "<group>"; };
-		367AEF1C1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaPlayerDecoder.h; sourceTree = "<group>"; };
-		367AEF1D1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaPlayerDecoder.m; sourceTree = "<group>"; };
+		367AEF1F1B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaVideoDecoder.h; sourceTree = "<group>"; };
+		367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaVideoDecoder.m; sourceTree = "<group>"; };
+		367AEF221B1EF036001CA7B6 /* JVCMediaAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaAudioDecoder.h; sourceTree = "<group>"; };
+		367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaAudioDecoder.m; sourceTree = "<group>"; };
 		36E0AD741B184680006AF0B4 /* JVCRTMPMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCRTMPMacro.h; sourceTree = "<group>"; };
 		36E0AD7F1B184E41006AF0B4 /* JVCMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaPlayer.h; sourceTree = "<group>"; };
 		36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaPlayer.m; sourceTree = "<group>"; };
@@ -272,16 +269,14 @@
 		36E0AD751B184697006AF0B4 /* MP4 */ = {
 			isa = PBXGroup;
 			children = (
-				365520DD1B1C60C4000F1FF9 /* JVCRTMPHelper.h */,
-				365520DE1B1C60C4000F1FF9 /* JVCRTMPHelper.m */,
-				365520DF1B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.h */,
-				365520E01B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.m */,
 				36E0AD7F1B184E41006AF0B4 /* JVCMediaPlayer.h */,
 				36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */,
 				36E0AD821B184E56006AF0B4 /* JVCMediaPlayerHelper.h */,
 				36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */,
-				367AEF1C1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.h */,
-				367AEF1D1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.m */,
+				367AEF1F1B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.h */,
+				367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */,
+				367AEF221B1EF036001CA7B6 /* JVCMediaAudioDecoder.h */,
+				367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */,
 			);
 			name = MP4;
 			sourceTree = "<group>";
@@ -632,6 +627,7 @@
 				36E0AD841B184E56006AF0B4 /* JVCMediaPlayerHelper.m in Sources */,
 				AD5FB7781A52B17F00A85CCE /* AQSController.mm in Sources */,
 				AD5FB77B1A52B17F00A85CCE /* CAXException.cpp in Sources */,
+				367AEF211B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m in Sources */,
 				AD5FB7791A52B17F00A85CCE /* CADebugMacros.cpp in Sources */,
 				AD5FB7AD1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m in Sources */,
 				AD5FB7AE1A52B1DC00A85CCE /* JVCPlaySoundHelper.m in Sources */,
@@ -644,20 +640,18 @@
 				36E0AD811B184E41006AF0B4 /* JVCMediaPlayer.m in Sources */,
 				AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */,
 				AD5FB7AC1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m in Sources */,
-				365520E21B1C60C4000F1FF9 /* JVCRTMPPlayerHelper.m in Sources */,
 				63CBD9A01AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
 				63BBB12C1AE1001800E0D05F /* JVCLocalCacheModel.m in Sources */,
 				AD5FB7671A52B14400A85CCE /* OpenALBufferViewcontroller.m in Sources */,
 				AD5FB7891A52B1C200A85CCE /* JVCVideoDecoderInterface.mm in Sources */,
-				367AEF1E1B1EED36001CA7B6 /* JVCMediaPlayerDecoder.m in Sources */,
 				AD5FB77A1A52B17F00A85CCE /* CAStreamBasicDescription.cpp in Sources */,
 				AD5FB7B21A52B1DC00A85CCE /* JVCStruct2Dic.m in Sources */,
 				63BBB1291AE1000200E0D05F /* JVCLanScanDeviceModel.m in Sources */,
+				367AEF241B1EF036001CA7B6 /* JVCMediaAudioDecoder.m in Sources */,
 				63CBD99C1AC7A2AE00378CC5 /* JVCPhotoModelObj.m in Sources */,
 				AD5FB7A81A52B1DC00A85CCE /* JVCVideoDecoderHelper.m in Sources */,
 				AD5FB78C1A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm in Sources */,
 				AD5FB78A1A52B1C200A85CCE /* JVCAudioCodecInterface.mm in Sources */,
-				365520E11B1C60C4000F1FF9 /* JVCRTMPHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

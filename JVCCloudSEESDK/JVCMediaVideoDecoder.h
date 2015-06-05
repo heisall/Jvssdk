@@ -10,7 +10,12 @@
 #import "JVCMP4Player.h"
 
 
-@interface JVCMediaVideoDecoder : NSObject
+@interface JVCMediaVideoDecoder : NSObject{
+    int    nVideoType;           //视频编码的类别
+    BOOL   isOpenDecoder;        //解码器是否打开   YES:打开
+}
+@property (nonatomic,assign)int   nVideoType;
+@property (nonatomic,assign)BOOL  isOpenDecoder;
 
 /**
  *  视频解码上锁，防止解码时关闭解码器

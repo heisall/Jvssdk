@@ -18,7 +18,15 @@
 #import "JVCVideoDecoderHelper.h"
 
 @interface JVCMediaPlayer  () {
+    
     VideoFrame *bufferFrame;
+    BOOL        isPlaying; //是否正在播放
+    MP4_UPK_HANDLE		upkHandle;
+    
+    NSString *curTimeBeforeReadVideoFrame;//读取MP4数据之前记录下时间
+    
+    NSString *curTimeAfterShowVideoFrame;//显示MP4后记录下时间
+
 }
 @end
 
@@ -64,12 +72,22 @@ static JVCMediaPlayer *player = nil;
     return nil;
 }
 
+- (void)dealloc{
+    
+    [super dealloc];
+    
+}
 /**
  *  播放器资源初始化
  *
  *  @param playerView 供显示的UIView
  */
 - (void)MediaPlayerInit:(UIView *)playerView{
+    
+    curTimeAfterShowVideoFrame = nil;
+    curTimeBeforeReadVideoFrame = nil;
+    
+    isPlaying = TRUE;
     
     self.showView = playerView;
     glView = [[GlView alloc] init:self.showView.bounds.size.width withdecoderHeight:self.showView.bounds.size.height withDisplayWidth:self.showView.bounds.size.width withDisplayHeight:self.showView.bounds.size.height];
@@ -81,14 +99,15 @@ static JVCMediaPlayer *player = nil;
 
 - (void)MediaPlayerRelease{
     
+    isPlaying = false;
     if(glView){
         
         [glView clearVideo];
         glView = nil;
         self.showView = nil;
-        
-        [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerResourceRelease];
     }
+    [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerResourceRelease];
+    JP_CloseUnpkg(upkHandle);
 }
 
 /**
@@ -114,7 +133,7 @@ void msleep(int millisSec) {
  */
 - (void)openMP4File:(NSString *)fileName
 {
-    MP4_UPK_HANDLE		upkHandle		= NULL;
+    upkHandle		= NULL;
     
     MP4_INFO			mp4Info			= {0};
     
@@ -150,19 +169,27 @@ void msleep(int millisSec) {
     int sampleID;
 
     for(sampleID=1; sampleID<=mp4Info.iNumVideoSamples; sampleID++){
+        
+        if(!isPlaying)
+            return;
+        
+        curTimeBeforeReadVideoFrame = [self getTimeNow];
+        AudioUnpkt.iType = JVS_UPKT_AUDIO;
+        AudioUnpkt.iSampleId	= sampleID;
+        JP_UnpkgOneFrame(upkHandle, &AudioUnpkt);
+        [self decodeAudioFrameAndPlay:AudioUnpkt];
+        
         VideoUnpkt.iType = JVS_UPKT_VIDEO;
         VideoUnpkt.iSampleId	= sampleID;
         //解封装的帧数据放在AvUnpkt里面
         JP_UnpkgOneFrame(upkHandle, &VideoUnpkt);
         [self decodeVideoFrameAndPlay:VideoUnpkt];
         
-        AudioUnpkt.iType = JVS_UPKT_AUDIO;
-        AudioUnpkt.iSampleId	= sampleID;
-        JP_UnpkgOneFrame(upkHandle, &AudioUnpkt);
-        [self decodeAudioFrameAndPlay:AudioUnpkt];
-        
-        NSLog(@"sampleID ==== %d", sampleID);
-        //msleep(20);
+        if(curTimeAfterShowVideoFrame != nil && curTimeBeforeReadVideoFrame != nil){
+            NSLog(@"=======%.f", ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
+            msleep(40 - 3 - ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
+        }else
+            msleep(40);
     }
 }
 
@@ -175,23 +202,23 @@ void msleep(int millisSec) {
  */
 -(void)DecoderOutVideoFrameCallBack:(OutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
     
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        
-        UIView *glShowView       = (UIView *)self.glView._kxOpenGLView;
-        
-        int     showViewHeight   = self.showView.frame.size.height;
-        int     showViewWidth    = self.showView.frame.size.width;
-        int     glShowViewHeight = glShowView.frame.size.height;
-        int     glShowViewWidth  = glShowView.frame.size.width;
-        
-        if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
+    if(isPlaying)
+        dispatch_sync(dispatch_get_main_queue(), ^{
             
-            [glView updateDecoderFrame:self.showView.bounds.size.width displayFrameHeight:self.showView.bounds.size.height];
-        }
-        
-        [glView decoder:decoderOutVideoFrame->decoder_y imageBufferU:decoderOutVideoFrame->decoder_u imageBufferV:(char*)decoderOutVideoFrame->decoder_v decoderFrameWidth:decoderOutVideoFrame->nWidth decoderFrameHeight:decoderOutVideoFrame->nHeight];
-        
-    });
+            UIView *glShowView       = (UIView *)self.glView._kxOpenGLView;
+            
+            int     showViewHeight   = self.showView.frame.size.height;
+            int     showViewWidth    = self.showView.frame.size.width;
+            int     glShowViewHeight = glShowView.frame.size.height;
+            int     glShowViewWidth  = glShowView.frame.size.width;
+            
+            if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
+                
+                [glView updateDecoderFrame:self.showView.bounds.size.width displayFrameHeight:self.showView.bounds.size.height];
+            }
+            
+            [glView decoder:decoderOutVideoFrame->decoder_y imageBufferU:decoderOutVideoFrame->decoder_u imageBufferV:(char*)decoderOutVideoFrame->decoder_v decoderFrameWidth:decoderOutVideoFrame->nWidth decoderFrameHeight:decoderOutVideoFrame->nHeight];
+        });
     
 }
 
@@ -224,9 +251,10 @@ void msleep(int millisSec) {
     
     int status = [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerDecoderOneVideoFrame:bufferFrame];
     
+    curTimeAfterShowVideoFrame =[self getTimeNow];
+    
     if(status>-1)
         free(bufferFrame);
-    NSLog(@"status === %d", status);
     
 }
 
@@ -234,6 +262,13 @@ void msleep(int millisSec) {
     
     [[JVCMediaPlayerHelper shareMediaPlayerHelper] MediaPlayerDecoderOneAudioFrame:(AvUnpkt.pData) nBufferSize:AvUnpkt.iSize];
     
+}
+
+
+- (NSString *)getTimeNow
+{
+    NSString *date = [NSString stringWithFormat:@"%f", (double)[[NSDate date] timeIntervalSince1970]];
+    return  date;
 }
 @end
 

@@ -116,37 +116,39 @@ char          pcmOutBuffer[1024] = {0};
  */
 -(BOOL)convertSoundBufferByNetworkBuffer:(unsigned char *)audioBuffer nBufferSize:(int)nBufferSize
 {
-//    AUDIO_DECODER_SAMR=0,
-//    AUDIO_DECODER_ALAW=1,
-//    AUDIO_DECODER_ULAW=2
-    if(self.nAudioType == AUDIO_DECODER_SAMR){
+    if(self.isOpenDecoder){
+        if(self.nAudioType == AUDIO_DECODER_SAMR){
+            
+            unsigned char *audioPcmBuf = NULL;
+            
+            [self lock];
+            
+            JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
+            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
+            
+            JAD_DecodeOneFrame(0, audioBuffer+21,  &audioPcmBuf);
+            memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
+            
+            [self unLock];
+            
+        }else if(self.nAudioType == AUDIO_DECODER_ALAW || self.nAudioType == AUDIO_DECODER_ULAW){
+            unsigned char *audioPcmBuf = NULL;
+            
+            [self lock];
+            JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
+            [self unLock];
+            
+            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
+            
+        }
         
-        unsigned char *audioPcmBuf = NULL;
-        
-        [self lock];
-        
-        JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
-        memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
-        
-        JAD_DecodeOneFrame(0, audioBuffer+21,  &audioPcmBuf);
-        memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
-        
-        [self unLock];
-
-    }else if(self.nAudioType == AUDIO_DECODER_ALAW || self.nAudioType == AUDIO_DECODER_ULAW){
-        unsigned char *audioPcmBuf = NULL;
-        
-        [self lock];
-        JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
-        [self unLock];
-        
-        memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
-
+        NSLog(@"before openal show audio frame!");
+        [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:AudioSize_G711 playSoundType:playSoundType_8k16B];
+        NSLog(@"before openal show audio frame!");
+        return true;
     }
-  
-    [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:AudioSize_G711 playSoundType:playSoundType_8k16B];
     
-    return true;
+    return false;
 }
 
 

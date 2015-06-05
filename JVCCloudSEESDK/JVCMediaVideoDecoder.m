@@ -20,7 +20,7 @@
 @end
 
 @implementation JVCMediaVideoDecoder
-
+@synthesize isOpenDecoder,nVideoType;
 
 -(void)dealloc {
     
@@ -71,7 +71,14 @@
  */
 -(void)openVideoDecoder:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID{
     
-    JVD05_DecodeOpen(nVideoDecodeID, wVideoCodecID);
+    if(!isOpenDecoder){
+        
+        JVD05_DecodeOpen(nVideoDecodeID, wVideoCodecID);
+        isOpenDecoder = TRUE;
+    }else{
+        NSLog(@"already open decoder type %d", wVideoCodecID);
+    }
+    
 }
 
 /**
@@ -80,9 +87,14 @@
  */
 -(void)closeVideoDecoder
 {
-    [self videoLock];
-    JVD05_DecodeClose(0);
-    [self VideoUnlock];
+    if(self.isOpenDecoder){
+        
+        [self videoLock];
+        JVD05_DecodeClose(0);
+        [self VideoUnlock];
+        
+        isOpenDecoder = FALSE;
+    }
 
 }
 
@@ -101,7 +113,9 @@
     
     [self videoLock];
     
-    ndecoderStatus = JVD05_DecodeOneFrame(0,videoFrame->nSize,videoFrame->buf,&outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,0,1,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
+    if (self.isOpenDecoder) {
+        ndecoderStatus = JVD05_DecodeOneFrame(0,videoFrame->nSize,videoFrame->buf,&outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,0,1,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
+    }
     
     [self VideoUnlock];
     

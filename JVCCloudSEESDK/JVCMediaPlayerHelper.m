@@ -64,6 +64,13 @@ int           nLocalChannel   = 1;
     return nil;
 }
 
+- (void)dealloc{
+    
+    [super dealloc];
+    [videoDecoder dealloc];
+    [audioDecoder dealloc];
+}
+
 //初始播放化资源，包括解码器，队列等
 - (void)MediaPlayerResourceInit:(int)nVideoWidth
              videoHeight:(int)nVideoHeight
@@ -87,10 +94,10 @@ int           nLocalChannel   = 1;
 - (void)MediaPlayerResourceRelease{
     
     [videoDecoder closeVideoDecoder];
-    [videoDecoder dealloc];
+    //[videoDecoder dealloc];
     
     [audioDecoder closeAudioDecoder];
-    [audioDecoder dealloc];
+    //[audioDecoder dealloc];
 }
 
 
@@ -100,23 +107,28 @@ int           nLocalChannel   = 1;
  *  @param videoFrame    <#videoFrame description#>
  *  @param VideoOutFrame <#VideoOutFrame description#>
  *
- *  @return <#return value description#>
+ *  @return return value description
  */
 - (int)MediaPlayerDecoderOneVideoFrame:(VideoFrame *)videoFrame
 {
-    int nDecoderStatus =  [videoDecoder decodeOneVideoFrame:videoFrame nSystemVersion:1 VideoOutFrame:&jvcOutVideoFrame];
-    
-    if (nDecoderStatus >= 0) {
+    if(videoDecoder.isOpenDecoder){
         
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(DecoderOutVideoFrameCallBack:nPlayBackFrametotalNumber:)]) {
+        int nDecoderStatus =  [videoDecoder decodeOneVideoFrame:videoFrame nSystemVersion:1 VideoOutFrame:&jvcOutVideoFrame];
+        
+        if (nDecoderStatus >= 0) {
             
-            jvcOutVideoFrame->nLocalChannelID = nLocalChannel;
-            
-            [self.delegate DecoderOutVideoFrameCallBack:jvcOutVideoFrame nPlayBackFrametotalNumber:-1];
+            if (self.delegate != nil && [self.delegate respondsToSelector:@selector(DecoderOutVideoFrameCallBack:nPlayBackFrametotalNumber:)]) {
+                
+                jvcOutVideoFrame->nLocalChannelID = nLocalChannel;
+                
+                [self.delegate DecoderOutVideoFrameCallBack:jvcOutVideoFrame nPlayBackFrametotalNumber:-1];
+            }
         }
+        
+        return nDecoderStatus;
     }
     
-    return nDecoderStatus;
+    return -1;
 }
 
 
@@ -128,7 +140,9 @@ int           nLocalChannel   = 1;
  */
 - (void)MediaPlayerDecoderOneAudioFrame:( unsigned char *)audioBuffer nBufferSize:(int)nBufferSize
 {
-     [audioDecoder convertSoundBufferByNetworkBuffer:audioBuffer nBufferSize:nBufferSize];
+    if(audioDecoder.isOpenDecoder){
+        [audioDecoder convertSoundBufferByNetworkBuffer:audioBuffer nBufferSize:nBufferSize];
+    }
 }
 
 

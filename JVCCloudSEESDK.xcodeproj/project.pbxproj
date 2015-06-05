@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */; };
+		36435B001B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */; };
 		36509EBC1B1D9B9A00DEB1BA /* libJVDecodeAmrAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36509EB91B1D9B1A00DEB1BA /* libJVDecodeAmrAudio.a */; };
 		365520C81B1BE66F000F1FF9 /* liblibmp4pkt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365520C31B1BE65A000F1FF9 /* liblibmp4pkt.a */; };
 		365520DC1B1C5CA2000F1FF9 /* libJDEC05.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365520D91B1C5C94000F1FF9 /* libJDEC05.a */; };
@@ -21,7 +22,6 @@
 		63CBD99C1AC7A2AE00378CC5 /* JVCPhotoModelObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CBD99B1AC7A2AE00378CC5 /* JVCPhotoModelObj.m */; };
 		63CBD9A01AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CBD99F1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		63CC3BC71AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		63E093B21AFC51EC00AB90FA /* libjvnetsdkV2.0.76.34_5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B11AFC51EC00AB90FA /* libjvnetsdkV2.0.76.34_5.a */; };
 		63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */; };
 		63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */; };
 		AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */; };
@@ -125,6 +125,7 @@
 /* Begin PBXFileReference section */
 		360E6CDD1AFC91CB00E6CDAF /* JVCDecoderMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCDecoderMacro.h; sourceTree = "<group>"; };
 		360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjvdecoder_01_V2.0.1_2015_1_23.a; sourceTree = "<group>"; };
+		36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjvnetsdkV2.0.76.34_5.a; sourceTree = "<group>"; };
 		36509EB31B1D841A00DEB1BA /* JVCMP4Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCMP4Player.h; sourceTree = "<group>"; };
 		36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JVDecodeAmrAudio.xcodeproj; path = ../JVDecodeAmrAudio/JVDecodeAmrAudio.xcodeproj; sourceTree = "<group>"; };
 		365520BD1B1BE65A000F1FF9 /* libmp4pkt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libmp4pkt.xcodeproj; path = ../libmp4pkt/libmp4pkt.xcodeproj; sourceTree = "<group>"; };
@@ -151,7 +152,6 @@
 		63CBD99F1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
 		63CC3BC51AC8353700F62C15 /* JVCConstansALAssetsMathHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCConstansALAssetsMathHelper.h; sourceTree = "<group>"; };
 		63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCConstansALAssetsMathHelper.m; sourceTree = "<group>"; };
-		63E093B11AFC51EC00AB90FA /* libjvnetsdkV2.0.76.34_5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjvnetsdkV2.0.76.34_5.a; sourceTree = "<group>"; };
 		63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGlView_v2.0.4.a; sourceTree = "<group>"; };
 		63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAndEncodeG729a_2013_6_7_3.a; sourceTree = "<group>"; };
 		AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJVCCloudSEESDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -222,9 +222,9 @@
 			files = (
 				36509EBC1B1D9B9A00DEB1BA /* libJVDecodeAmrAudio.a in Frameworks */,
 				365520DC1B1C5CA2000F1FF9 /* libJDEC05.a in Frameworks */,
+				36435B001B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a in Frameworks */,
 				365520C81B1BE66F000F1FF9 /* liblibmp4pkt.a in Frameworks */,
 				63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */,
-				63E093B21AFC51EC00AB90FA /* libjvnetsdkV2.0.76.34_5.a in Frameworks */,
 				360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */,
 				63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */,
 			);
@@ -306,13 +306,13 @@
 		63E093AA1AFC516800AB90FA /* frame */ = {
 			isa = PBXGroup;
 			children = (
+				36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */,
 				36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */,
 				365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */,
 				365520BD1B1BE65A000F1FF9 /* libmp4pkt.xcodeproj */,
 				360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */,
 				63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */,
 				63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */,
-				63E093B11AFC51EC00AB90FA /* libjvnetsdkV2.0.76.34_5.a */,
 			);
 			name = frame;
 			sourceTree = "<group>";

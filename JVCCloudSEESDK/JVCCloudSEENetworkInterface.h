@@ -461,5 +461,4 @@ void JVC_Connect(int nLocalChannel,int nChannel,
                                     FUNC_WRITE_CALLBACK m_pfWriteDataCallBack);
 //};
 
-
 @end

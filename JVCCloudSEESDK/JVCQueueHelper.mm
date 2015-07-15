@@ -60,13 +60,13 @@ static NSString * const kVideoQueueSemNameDefaultHead  = @"video";  //队列的�
  */
 void msleep(int millisSec) {
     
-	if (millisSec > 0) {
+    if (millisSec > 0) {
         
-		struct timeval tt;
-		tt.tv_sec = 0;
-		tt.tv_usec = millisSec * 1000;
-		select(0, NULL, NULL, NULL, &tt);
-	}
+        struct timeval tt;
+        tt.tv_sec = 0;
+        tt.tv_usec = millisSec * 1000;
+        select(0, NULL, NULL, NULL, &tt);
+    }
 }
 
 /**
@@ -75,13 +75,13 @@ void msleep(int millisSec) {
  */
 void ssleep(int Sec) {
     
-	if (Sec > 0) {
+    if (Sec > 0) {
         
-		struct timeval tt;
-		tt.tv_sec = Sec;
-		tt.tv_usec = 0;
-		select(0, NULL, NULL, NULL, &tt);
-	}
+        struct timeval tt;
+        tt.tv_sec = Sec;
+        tt.tv_usec = 0;
+        select(0, NULL, NULL, NULL, &tt);
+    }
 }
 
 /**
@@ -90,14 +90,14 @@ void ssleep(int Sec) {
  */
 long long currentMillisSec() {
     
-	long long result = 0l;
+    long long result = 0l;
     
-	struct timeval t;
+    struct timeval t;
     
-	gettimeofday(&t, NULL);
-	result = (long long) t.tv_sec * 1000 + t.tv_usec / 1000;
+    gettimeofday(&t, NULL);
+    result = (long long) t.tv_sec * 1000 + t.tv_usec / 1000;
     
-	return result;
+    return result;
 }
 
 /**
@@ -112,8 +112,12 @@ long long currentMillisSec() {
     if (self = [super init]) {
         
         NSString *strQueueSemName = [NSString stringWithFormat:@"%@%d",kVideoQueueSemNameDefaultHead,nLocalChannelID];
-
+        
         dqueue = new DataQueue((char *)[strQueueSemName UTF8String]);
+        
+        size_t size                = sizeof(queueServiceUtilityClassParam);
+        
+        param                      = (queueServiceUtilityClassParam *)malloc(size);
         
         /*init the queue_mutex*/
         int ret = pthread_mutex_init(&mutex, NULL);
@@ -123,11 +127,6 @@ long long currentMillisSec() {
             printf("%s:pthread_mutex_init error:%s(%d) at %s, line %d.", __func__, strerror(errno), ret, __FILE__, __LINE__);
         }
         
-        
-        size_t size                = sizeof(queueServiceUtilityClassParam);
-        
-        param                      = (queueServiceUtilityClassParam *)malloc(size);
-        memset(param, 0, size);
     }
     
     return self;
@@ -145,9 +144,9 @@ long long currentMillisSec() {
     
     //[self Lock];
     param->video_frame_fps = frameRateValue;
+    //NSLog(@"%s-----------------%lf",__FUNCTION__,frameRateValue);
     //[self Unlock];
     isEnable               = enable;
-    printf("%s----frameRate=%lf\n",__FUNCTION__,param->video_frame_fps);
 }
 
 /**
@@ -157,11 +156,7 @@ long long currentMillisSec() {
     
     if (!bm_exit) {
         
-        //[NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
-        
-        [self performSelectorInBackground:@selector(popDataCallBack) withObject:nil];
-        
-        //[self popDataCallBack];
+        [NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
     }
 }
 
@@ -169,7 +164,7 @@ long long currentMillisSec() {
  *  出队数据的回调
  */
 -(void)popDataCallBack{
-    NSLog(@"popDataCallBack =====");
+    
     playThreadExit = TRUE;
     bm_exit = TRUE;
     
@@ -178,8 +173,8 @@ long long currentMillisSec() {
     bool need_jump      = true;
     BOOL isFastPlay     = FALSE;
     
+    
     while (TRUE) {
-        NSLog(@"popDataCallBack =====TRUE ==== ");
         
         if (!bm_exit) {
             
@@ -188,7 +183,7 @@ long long currentMillisSec() {
         
         //获取当前缓存队列中当前帧的个数
         int queueFrameCount = [self GetEnqueueDataCount];
-        NSLog(@"popDataCallBack =====queueFrameCount ==== %d", queueFrameCount);
+        
         float queue_fps = param->video_frame_fps;
         
         //当缓存区达到临界值时开启加速播放模式，如果依然排解不了拥堵现象启用跳帧模式
@@ -223,7 +218,7 @@ long long currentMillisSec() {
         int full_delay = 1000 / queue_fps;
         
         frame *frameBuffer = (frame * )dqueue->PopData();
-       
+        
         if (NULL == frameBuffer) {
             
             continue;
@@ -235,11 +230,11 @@ long long currentMillisSec() {
         if(queueFrameCount > queue_fps && isEnable) {
             
             need_jump = true;
-        }else{
-            need_jump = false;
         }
         
         if(need_jump && !frameBuffer->is_i_frame) {
+            
+            //             DDLogInfo(@"%s----need_jump queueFrameCount=%d",__FUNCTION__,queueFrameCount);
             
         }else {
             
@@ -248,7 +243,7 @@ long long currentMillisSec() {
                 //结束跳帧模式，启用正常播放模式
                 need_jump = false;
             }
-
+            
             
             if (self.jvcQueueHelperDelegate !=nil && [self.jvcQueueHelperDelegate respondsToSelector:@selector(popDataCallBack:)]) {
                 
@@ -268,8 +263,7 @@ long long currentMillisSec() {
         free(frameBuffer);
         
     }
-    
-    printf("%s----playThread---end\n",__FUNCTION__);
+
     playThreadExit = FALSE;
 }
 
@@ -281,7 +275,7 @@ long long currentMillisSec() {
     
     pthread_mutex_destroy(&mutex);
     
-	[super dealloc];
+    [super dealloc];
 }
 
 /**
@@ -297,8 +291,7 @@ long long currentMillisSec() {
  */
 -(int)offer:(unsigned char *)data withFrameSize:(int)nSize withIsIFrame:(BOOL)isIFrame withIsBFrame:(BOOL)isBFrame withFrameType:(int)frameType
 {
-    NSLog(@"offer data into queue, size = %d", nSize);
-	if (dqueue==NULL || !bm_exit)
+    if (dqueue==NULL || !bm_exit)
         return  OPERATION_TYPE_ERROR;
     
     size_t size                = sizeof(frame);
@@ -329,17 +322,17 @@ long long currentMillisSec() {
     
     if (result == 0) {
         
-//        [self Lock];
-//        
-//        param.video_frame_fps ++;
-//        
-//        param.video_frame_seconds_rec_dataSize += nSize;
-//        
-//        [self Unlock];
+        //        [self Lock];
+        //
+        //        param.video_frame_fps ++;
+        //
+        //        param.video_frame_seconds_rec_dataSize += nSize;
+        //
+        //        [self Unlock];
     }
     
     sem_post(dqueue->dataqueue_sem_);
-
+    
     return result;
 }
 
@@ -412,8 +405,6 @@ long long currentMillisSec() {
         }
     }
     
-    printf("%s----exit--successful\n",__FUNCTION__);
-    
     return result;
 }
 
@@ -422,7 +413,7 @@ long long currentMillisSec() {
  */
 -(void)Lock
 {
-	pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&mutex);
 }
 
 /**
@@ -430,7 +421,7 @@ long long currentMillisSec() {
  */
 -(void)Unlock
 {
-	pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&mutex);
 }
 
 /**
@@ -438,45 +429,45 @@ long long currentMillisSec() {
  */
 -(void)refreshParam{
     
-//    while (true) {
-//        
-//        [self Lock];
-//        
-//        long long currentTime = currentMillisSec();
-//        
-//        long delayed     = currentTime - lastTime;
-//        
-//        int netWorkSingleFrameTime = delayed / param->video_frame_fps;
-//        int decoderSingleFrameTime = param->video_frame_decoder_Time / param->video_frame_decoder_count;
-//        int displaySingleFrameTime = param->video_frame_Display_Time / param->video_frame_display_count;
-//        
-//        int audioSingePlayTime     = param->audio_decoder_time       / param->audio_total_count;
-//        
-//        // printf("currentTime = %lld-lastTime=%lld---delayed=%ld video: Bps=%d videoNetCount=%d videoNetSingleFrmae=%d,videoDecodeCount=%d,videoDecodeSingleTime=%d,displayCount=%d,displaySingleTime=%d audio: audioCount=%d,audioSingleTime=%d\n",currentTime,lastTime,delayed,playChannel.video_frame_seconds_total/1024,playChannel.video_frame_net_count,netWorkSingleFrameTime,playChannel.video_frame_decoder_count,decoderSingleFrameTime,playChannel.video_frame_display_count,displaySingleFrameTime,playChannel.audio_total_count,audioSingePlayTime);
-//        
-//        param->video_frame_decoder_count        = 0;
-//        //param.video_frame_rate                 = 0;
-//        param->video_frame_seconds_rec_dataSize = 0;
-//        param->video_frame_decoder_count        = 0;
-//        param->video_frame_fps                  = 0;
-//        param->video_frame_display_count        = 0;
-//        param->video_frame_Display_Time         = 0;
-//        param->video_frame_decoder_Time         = 0;
-//        
-//        param->audio_type                = 0;
-//        param->audio_sample_rate         = 0;
-//        param->audio_bit                 = 0;
-//        param->audio_channel             = 0;
-//        param->audio_total_count         = 0;
-//        param->audio_decoder_time        = 0;
-//        
-//        lastTime         =  currentTime;
-//        
-//        [self Unlock];
-//        
-//        ssleep(1);
-//        
-//    }
+    //    while (true) {
+    //
+    //        [self Lock];
+    //
+    //        long long currentTime = currentMillisSec();
+    //
+    //        long delayed     = currentTime - lastTime;
+    //
+    //        int netWorkSingleFrameTime = delayed / param->video_frame_fps;
+    //        int decoderSingleFrameTime = param->video_frame_decoder_Time / param->video_frame_decoder_count;
+    //        int displaySingleFrameTime = param->video_frame_Display_Time / param->video_frame_display_count;
+    //
+    //        int audioSingePlayTime     = param->audio_decoder_time       / param->audio_total_count;
+    //
+    //        // printf("currentTime = %lld-lastTime=%lld---delayed=%ld video: Bps=%d videoNetCount=%d videoNetSingleFrmae=%d,videoDecodeCount=%d,videoDecodeSingleTime=%d,displayCount=%d,displaySingleTime=%d audio: audioCount=%d,audioSingleTime=%d\n",currentTime,lastTime,delayed,playChannel.video_frame_seconds_total/1024,playChannel.video_frame_net_count,netWorkSingleFrameTime,playChannel.video_frame_decoder_count,decoderSingleFrameTime,playChannel.video_frame_display_count,displaySingleFrameTime,playChannel.audio_total_count,audioSingePlayTime);
+    //
+    //        param->video_frame_decoder_count        = 0;
+    //        //param.video_frame_rate                 = 0;
+    //        param->video_frame_seconds_rec_dataSize = 0;
+    //        param->video_frame_decoder_count        = 0;
+    //        param->video_frame_fps                  = 0;
+    //        param->video_frame_display_count        = 0;
+    //        param->video_frame_Display_Time         = 0;
+    //        param->video_frame_decoder_Time         = 0;
+    //
+    //        param->audio_type                = 0;
+    //        param->audio_sample_rate         = 0;
+    //        param->audio_bit                 = 0;
+    //        param->audio_channel             = 0;
+    //        param->audio_total_count         = 0;
+    //        param->audio_decoder_time        = 0;
+    //        
+    //        lastTime         =  currentTime;
+    //        
+    //        [self Unlock];
+    //        
+    //        ssleep(1);
+    //        
+    //    }
 }
 
 @end

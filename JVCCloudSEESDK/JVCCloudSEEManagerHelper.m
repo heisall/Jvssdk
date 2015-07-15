@@ -221,7 +221,7 @@ char          pcmBuffer[1024] ={0};
     
     frame *decodervideoFrame = (frame *)bufferData;
     
-    int nDecoderStatus = [self decodeOneVideoFrame:decodervideoFrame VideoOutFrame:jvcOutVideoFrame];
+    int nDecoderStatus = [self decodeOneVideoFrame:decodervideoFrame];
     
     if (nDecoderStatus>=0) {
         
@@ -296,7 +296,7 @@ char          pcmBuffer[1024] ={0};
  *
  *  @return 解码成功返回 0 否则失败
  */
--(int)decodeOneVideoFrame:(frame *)videoFrame VideoOutFrame:(DecoderOutVideoFrame *)VideoOutFrame{
+-(int)decodeOneVideoFrame:(frame *)videoFrame{
     
     int nDecoderStatus  = -1 ;
     

@@ -10,10 +10,10 @@
 		360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */; };
 		36435B001B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */; };
 		36435BDA1B256E1F00C21930 /* liblibmp4pkt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36435BD51B256E0B00C21930 /* liblibmp4pkt.a */; };
-		36509EBC1B1D9B9A00DEB1BA /* libJVDecodeAmrAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36509EB91B1D9B1A00DEB1BA /* libJVDecodeAmrAudio.a */; };
-		365520DC1B1C5CA2000F1FF9 /* libJDEC05.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 365520D91B1C5C94000F1FF9 /* libJDEC05.a */; };
 		367AEF211B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */; };
 		367AEF241B1EF036001CA7B6 /* JVCMediaAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */; };
+		36C59E861B55F9E200DB2014 /* libJDEC05.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C59E841B55F9E200DB2014 /* libJDEC05.a */; };
+		36C59E871B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */; };
 		36E0AD811B184E41006AF0B4 /* JVCMediaPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */; };
 		36E0AD841B184E56006AF0B4 /* JVCMediaPlayerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */; };
 		63BBB1261AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BBB1251AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m */; };
@@ -73,34 +73,6 @@
 			remoteGlobalIDString = 36495D2B1B141A0200BBC5F3;
 			remoteInfo = libmp4pkt;
 		};
-		36509EB81B1D9B1A00DEB1BA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A7E779EA1755E6BD0020F62E;
-			remoteInfo = JVDecodeAmrAudio;
-		};
-		36509EBA1B1D9B9700DEB1BA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A7E779E91755E6BD0020F62E;
-			remoteInfo = JVDecodeAmrAudio;
-		};
-		365520D81B1C5C94000F1FF9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4A8389D71682D7D500FBD497;
-			remoteInfo = JDEC05;
-		};
-		365520DA1B1C5C9E000F1FF9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 4A8389D61682D7D500FBD497;
-			remoteInfo = JDEC05;
-		};
 		AD5FB73E1A52AFBE00A85CCE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AD5FB7291A52AFBD00A85CCE /* Project object */;
@@ -128,13 +100,13 @@
 		36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjvnetsdkV2.0.76.34_5.a; sourceTree = "<group>"; };
 		36435BCF1B256E0B00C21930 /* libmp4pkt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libmp4pkt.xcodeproj; path = ../libmp4pkt/libmp4pkt.xcodeproj; sourceTree = "<group>"; };
 		36509EB31B1D841A00DEB1BA /* JVCMP4Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCMP4Player.h; sourceTree = "<group>"; };
-		36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JVDecodeAmrAudio.xcodeproj; path = ../JVDecodeAmrAudio/JVDecodeAmrAudio.xcodeproj; sourceTree = "<group>"; };
 		365520CD1B1BEB42000F1FF9 /* Jmp4pkg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Jmp4pkg.h; sourceTree = "<group>"; };
-		365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JDEC05.xcodeproj; path = ../JDEC05/JDEC05.xcodeproj; sourceTree = "<group>"; };
 		367AEF1F1B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaVideoDecoder.h; sourceTree = "<group>"; };
 		367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaVideoDecoder.m; sourceTree = "<group>"; };
 		367AEF221B1EF036001CA7B6 /* JVCMediaAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaAudioDecoder.h; sourceTree = "<group>"; };
 		367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaAudioDecoder.m; sourceTree = "<group>"; };
+		36C59E841B55F9E200DB2014 /* libJDEC05.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJDEC05.a; sourceTree = "<group>"; };
+		36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAmrAudio2_2013_6_27_2.a; sourceTree = "<group>"; };
 		36E0AD741B184680006AF0B4 /* JVCRTMPMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCRTMPMacro.h; sourceTree = "<group>"; };
 		36E0AD7F1B184E41006AF0B4 /* JVCMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaPlayer.h; sourceTree = "<group>"; };
 		36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaPlayer.m; sourceTree = "<group>"; };
@@ -221,11 +193,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				36435BDA1B256E1F00C21930 /* liblibmp4pkt.a in Frameworks */,
-				36509EBC1B1D9B9A00DEB1BA /* libJVDecodeAmrAudio.a in Frameworks */,
-				365520DC1B1C5CA2000F1FF9 /* libJDEC05.a in Frameworks */,
+				36C59E871B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a in Frameworks */,
 				36435B001B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a in Frameworks */,
 				63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */,
 				360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */,
+				36C59E861B55F9E200DB2014 /* libJDEC05.a in Frameworks */,
 				63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,22 +218,6 @@
 			children = (
 				36435BD51B256E0B00C21930 /* liblibmp4pkt.a */,
 				36435BD71B256E0B00C21930 /* libmp4pktTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		36509EB51B1D9B1A00DEB1BA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				36509EB91B1D9B1A00DEB1BA /* libJVDecodeAmrAudio.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		365520D51B1C5C94000F1FF9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				365520D91B1C5C94000F1FF9 /* libJDEC05.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -306,10 +262,10 @@
 		63E093AA1AFC516800AB90FA /* frame */ = {
 			isa = PBXGroup;
 			children = (
+				36C59E841B55F9E200DB2014 /* libJDEC05.a */,
+				36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */,
 				36435BCF1B256E0B00C21930 /* libmp4pkt.xcodeproj */,
 				36435AFF1B2198AA00C21930 /* libjvnetsdkV2.0.76.34_5.a */,
-				36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */,
-				365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */,
 				360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */,
 				63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */,
 				63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */,
@@ -497,8 +453,6 @@
 			);
 			dependencies = (
 				36435BD91B256E1800C21930 /* PBXTargetDependency */,
-				36509EBB1B1D9B9700DEB1BA /* PBXTargetDependency */,
-				365520DB1B1C5C9E000F1FF9 /* PBXTargetDependency */,
 			);
 			name = JVCCloudSEESDK;
 			productName = JVCCloudSEESDK;
@@ -552,14 +506,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 365520D51B1C5C94000F1FF9 /* Products */;
-					ProjectRef = 365520D41B1C5C94000F1FF9 /* JDEC05.xcodeproj */;
-				},
-				{
-					ProductGroup = 36509EB51B1D9B1A00DEB1BA /* Products */;
-					ProjectRef = 36509EB41B1D9B1A00DEB1BA /* JVDecodeAmrAudio.xcodeproj */;
-				},
-				{
 					ProductGroup = 36435BD01B256E0B00C21930 /* Products */;
 					ProjectRef = 36435BCF1B256E0B00C21930 /* libmp4pkt.xcodeproj */;
 				},
@@ -585,20 +531,6 @@
 			fileType = wrapper.cfbundle;
 			path = libmp4pktTests.xctest;
 			remoteRef = 36435BD61B256E0B00C21930 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		36509EB91B1D9B1A00DEB1BA /* libJVDecodeAmrAudio.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libJVDecodeAmrAudio.a;
-			remoteRef = 36509EB81B1D9B1A00DEB1BA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		365520D91B1C5C94000F1FF9 /* libJDEC05.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libJDEC05.a;
-			remoteRef = 365520D81B1C5C94000F1FF9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -669,16 +601,6 @@
 			isa = PBXTargetDependency;
 			name = libmp4pkt;
 			targetProxy = 36435BD81B256E1800C21930 /* PBXContainerItemProxy */;
-		};
-		36509EBB1B1D9B9700DEB1BA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = JVDecodeAmrAudio;
-			targetProxy = 36509EBA1B1D9B9700DEB1BA /* PBXContainerItemProxy */;
-		};
-		365520DB1B1C5C9E000F1FF9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = JDEC05;
-			targetProxy = 365520DA1B1C5C9E000F1FF9 /* PBXContainerItemProxy */;
 		};
 		AD5FB73F1A52AFBE00A85CCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

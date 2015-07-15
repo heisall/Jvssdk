@@ -1,7 +1,7 @@
 //
 //  JVCQueueHelper.h
 //  CloudSEE
-//
+//  视频的缓冲队列（缓冲池必须是唯一的，需要添加个标识，以免引起混乱）
 //  Created by chenzhenyang on 14-9-9.
 //  Copyright (c) 2014年 miaofaqiang. All rights reserved.
 //

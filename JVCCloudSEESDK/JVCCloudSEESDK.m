@@ -27,6 +27,7 @@
 #import "JVCVideoDecoderInterface.h"
 #import "JVCAudioCodecInterface.h"
 #import "JVCMediaPlayer.h"
+#import "Jmp4pkg.h"
 
 
 static const NSString      *kRecoedVideoFileFormat  = @".mp4";                             //保存录像的单个文件后缀
@@ -339,6 +340,7 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
         JVC_EnableLog(FALSE);
         JVD04_InitSDK();
         JVD05_InitSDK();
+        JP_InitSDK(32 * 1024, 1);
         InitDecode();      //板卡语音解码
         InitEncode();      //板卡语音编解]
         JVC_EnableHelp(true,3);  //手机端是3

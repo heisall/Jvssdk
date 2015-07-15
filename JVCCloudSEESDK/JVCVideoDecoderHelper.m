@@ -197,8 +197,6 @@ char  captureImageBuffer[1280*720*3] ={0};
                 
                 
                 ndecoderStatus = JVD05_DecodeOneFrame(nDecoderID,videoFrame->nSize,videoFrame->buf,&outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,0,nSystemVersion,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
-                NSLog(@"ndecoderStatus =========== %d", ndecoderStatus);
-                NSLog(@"nSize ==== %d", videoFrame->nSize);
                 
                 if (outVideoFrame->nWidth <=0 || outVideoFrame->nHeight <=0) {
                     

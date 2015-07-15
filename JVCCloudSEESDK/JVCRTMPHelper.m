@@ -88,7 +88,7 @@ static JVCRTMPHelper *helper = nil;
 {
     [self ResourceInit:playerView];
     
-    //JVC_ConnectRTMP(nChannelID,[rtmpUrl UTF8String],jvcrtmp_connectchange,jvcrtmp_videoCallBack);
+    JVC_ConnectRTMP(nChannelID,[rtmpUrl UTF8String],jvcrtmp_connectchange,jvcrtmp_videoCallBack);
 }
 
 /**

@@ -26,6 +26,12 @@
     NSString *curTimeBeforeReadVideoFrame;//读取MP4数据之前记录下时间
     
     NSString *curTimeAfterShowVideoFrame;//显示MP4后记录下时间
+    
+    int lastFrameTime;                  //上一帧的时间戳
+    
+    int curFrameTime;                   //下一帧的时间戳
+    
+    int timeBetweenFrames;              //两帧之间的间隔
 
 }
 @end
@@ -35,6 +41,8 @@ static JVCMediaPlayer *player = nil;
 @implementation JVCMediaPlayer
 @synthesize showView;
 @synthesize glView;
+
+int renderTime = 3;                 //渲染时间，定为3毫秒
 
 /**
  *  单例
@@ -75,6 +83,9 @@ static JVCMediaPlayer *player = nil;
 - (void)dealloc{
     
     [super dealloc];
+    
+    if(bufferFrame)
+        free(bufferFrame);
     
 }
 /**
@@ -143,6 +154,8 @@ void msleep(int millisSec) {
     
     upkHandle = JP_OpenUnpkg((char *)file, &mp4Info, 0);
     
+    timeBetweenFrames = 1000/mp4Info.dFrameRate;
+    
     NSLog(@"file ==== %s", file);
     
     NSLog(@"video type === %s, audio type === %s", mp4Info.szVideoMediaDataName, mp4Info.szAudioMediaDataName);
@@ -185,9 +198,10 @@ void msleep(int millisSec) {
         JP_UnpkgOneFrame(upkHandle, &VideoUnpkt);
         [self decodeVideoFrameAndPlay:VideoUnpkt];
         
+        
         if(curTimeAfterShowVideoFrame != nil && curTimeBeforeReadVideoFrame != nil){
-            NSLog(@"=======%.f", ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
-            msleep(40 - 3 - ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
+            //NSLog(@"=======%.f", ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
+            msleep(timeBetweenFrames - renderTime - ([curTimeAfterShowVideoFrame doubleValue]-[curTimeBeforeReadVideoFrame doubleValue])*1000);
         }else
             msleep(40);
     }

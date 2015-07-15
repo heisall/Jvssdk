@@ -142,9 +142,7 @@ char          pcmOutBuffer[1024] = {0};
             
         }
         
-        NSLog(@"before openal show audio frame!");
         [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:AudioSize_G711 playSoundType:playSoundType_8k16B];
-        NSLog(@"before openal show audio frame!");
         return true;
     }
     

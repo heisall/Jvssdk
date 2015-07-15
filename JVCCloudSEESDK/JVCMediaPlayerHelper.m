@@ -67,8 +67,6 @@ int           nLocalChannel   = 1;
 - (void)dealloc{
     
     [super dealloc];
-    [videoDecoder dealloc];
-    [audioDecoder dealloc];
 }
 
 //初始播放化资源，包括解码器，队列等
@@ -78,7 +76,8 @@ int           nLocalChannel   = 1;
                     videoType:(int)nVideoType
                     audioType:(int)nAudioType{
     
-    self.delegate = [JVCMediaPlayer shareMediaPlayer];
+    if(!self.delegate)
+        self.delegate = [JVCMediaPlayer shareMediaPlayer];
     //初始化视频解码器
     videoDecoder = [[JVCMediaVideoDecoder alloc] init];
     [videoDecoder openVideoDecoder:0 wVideoCodecID:nVideoType];
@@ -94,10 +93,10 @@ int           nLocalChannel   = 1;
 - (void)MediaPlayerResourceRelease{
     
     [videoDecoder closeVideoDecoder];
-    //[videoDecoder dealloc];
+    [videoDecoder dealloc];
     
     [audioDecoder closeAudioDecoder];
-    //[audioDecoder dealloc];
+    [audioDecoder dealloc];
 }
 
 

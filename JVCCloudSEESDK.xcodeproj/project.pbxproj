@@ -1,0 +1,822 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */; };
+		367AEF211B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */; };
+		367AEF241B1EF036001CA7B6 /* JVCMediaAudioDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */; };
+		36C59E861B55F9E200DB2014 /* libJDEC05.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C59E841B55F9E200DB2014 /* libJDEC05.a */; };
+		36C59E871B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */; };
+		36E0AD811B184E41006AF0B4 /* JVCMediaPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */; };
+		36E0AD841B184E56006AF0B4 /* JVCMediaPlayerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */; };
+		63BBB1261AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BBB1251AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m */; };
+		63BBB1291AE1000200E0D05F /* JVCLanScanDeviceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BBB1281AE1000200E0D05F /* JVCLanScanDeviceModel.m */; };
+		63BBB12C1AE1001800E0D05F /* JVCLocalCacheModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BBB12B1AE1001800E0D05F /* JVCLocalCacheModel.m */; };
+		63CBD99C1AC7A2AE00378CC5 /* JVCPhotoModelObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CBD99B1AC7A2AE00378CC5 /* JVCPhotoModelObj.m */; };
+		63CBD9A01AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CBD99F1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		63CC3BC71AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */; };
+		63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */; };
+		AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */; };
+		AD5FB73D1A52AFBE00A85CCE /* libJVCCloudSEESDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */; };
+		AD5FB7671A52B14400A85CCE /* OpenALBufferViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7661A52B14400A85CCE /* OpenALBufferViewcontroller.m */; };
+		AD5FB7761A52B17F00A85CCE /* AQPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB76A1A52B17F00A85CCE /* AQPlayer.mm */; };
+		AD5FB7771A52B17F00A85CCE /* AQRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB76C1A52B17F00A85CCE /* AQRecorder.mm */; };
+		AD5FB7781A52B17F00A85CCE /* AQSController.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB76E1A52B17F00A85CCE /* AQSController.mm */; };
+		AD5FB7791A52B17F00A85CCE /* CADebugMacros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB76F1A52B17F00A85CCE /* CADebugMacros.cpp */; };
+		AD5FB77A1A52B17F00A85CCE /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7721A52B17F00A85CCE /* CAStreamBasicDescription.cpp */; };
+		AD5FB77B1A52B17F00A85CCE /* CAXException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7741A52B17F00A85CCE /* CAXException.cpp */; };
+		AD5FB7881A52B1C200A85CCE /* JVCRecordVideoInter.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB77E1A52B1C200A85CCE /* JVCRecordVideoInter.mm */; };
+		AD5FB7891A52B1C200A85CCE /* JVCVideoDecoderInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7801A52B1C200A85CCE /* JVCVideoDecoderInterface.mm */; };
+		AD5FB78A1A52B1C200A85CCE /* JVCAudioCodecInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7821A52B1C200A85CCE /* JVCAudioCodecInterface.mm */; };
+		AD5FB78B1A52B1C200A85CCE /* data_queue.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7841A52B1C200A85CCE /* data_queue.mm */; };
+		AD5FB78C1A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7871A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm */; };
+		AD5FB7A71A52B1DC00A85CCE /* JVCRecordVideoHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7901A52B1DC00A85CCE /* JVCRecordVideoHelper.m */; };
+		AD5FB7A81A52B1DC00A85CCE /* JVCVideoDecoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7921A52B1DC00A85CCE /* JVCVideoDecoderHelper.m */; };
+		AD5FB7A91A52B1DC00A85CCE /* JVCAudioQueueHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7941A52B1DC00A85CCE /* JVCAudioQueueHelper.mm */; };
+		AD5FB7AA1A52B1DC00A85CCE /* JVCQueueHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7961A52B1DC00A85CCE /* JVCQueueHelper.mm */; };
+		AD5FB7AC1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79A1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m */; };
+		AD5FB7AD1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79B1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m */; };
+		AD5FB7AE1A52B1DC00A85CCE /* JVCPlaySoundHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */; };
+		AD5FB7B01A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */; };
+		AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A41A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m */; };
+		AD5FB7B21A52B1DC00A85CCE /* JVCStruct2Dic.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */; };
+		ADBAF4F91BE3452E00415478 /* JVCNPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADBAF4F81BE3452E00415478 /* JVCNPlayer.mm */; settings = {ASSET_TAGS = (); }; };
+		ADBAF5031BE347F000415478 /* libnplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBAF5021BE347F000415478 /* libnplayer.a */; settings = {ASSET_TAGS = (); }; };
+		ADBEA03C1A8893FF00753852 /* JVCVoiceIntercomHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */; };
+		ADEE6EB61BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AD5FB73E1A52AFBE00A85CCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD5FB7291A52AFBD00A85CCE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AD5FB7301A52AFBD00A85CCE;
+			remoteInfo = JVCCloudSEESDK;
+		};
+		AD85E2DF1BE9A8F600F378CE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 36495D2C1B141A0200BBC5F3;
+			remoteInfo = libmp4pkt;
+		};
+		AD85E2E11BE9A8F600F378CE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 36495D371B141A0200BBC5F3;
+			remoteInfo = libmp4pktTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AD5FB72F1A52AFBD00A85CCE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		360E6CDD1AFC91CB00E6CDAF /* JVCDecoderMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCDecoderMacro.h; sourceTree = "<group>"; };
+		360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjvdecoder_01_V2.0.1_2015_1_23.a; sourceTree = "<group>"; };
+		36509EB31B1D841A00DEB1BA /* JVCMP4Player.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCMP4Player.h; sourceTree = "<group>"; };
+		365520CD1B1BEB42000F1FF9 /* Jmp4pkg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Jmp4pkg.h; sourceTree = "<group>"; };
+		367AEF1F1B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaVideoDecoder.h; sourceTree = "<group>"; };
+		367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaVideoDecoder.m; sourceTree = "<group>"; };
+		367AEF221B1EF036001CA7B6 /* JVCMediaAudioDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaAudioDecoder.h; sourceTree = "<group>"; };
+		367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaAudioDecoder.m; sourceTree = "<group>"; };
+		36C59E841B55F9E200DB2014 /* libJDEC05.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJDEC05.a; sourceTree = "<group>"; };
+		36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAmrAudio2_2013_6_27_2.a; sourceTree = "<group>"; };
+		36E0AD741B184680006AF0B4 /* JVCRTMPMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JVCRTMPMacro.h; sourceTree = "<group>"; };
+		36E0AD7F1B184E41006AF0B4 /* JVCMediaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaPlayer.h; sourceTree = "<group>"; };
+		36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaPlayer.m; sourceTree = "<group>"; };
+		36E0AD821B184E56006AF0B4 /* JVCMediaPlayerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCMediaPlayerHelper.h; sourceTree = "<group>"; };
+		36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCMediaPlayerHelper.m; sourceTree = "<group>"; };
+		63BBB1241AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCLANScanWithSetHelpYSTNOHelper.h; sourceTree = "<group>"; };
+		63BBB1251AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCLANScanWithSetHelpYSTNOHelper.m; sourceTree = "<group>"; };
+		63BBB1271AE1000200E0D05F /* JVCLanScanDeviceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCLanScanDeviceModel.h; sourceTree = "<group>"; };
+		63BBB1281AE1000200E0D05F /* JVCLanScanDeviceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCLanScanDeviceModel.m; sourceTree = "<group>"; };
+		63BBB12A1AE1001800E0D05F /* JVCLocalCacheModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCLocalCacheModel.h; sourceTree = "<group>"; };
+		63BBB12B1AE1001800E0D05F /* JVCLocalCacheModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCLocalCacheModel.m; sourceTree = "<group>"; };
+		63CBD99A1AC7A2AE00378CC5 /* JVCPhotoModelObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCPhotoModelObj.h; sourceTree = "<group>"; };
+		63CBD99B1AC7A2AE00378CC5 /* JVCPhotoModelObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCPhotoModelObj.m; sourceTree = "<group>"; };
+		63CBD99E1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ALAssetsLibrary+CustomPhotoAlbum.h"; sourceTree = "<group>"; };
+		63CBD99F1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ALAssetsLibrary+CustomPhotoAlbum.m"; sourceTree = "<group>"; };
+		63CC3BC51AC8353700F62C15 /* JVCConstansALAssetsMathHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCConstansALAssetsMathHelper.h; sourceTree = "<group>"; };
+		63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCConstansALAssetsMathHelper.m; sourceTree = "<group>"; };
+		63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGlView_v2.0.4.a; sourceTree = "<group>"; };
+		63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAndEncodeG729a_2013_6_7_3.a; sourceTree = "<group>"; };
+		AD140F021BE70FDC00B4D676 /* JVCDeviceMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCDeviceMacro.h; sourceTree = "<group>"; };
+		AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJVCCloudSEESDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEESDK.m; sourceTree = "<group>"; };
+		AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JVCCloudSEESDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AD5FB7421A52AFBE00A85CCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AD5FB75D1A52B0B100A85CCE /* JVCQueueMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCQueueMacro.h; sourceTree = "<group>"; };
+		AD5FB75E1A52B0B100A85CCE /* JVCStruct2DicMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCStruct2DicMacro.h; sourceTree = "<group>"; };
+		AD5FB75F1A52B0B100A85CCE /* JVNetConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVNetConst.h; sourceTree = "<group>"; };
+		AD5FB7601A52B0B100A85CCE /* JVCCloudSEENetworkMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEENetworkMacro.h; sourceTree = "<group>"; };
+		AD5FB7651A52B14400A85CCE /* OpenALBufferViewcontroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenALBufferViewcontroller.h; sourceTree = "<group>"; };
+		AD5FB7661A52B14400A85CCE /* OpenALBufferViewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenALBufferViewcontroller.m; sourceTree = "<group>"; };
+		AD5FB7691A52B17F00A85CCE /* AQPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPlayer.h; sourceTree = "<group>"; };
+		AD5FB76A1A52B17F00A85CCE /* AQPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AQPlayer.mm; sourceTree = "<group>"; };
+		AD5FB76B1A52B17F00A85CCE /* AQRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQRecorder.h; sourceTree = "<group>"; };
+		AD5FB76C1A52B17F00A85CCE /* AQRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AQRecorder.mm; sourceTree = "<group>"; };
+		AD5FB76D1A52B17F00A85CCE /* AQSController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQSController.h; sourceTree = "<group>"; };
+		AD5FB76E1A52B17F00A85CCE /* AQSController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AQSController.mm; sourceTree = "<group>"; };
+		AD5FB76F1A52B17F00A85CCE /* CADebugMacros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CADebugMacros.cpp; sourceTree = "<group>"; };
+		AD5FB7701A52B17F00A85CCE /* CADebugMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CADebugMacros.h; sourceTree = "<group>"; };
+		AD5FB7711A52B17F00A85CCE /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMath.h; sourceTree = "<group>"; };
+		AD5FB7721A52B17F00A85CCE /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
+		AD5FB7731A52B17F00A85CCE /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAStreamBasicDescription.h; sourceTree = "<group>"; };
+		AD5FB7741A52B17F00A85CCE /* CAXException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CAXException.cpp; sourceTree = "<group>"; };
+		AD5FB7751A52B17F00A85CCE /* CAXException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAXException.h; sourceTree = "<group>"; };
+		AD5FB77D1A52B1C200A85CCE /* JVCRecordVideoInter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCRecordVideoInter.h; sourceTree = "<group>"; };
+		AD5FB77E1A52B1C200A85CCE /* JVCRecordVideoInter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCRecordVideoInter.mm; sourceTree = "<group>"; };
+		AD5FB77F1A52B1C200A85CCE /* JVCVideoDecoderInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVideoDecoderInterface.h; sourceTree = "<group>"; };
+		AD5FB7801A52B1C200A85CCE /* JVCVideoDecoderInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCVideoDecoderInterface.mm; sourceTree = "<group>"; };
+		AD5FB7811A52B1C200A85CCE /* JVCAudioCodecInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCAudioCodecInterface.h; sourceTree = "<group>"; };
+		AD5FB7821A52B1C200A85CCE /* JVCAudioCodecInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCAudioCodecInterface.mm; sourceTree = "<group>"; };
+		AD5FB7831A52B1C200A85CCE /* JVCVoiceencInteface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVoiceencInteface.h; sourceTree = "<group>"; };
+		AD5FB7841A52B1C200A85CCE /* data_queue.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = data_queue.mm; sourceTree = "<group>"; };
+		AD5FB7851A52B1C200A85CCE /* data_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_queue.h; sourceTree = "<group>"; };
+		AD5FB7861A52B1C200A85CCE /* JVCCloudSEENetworkInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEENetworkInterface.h; sourceTree = "<group>"; };
+		AD5FB7871A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCCloudSEENetworkInterface.mm; sourceTree = "<group>"; };
+		AD5FB78E1A52B1DC00A85CCE /* JVCRecordVideoHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCRecordVideoHelper.h; sourceTree = "<group>"; };
+		AD5FB78F1A52B1DC00A85CCE /* GlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlView.h; sourceTree = "<group>"; };
+		AD5FB7901A52B1DC00A85CCE /* JVCRecordVideoHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCRecordVideoHelper.m; sourceTree = "<group>"; };
+		AD5FB7911A52B1DC00A85CCE /* JVCVideoDecoderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVideoDecoderHelper.h; sourceTree = "<group>"; };
+		AD5FB7921A52B1DC00A85CCE /* JVCVideoDecoderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCVideoDecoderHelper.m; sourceTree = "<group>"; };
+		AD5FB7931A52B1DC00A85CCE /* JVCAudioQueueHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCAudioQueueHelper.h; sourceTree = "<group>"; };
+		AD5FB7941A52B1DC00A85CCE /* JVCAudioQueueHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCAudioQueueHelper.mm; sourceTree = "<group>"; };
+		AD5FB7951A52B1DC00A85CCE /* JVCQueueHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCQueueHelper.h; sourceTree = "<group>"; };
+		AD5FB7961A52B1DC00A85CCE /* JVCQueueHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCQueueHelper.mm; sourceTree = "<group>"; };
+		AD5FB7991A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCRemotePlayBackWithVideoDecoderHelper.h; sourceTree = "<group>"; };
+		AD5FB79A1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCRemotePlayBackWithVideoDecoderHelper.m; sourceTree = "<group>"; };
+		AD5FB79B1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEENetworkGeneralHelper.m; sourceTree = "<group>"; };
+		AD5FB79C1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEENetworkGeneralHelper.h; sourceTree = "<group>"; };
+		AD5FB79D1A52B1DC00A85CCE /* JVCPlaySoundHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCPlaySoundHelper.h; sourceTree = "<group>"; };
+		AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCPlaySoundHelper.m; sourceTree = "<group>"; };
+		AD5FB7A11A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEEManagerHelper.h; sourceTree = "<group>"; };
+		AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEEManagerHelper.m; sourceTree = "<group>"; };
+		AD5FB7A31A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESendGeneralHelper.h; sourceTree = "<group>"; };
+		AD5FB7A41A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCCloudSEESendGeneralHelper.m; sourceTree = "<group>"; };
+		AD5FB7A51A52B1DC00A85CCE /* JVCStruct2Dic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCStruct2Dic.h; sourceTree = "<group>"; };
+		AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCStruct2Dic.m; sourceTree = "<group>"; };
+		AD5FB8F81A53833F00A85CCE /* JVCCloudSEESDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDK.h; sourceTree = "<group>"; };
+		AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libmp4pkt.xcodeproj; path = ../libmp4pkt/libmp4pkt.xcodeproj; sourceTree = "<group>"; };
+		ADBAF4F71BE3452E00415478 /* JVCNPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCNPlayer.h; sourceTree = "<group>"; };
+		ADBAF4F81BE3452E00415478 /* JVCNPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = JVCNPlayer.mm; sourceTree = "<group>"; };
+		ADBAF4FB1BE3459800415478 /* defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defines.h; sourceTree = "<group>"; };
+		ADBAF4FC1BE3459800415478 /* handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = handler.h; sourceTree = "<group>"; };
+		ADBAF4FD1BE3459800415478 /* nplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nplayer.h; sourceTree = "<group>"; };
+		ADBAF4FE1BE3459800415478 /* play_suit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = play_suit.h; sourceTree = "<group>"; };
+		ADBAF4FF1BE3459800415478 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		ADBAF5021BE347F000415478 /* libnplayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnplayer.a; sourceTree = "<group>"; };
+		ADBEA03A1A8893FF00753852 /* JVCVoiceIntercomHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVoiceIntercomHelper.h; sourceTree = "<group>"; };
+		ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCVoiceIntercomHelper.m; sourceTree = "<group>"; };
+		ADE7C9761A53F49E006B7144 /* JVCCloudSEESDKMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDKMacro.h; sourceTree = "<group>"; };
+		ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjvnetsdkv2.0.76.3.78-4.a"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AD5FB72E1A52AFBD00A85CCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36C59E871B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a in Frameworks */,
+				63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */,
+				ADEE6EB61BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a in Frameworks */,
+				360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */,
+				ADBAF5031BE347F000415478 /* libnplayer.a in Frameworks */,
+				36C59E861B55F9E200DB2014 /* libJDEC05.a in Frameworks */,
+				63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD5FB7391A52AFBE00A85CCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD5FB73D1A52AFBE00A85CCE /* libJVCCloudSEESDK.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		36E0AD751B184697006AF0B4 /* MP4 */ = {
+			isa = PBXGroup;
+			children = (
+				36E0AD7F1B184E41006AF0B4 /* JVCMediaPlayer.h */,
+				36E0AD801B184E41006AF0B4 /* JVCMediaPlayer.m */,
+				36E0AD821B184E56006AF0B4 /* JVCMediaPlayerHelper.h */,
+				36E0AD831B184E56006AF0B4 /* JVCMediaPlayerHelper.m */,
+				367AEF1F1B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.h */,
+				367AEF201B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m */,
+				367AEF221B1EF036001CA7B6 /* JVCMediaAudioDecoder.h */,
+				367AEF231B1EF036001CA7B6 /* JVCMediaAudioDecoder.m */,
+			);
+			name = MP4;
+			sourceTree = "<group>";
+		};
+		63CBD9991AC7A2A600378CC5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				63BBB12A1AE1001800E0D05F /* JVCLocalCacheModel.h */,
+				63BBB12B1AE1001800E0D05F /* JVCLocalCacheModel.m */,
+				63BBB1271AE1000200E0D05F /* JVCLanScanDeviceModel.h */,
+				63BBB1281AE1000200E0D05F /* JVCLanScanDeviceModel.m */,
+				63CBD99A1AC7A2AE00378CC5 /* JVCPhotoModelObj.h */,
+				63CBD99B1AC7A2AE00378CC5 /* JVCPhotoModelObj.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		63CBD99D1AC7A4B000378CC5 /* general */ = {
+			isa = PBXGroup;
+			children = (
+				63CBD99E1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.h */,
+				63CBD99F1AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m */,
+			);
+			name = general;
+			sourceTree = "<group>";
+		};
+		63E093AA1AFC516800AB90FA /* frame */ = {
+			isa = PBXGroup;
+			children = (
+				AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */,
+				ADBAF5021BE347F000415478 /* libnplayer.a */,
+				ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */,
+				36C59E841B55F9E200DB2014 /* libJDEC05.a */,
+				36C59E851B55F9E200DB2014 /* libJVDecodeAmrAudio2_2013_6_27_2.a */,
+				360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */,
+				63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */,
+				63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */,
+			);
+			name = frame;
+			sourceTree = "<group>";
+		};
+		AD5FB7281A52AFBD00A85CCE = {
+			isa = PBXGroup;
+			children = (
+				AD5FB74B1A52B07400A85CCE /* Frameworks */,
+				AD5FB7331A52AFBD00A85CCE /* JVCCloudSEESDK */,
+				AD5FB7401A52AFBE00A85CCE /* JVCCloudSEESDKTests */,
+				AD5FB7321A52AFBD00A85CCE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AD5FB7321A52AFBD00A85CCE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */,
+				AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AD5FB7331A52AFBD00A85CCE /* JVCCloudSEESDK */ = {
+			isa = PBXGroup;
+			children = (
+				ADBAF4F51BE3450500415478 /* Media */,
+				63CBD99D1AC7A4B000378CC5 /* general */,
+				63CBD9991AC7A2A600378CC5 /* Model */,
+				AD5FB78D1A52B1D100A85CCE /* helper */,
+				AD5FB77C1A52B1B800A85CCE /* InterfaceFiles */,
+				AD5FB7631A52B11E00A85CCE /* audio */,
+				AD5FB75C1A52B0A300A85CCE /* macro */,
+				AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */,
+				ADE7C9761A53F49E006B7144 /* JVCCloudSEESDKMacro.h */,
+				AD5FB8F81A53833F00A85CCE /* JVCCloudSEESDK.h */,
+			);
+			path = JVCCloudSEESDK;
+			sourceTree = "<group>";
+		};
+		AD5FB7401A52AFBE00A85CCE /* JVCCloudSEESDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7411A52AFBE00A85CCE /* Supporting Files */,
+			);
+			path = JVCCloudSEESDKTests;
+			sourceTree = "<group>";
+		};
+		AD5FB7411A52AFBE00A85CCE /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7421A52AFBE00A85CCE /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AD5FB74B1A52B07400A85CCE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63E093AA1AFC516800AB90FA /* frame */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD5FB75C1A52B0A300A85CCE /* macro */ = {
+			isa = PBXGroup;
+			children = (
+				AD140F021BE70FDC00B4D676 /* JVCDeviceMacro.h */,
+				36E0AD741B184680006AF0B4 /* JVCRTMPMacro.h */,
+				360E6CDD1AFC91CB00E6CDAF /* JVCDecoderMacro.h */,
+				AD5FB75D1A52B0B100A85CCE /* JVCQueueMacro.h */,
+				AD5FB75E1A52B0B100A85CCE /* JVCStruct2DicMacro.h */,
+				AD5FB75F1A52B0B100A85CCE /* JVNetConst.h */,
+				AD5FB7601A52B0B100A85CCE /* JVCCloudSEENetworkMacro.h */,
+				36509EB31B1D841A00DEB1BA /* JVCMP4Player.h */,
+			);
+			name = macro;
+			sourceTree = "<group>";
+		};
+		AD5FB7631A52B11E00A85CCE /* audio */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7681A52B17500A85CCE /* AQRecoder */,
+				AD5FB7641A52B13100A85CCE /* openAL */,
+			);
+			name = audio;
+			sourceTree = "<group>";
+		};
+		AD5FB7641A52B13100A85CCE /* openAL */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7651A52B14400A85CCE /* OpenALBufferViewcontroller.h */,
+				AD5FB7661A52B14400A85CCE /* OpenALBufferViewcontroller.m */,
+			);
+			name = openAL;
+			sourceTree = "<group>";
+		};
+		AD5FB7681A52B17500A85CCE /* AQRecoder */ = {
+			isa = PBXGroup;
+			children = (
+				AD5FB7691A52B17F00A85CCE /* AQPlayer.h */,
+				AD5FB76A1A52B17F00A85CCE /* AQPlayer.mm */,
+				AD5FB76B1A52B17F00A85CCE /* AQRecorder.h */,
+				AD5FB76C1A52B17F00A85CCE /* AQRecorder.mm */,
+				AD5FB76D1A52B17F00A85CCE /* AQSController.h */,
+				AD5FB76E1A52B17F00A85CCE /* AQSController.mm */,
+				AD5FB76F1A52B17F00A85CCE /* CADebugMacros.cpp */,
+				AD5FB7701A52B17F00A85CCE /* CADebugMacros.h */,
+				AD5FB7711A52B17F00A85CCE /* CAMath.h */,
+				AD5FB7721A52B17F00A85CCE /* CAStreamBasicDescription.cpp */,
+				AD5FB7731A52B17F00A85CCE /* CAStreamBasicDescription.h */,
+				AD5FB7741A52B17F00A85CCE /* CAXException.cpp */,
+				AD5FB7751A52B17F00A85CCE /* CAXException.h */,
+			);
+			name = AQRecoder;
+			sourceTree = "<group>";
+		};
+		AD5FB77C1A52B1B800A85CCE /* InterfaceFiles */ = {
+			isa = PBXGroup;
+			children = (
+				ADBAF4FA1BE3457A00415478 /* nplay */,
+				365520CD1B1BEB42000F1FF9 /* Jmp4pkg.h */,
+				AD5FB77D1A52B1C200A85CCE /* JVCRecordVideoInter.h */,
+				AD5FB77E1A52B1C200A85CCE /* JVCRecordVideoInter.mm */,
+				AD5FB77F1A52B1C200A85CCE /* JVCVideoDecoderInterface.h */,
+				AD5FB7801A52B1C200A85CCE /* JVCVideoDecoderInterface.mm */,
+				AD5FB7811A52B1C200A85CCE /* JVCAudioCodecInterface.h */,
+				AD5FB7821A52B1C200A85CCE /* JVCAudioCodecInterface.mm */,
+				AD5FB7831A52B1C200A85CCE /* JVCVoiceencInteface.h */,
+				AD5FB7841A52B1C200A85CCE /* data_queue.mm */,
+				AD5FB7851A52B1C200A85CCE /* data_queue.h */,
+				AD5FB7861A52B1C200A85CCE /* JVCCloudSEENetworkInterface.h */,
+				AD5FB7871A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm */,
+			);
+			name = InterfaceFiles;
+			sourceTree = "<group>";
+		};
+		AD5FB78D1A52B1D100A85CCE /* helper */ = {
+			isa = PBXGroup;
+			children = (
+				36E0AD751B184697006AF0B4 /* MP4 */,
+				63BBB1241AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.h */,
+				63BBB1251AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m */,
+				AD5FB78E1A52B1DC00A85CCE /* JVCRecordVideoHelper.h */,
+				AD5FB78F1A52B1DC00A85CCE /* GlView.h */,
+				AD5FB7901A52B1DC00A85CCE /* JVCRecordVideoHelper.m */,
+				AD5FB7911A52B1DC00A85CCE /* JVCVideoDecoderHelper.h */,
+				AD5FB7921A52B1DC00A85CCE /* JVCVideoDecoderHelper.m */,
+				AD5FB7931A52B1DC00A85CCE /* JVCAudioQueueHelper.h */,
+				AD5FB7941A52B1DC00A85CCE /* JVCAudioQueueHelper.mm */,
+				AD5FB7951A52B1DC00A85CCE /* JVCQueueHelper.h */,
+				AD5FB7961A52B1DC00A85CCE /* JVCQueueHelper.mm */,
+				AD5FB7991A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.h */,
+				AD5FB79A1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m */,
+				AD5FB79B1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m */,
+				AD5FB79C1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.h */,
+				ADBEA03A1A8893FF00753852 /* JVCVoiceIntercomHelper.h */,
+				ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */,
+				AD5FB79D1A52B1DC00A85CCE /* JVCPlaySoundHelper.h */,
+				AD5FB79E1A52B1DC00A85CCE /* JVCPlaySoundHelper.m */,
+				AD5FB7A11A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.h */,
+				AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */,
+				AD5FB7A31A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.h */,
+				AD5FB7A41A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m */,
+				AD5FB7A51A52B1DC00A85CCE /* JVCStruct2Dic.h */,
+				AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */,
+				63CC3BC51AC8353700F62C15 /* JVCConstansALAssetsMathHelper.h */,
+				63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */,
+			);
+			name = helper;
+			sourceTree = "<group>";
+		};
+		AD85E2DB1BE9A8F600F378CE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD85E2E01BE9A8F600F378CE /* liblibmp4pkt.a */,
+				AD85E2E21BE9A8F600F378CE /* libmp4pktTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ADBAF4F51BE3450500415478 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				ADBAF4F71BE3452E00415478 /* JVCNPlayer.h */,
+				ADBAF4F81BE3452E00415478 /* JVCNPlayer.mm */,
+			);
+			name = Media;
+			sourceTree = "<group>";
+		};
+		ADBAF4FA1BE3457A00415478 /* nplay */ = {
+			isa = PBXGroup;
+			children = (
+				ADBAF4FB1BE3459800415478 /* defines.h */,
+				ADBAF4FC1BE3459800415478 /* handler.h */,
+				ADBAF4FD1BE3459800415478 /* nplayer.h */,
+				ADBAF4FE1BE3459800415478 /* play_suit.h */,
+				ADBAF4FF1BE3459800415478 /* types.h */,
+			);
+			name = nplay;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD5FB7451A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDK" */;
+			buildPhases = (
+				AD5FB72D1A52AFBD00A85CCE /* Sources */,
+				AD5FB72E1A52AFBD00A85CCE /* Frameworks */,
+				AD5FB72F1A52AFBD00A85CCE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JVCCloudSEESDK;
+			productName = JVCCloudSEESDK;
+			productReference = AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		AD5FB73B1A52AFBE00A85CCE /* JVCCloudSEESDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD5FB7481A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDKTests" */;
+			buildPhases = (
+				AD5FB7381A52AFBE00A85CCE /* Sources */,
+				AD5FB7391A52AFBE00A85CCE /* Frameworks */,
+				AD5FB73A1A52AFBE00A85CCE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AD5FB73F1A52AFBE00A85CCE /* PBXTargetDependency */,
+			);
+			name = JVCCloudSEESDKTests;
+			productName = JVCCloudSEESDKTests;
+			productReference = AD5FB73C1A52AFBE00A85CCE /* JVCCloudSEESDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AD5FB7291A52AFBD00A85CCE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = chenzhenyang;
+				TargetAttributes = {
+					AD5FB7301A52AFBD00A85CCE = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					AD5FB73B1A52AFBE00A85CCE = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = AD5FB72C1A52AFBD00A85CCE /* Build configuration list for PBXProject "JVCCloudSEESDK" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AD5FB7281A52AFBD00A85CCE;
+			productRefGroup = AD5FB7321A52AFBD00A85CCE /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = AD85E2DB1BE9A8F600F378CE /* Products */;
+					ProjectRef = AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */,
+				AD5FB73B1A52AFBE00A85CCE /* JVCCloudSEESDKTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		AD85E2E01BE9A8F600F378CE /* liblibmp4pkt.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibmp4pkt.a;
+			remoteRef = AD85E2DF1BE9A8F600F378CE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AD85E2E21BE9A8F600F378CE /* libmp4pktTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = libmp4pktTests.xctest;
+			remoteRef = AD85E2E11BE9A8F600F378CE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AD5FB73A1A52AFBE00A85CCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AD5FB72D1A52AFBD00A85CCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */,
+				AD5FB7AA1A52B1DC00A85CCE /* JVCQueueHelper.mm in Sources */,
+				AD5FB7771A52B17F00A85CCE /* AQRecorder.mm in Sources */,
+				AD5FB7761A52B17F00A85CCE /* AQPlayer.mm in Sources */,
+				AD5FB7B01A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m in Sources */,
+				AD5FB7881A52B1C200A85CCE /* JVCRecordVideoInter.mm in Sources */,
+				36E0AD841B184E56006AF0B4 /* JVCMediaPlayerHelper.m in Sources */,
+				AD5FB7781A52B17F00A85CCE /* AQSController.mm in Sources */,
+				AD5FB77B1A52B17F00A85CCE /* CAXException.cpp in Sources */,
+				367AEF211B1EEFBD001CA7B6 /* JVCMediaVideoDecoder.m in Sources */,
+				ADBAF4F91BE3452E00415478 /* JVCNPlayer.mm in Sources */,
+				AD5FB7791A52B17F00A85CCE /* CADebugMacros.cpp in Sources */,
+				AD5FB7AD1A52B1DC00A85CCE /* JVCCloudSEENetworkGeneralHelper.m in Sources */,
+				AD5FB7AE1A52B1DC00A85CCE /* JVCPlaySoundHelper.m in Sources */,
+				AD5FB78B1A52B1C200A85CCE /* data_queue.mm in Sources */,
+				63CC3BC71AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m in Sources */,
+				AD5FB7A91A52B1DC00A85CCE /* JVCAudioQueueHelper.mm in Sources */,
+				63BBB1261AE0FFD400E0D05F /* JVCLANScanWithSetHelpYSTNOHelper.m in Sources */,
+				ADBEA03C1A8893FF00753852 /* JVCVoiceIntercomHelper.m in Sources */,
+				AD5FB7A71A52B1DC00A85CCE /* JVCRecordVideoHelper.m in Sources */,
+				36E0AD811B184E41006AF0B4 /* JVCMediaPlayer.m in Sources */,
+				AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */,
+				AD5FB7AC1A52B1DC00A85CCE /* JVCRemotePlayBackWithVideoDecoderHelper.m in Sources */,
+				63CBD9A01AC7A4B800378CC5 /* ALAssetsLibrary+CustomPhotoAlbum.m in Sources */,
+				63BBB12C1AE1001800E0D05F /* JVCLocalCacheModel.m in Sources */,
+				AD5FB7671A52B14400A85CCE /* OpenALBufferViewcontroller.m in Sources */,
+				AD5FB7891A52B1C200A85CCE /* JVCVideoDecoderInterface.mm in Sources */,
+				AD5FB77A1A52B17F00A85CCE /* CAStreamBasicDescription.cpp in Sources */,
+				AD5FB7B21A52B1DC00A85CCE /* JVCStruct2Dic.m in Sources */,
+				63BBB1291AE1000200E0D05F /* JVCLanScanDeviceModel.m in Sources */,
+				367AEF241B1EF036001CA7B6 /* JVCMediaAudioDecoder.m in Sources */,
+				63CBD99C1AC7A2AE00378CC5 /* JVCPhotoModelObj.m in Sources */,
+				AD5FB7A81A52B1DC00A85CCE /* JVCVideoDecoderHelper.m in Sources */,
+				AD5FB78C1A52B1C200A85CCE /* JVCCloudSEENetworkInterface.mm in Sources */,
+				AD5FB78A1A52B1C200A85CCE /* JVCAudioCodecInterface.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AD5FB7381A52AFBE00A85CCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AD5FB73F1A52AFBE00A85CCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AD5FB7301A52AFBD00A85CCE /* JVCCloudSEESDK */;
+			targetProxy = AD5FB73E1A52AFBE00A85CCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AD5FB7431A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = armv7;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALID_ARCHS = armv7;
+			};
+			name = Debug;
+		};
+		AD5FB7441A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = armv7;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = armv7;
+			};
+			name = Release;
+		};
+		AD5FB7461A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "";
+				GCC_C_LANGUAGE_STANDARD = gnu89;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/chenzhenyang/Desktop/CloudSEESDK/SDK1/JVCCloudSEESDK,
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Debug;
+		};
+		AD5FB7471A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "";
+				GCC_C_LANGUAGE_STANDARD = gnu89;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					/Users/chenzhenyang/Desktop/CloudSEESDK/SDK1/JVCCloudSEESDK,
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 arm64";
+			};
+			name = Release;
+		};
+		AD5FB7491A52AFBE00A85CCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = JVCCloudSEESDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AD5FB74A1A52AFBE00A85CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = JVCCloudSEESDKTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD5FB72C1A52AFBD00A85CCE /* Build configuration list for PBXProject "JVCCloudSEESDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7431A52AFBE00A85CCE /* Debug */,
+				AD5FB7441A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD5FB7451A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7461A52AFBE00A85CCE /* Debug */,
+				AD5FB7471A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AD5FB7481A52AFBE00A85CCE /* Build configuration list for PBXNativeTarget "JVCCloudSEESDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AD5FB7491A52AFBE00A85CCE /* Debug */,
+				AD5FB74A1A52AFBE00A85CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AD5FB7291A52AFBD00A85CCE /* Project object */;
+}

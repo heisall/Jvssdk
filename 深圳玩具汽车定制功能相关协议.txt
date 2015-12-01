@@ -1,0 +1,140 @@
+1.	设置OSD显示属性
+typedef enum{
+	MCHNOSD_POS_LEFT_TOP=0,
+	MCHNOSD_POS_LEFT_BOTTOM,
+	MCHNOSD_POS_RIGHT_TOP,
+	MCHNOSD_POS_RIGHT_BOTTOM,
+	MCHNOSD_POS_HIDE,
+}mchnosd_pos_e;
+
+PACKET	packet;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType = RC_SETPARAM;
+sprintf(packet.acData, "%s",  “[ALL];nPosition=4;nTimePosition=4;”);	  //隐藏
+//sprintf(packet.acData, "%s",  “[ALL];nPosition=1;nTimePosition=2;”);	  //显示
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 4+strlen(packet.acData));
+
+
+
+ // 命令定义
+#define RC_EX_FIRMUP		0x01
+#define RC_EX_NETWORK		0x02
+#define RC_EX_STORAGE		0x03
+#define RC_EX_ACCOUNT		0x04
+#define RC_EX_PRIVACY		0x05
+#define RC_EX_MD		    0x06
+#define RC_EX_ALARM		    0x07
+#define RC_EX_SENSOR		0x08
+#define RC_EX_PTZ			0x09
+#define RC_EX_AUDIO			0x0a
+#define RC_EX_ALARMIN		0x0b
+#define RC_EX_REGISTER 		0x0c
+#define RC_EX_EXPOSURE		0x0d
+#define RC_EX_QRCODE		0x0e
+#define RC_EX_IVP			0x0f
+#define RC_EX_DOORALARM		0x10
+#define RC_EX_PTZUPDATE		0x11
+#define RC_EX_COMTRANS		0x12
+
+//------------------网络设置-------------------------------------
+#define EX_ADSL_ON		0x01	//连接ADSL消息
+#define EX_ADSL_OFF		0x02	//断开ADSL消息
+#define EX_WIFI_AP		0x03	//获取AP消息
+#define EX_WIFI_ON		0x04	//连接wifi
+#define EX_WIFI_OFF		0x05	//断开wifi
+#define EX_NETWORK_OK	0x06	//设置成功
+#define EX_UPDATE_ETH	0x07	//修改eth网络信息
+#define EX_NW_REFRESH	0x08	//刷新当前网络信息
+#define EX_NW_SUBMIT	0x09	//刷新当前网络信息
+#define EX_WIFI_CON 	0x0a
+#define EX_WIFI_AP_CONFIG 0x0b
+#define EX_START_AP		0x0c	//开启AP
+#define EX_START_STA	0x0d	//开启STA
+
+2. 开启AP
+（1）先向设备端发送开启AP请求
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_START_AP;
+pstExt->nParam1 = 0;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);
+
+（2）手机端接受设备端回应，解析pstExt->nParam1的值：
+若pstExt->nParam1=-1，则不支持wifi；
+若pstExt->nParam1=1，说明AP模式已经开启；
+若pstExt->nParam1=0或pstExt->nParam1=2，则可以开启AP。
+
+（3）当（2）中返回可以开启AP时，手机端发送如下命令开启AP
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_START_AP;
+pstExt->nParam1 = 1;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);
+
+3. 开启STA
+#define EX_START_STA	0x0d	//开启STA
+（1）先向设备端发送开启STA请求
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_START_STA;
+pstExt->nParam1 = 0;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);
+
+（2）手机端接受设备端回应，解析pstExt->nParam1的值：
+若pstExt->nParam1=-1，则不支持wifi；
+若pstExt->nParam1=0，说明目前尚未配置wifi，无法开启STA（开启了也没用）；
+若pstExt->nParam1=1，说明STA模式已经开启；
+若pstExt->nParam1=2，则可以开启STA。
+
+（3）当（2）中返回可以开启STA时，手机端发送如下命令开启STA
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_START_STA;
+pstExt->nParam1 = 1;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);
+
+
+4. 获取当前网络信息（包含wifi）
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_NW_REFRESH;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);
+
+手机端接受设备端回应，解析数据（有效数据的长度pstExt->nParam2）
+bIPSelfAdapt=0;ACTIVED=2;bDHCP=1;
+ETH_IP=172.16.34.154;ETH_NM=255.255.255.0;ETH_GW=172.16.34.1;ETH_DNS=172.18.1.254;ETH_MAC=ac:a2:13:25:43:a7;
+WIFI_IP=172.16.34.154;WIFI_NM=255.255.255.0;WIFI_GW=172.16.34.1;WIFI_DNS=172.18.1.254;WIFI_MAC=ac:a2:13:25:43:a7;
+WIFI_ID=tp-wy;WIFI_PW=87654321;WIFI_Q=100;WIFI_AUTH=4;WIFI_ENC=3;WIFI_ON=0;YSTGROUP=83;YSTID=238839081;YSTSTATUS=1;RTMP_bSupport=0;
+说明：
+ACTIVED字段表示当前使用的网络类型，0 有线， 1 PPPOE， 2 wifi
+WIFI_ID字段是当前配置的wifi SSID。（只说明配置过，不代表当前正在使用wifi，当前网络类型由ACTIVED字段决定）。
+
+5. 设备搜索wifi热点 （iphone之前就有这个功能）
+PACKET	packet;
+EXTEND	*pstExt;
+memset(&packet, 0, sizeof(PACKET));
+packet.nPacketType	= RC_EXTEND;
+packet.nPacketCount = RC_EX_NETWORK;
+pstExt = (EXTEND*)packet.acData;
+pstExt->nType	= EX_WIFI_AP;
+JVC_SendData(g_nYSTCh,JVN_RSP_TEXTDATA,(PUCHAR)&packet, 20);

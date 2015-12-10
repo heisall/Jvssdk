@@ -109,6 +109,9 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
 @property (nonatomic,retain) JVCVideoDecoderHelper                     * decodeModelObj;
 @property (nonatomic,retain) JVCRemotePlayBackWithVideoDecoderHelper   * playBackDecoderObj;
 @property (nonatomic,retain) JVCQueueHelper                            * jvcQueueHelper;
+
+@property (nonatomic,retain) JVCQueueHelper                            * jvcRemoteQueueHelper;
+
 @property (nonatomic,assign) id<JVCCloudSEEManagerHelperDelegate>        jvConnectDelegate;
 @property (nonatomic,retain) JVCPlaySoundHelper                        * jvcPlaySound;
 @property (nonatomic,retain) JVCAudioQueueHelper                       * jvcAudioQueueHelper;    //音频的缓存队列

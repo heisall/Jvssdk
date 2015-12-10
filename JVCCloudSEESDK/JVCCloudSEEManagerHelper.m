@@ -29,7 +29,8 @@
 @synthesize linkModel,nConnectDeviceType,decodeModelObj,isRunDisconnect;
 @synthesize nShowWindowID,isAudioListening,isVoiceIntercom;
 @synthesize isPlaybackVideo,playBackDecoderObj,nConnectStartCode;
-@synthesize isDisplayVideo,jvcQueueHelper,jvConnectDelegate,nSystemVersion;
+@synthesize isDisplayVideo,jvcQueueHelper,jvConnectDelegate,nSystemVersion,jvcRemoteQueueHelper;
+
 @synthesize jvcPlaySound,jvcAudioQueueHelper,jvcVoiceIntercomHelper;
 @synthesize isOnlyIState,isVideoPause;
 @synthesize nConnectType,isHomeIPC,isTcp;

@@ -237,6 +237,7 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
         [self RemoteAlarmVedio:nJvChannelID];
     }
     [self RemoteWithDeviceGetFrameParam:nJvChannelID];
+
 }
 //手动录像
 -(void)ManualVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType{
@@ -244,6 +245,7 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
         [self RemoteManualVedio:nJvChannelID];
     }
     [self RemoteWithDeviceGetFrameParam:nJvChannelID];
+
 }
 
 //停止录像
@@ -252,6 +254,7 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
         [self RemoteStopVedio:nJvChannelID];
     }
     [self RemoteWithDeviceGetFrameParam:nJvChannelID];
+
 }
 //旧设备停止录像
 -(void)stopOldVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType{

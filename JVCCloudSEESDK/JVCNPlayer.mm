@@ -143,10 +143,12 @@ void shutdown_audio() {
     player->resume();
     player->enable_audio(true);
     player->adjust_track_volume(adjust_volume);
-    LOGI("adjust_track_volume %f version %s\n",adjust_volume,nplayer::NPlayer::version());
+
+    NSLog(@"adjust_track_volume %f version %s\n",adjust_volume,nplayer::NPlayer::version());
 }
 +(void)initCore{
     nplayer::NPlayer::init();
+    NSLog(@"version %s",nplayer::NPlayer::version());
 }
 
 +(void)deinitCore{

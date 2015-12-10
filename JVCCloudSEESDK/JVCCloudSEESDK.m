@@ -131,7 +131,9 @@ enum DEVICE_AP_LEVEL {
     
     NSMutableString  *savePath;
     NSMutableString *saveAlbum;
-    
+
+    BOOL isPause;
+
 }
 
 
@@ -482,7 +484,6 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
  *  @return 成功返回YES  重复连接返回NO
  */
 -(BOOL)ystConnectVideobyDeviceInfo:(int)nLocalChannel nRemoteChannel:(int)nRemoteChannel strYstNumber:(NSString *)strYstNumber strUserName:(NSString *)strUserName strPassWord:(NSString *)strPassWord nSystemVersion:(int)nSystemVersion isConnectShowVideo:(BOOL)isConnectShowVideo withConnectType:(int)nConnectType withShowView:(UIView *)showVew{
-    
     
     JVCCloudSEEManagerHelper *currentChannelObj        = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
     int               nJvchannelID             = [self returnCurrentChannelBynLocalChannelID:nLocalChannel];
@@ -1137,6 +1138,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
         case TextChatType_setDeviceAPMode:
         case TextChatType_setDeviceFlashMode:
         case TextChatType_setDeviceNetTime:
+
         case TextChatType_setDevicePNMode:
         case TextChatType_setDeviceTimezone:
         case TextChatType_setDeviceAlarmSound:
@@ -1277,6 +1279,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
         [ystRemoteOperationHelperObj AlarmVedioSendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:TextChatType_AlarmVedio];
     }
 }
+
 #pragma mark -----------------------------------------------------------－－－－－－－－语音对讲功能模块
 /**
  *  语音对讲的回调函数
@@ -1657,6 +1660,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
 
                 }
                     break;
+
                 case RC_LOADDLG:{
                     
                     switch (stpacket.nPacketID) {
@@ -1681,9 +1685,11 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                         case IPCAM_STREAM:{
                             if (jvcCloudSEENetworkHelper.ystNWTDDelegate !=nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(RemoteOperationAtTextChatResponse:withResponseDic:)]) {
                                 NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+
                                 [params retain];
                                 [jvcCloudSEENetworkHelper.ystNWTDDelegate RemoteOperationAtTextChatResponse:currentChannelObj.nShowWindowID+1  withResponseDic:params];
                                 [params release];
+
                             }
                             if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
                                 
@@ -1999,6 +2005,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                 default:
                                     break;
                             }
+
                         default:
                             break;
                     }
@@ -2272,6 +2279,11 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
  */
 -(void)decoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
     
+
+    if (isPause) {
+        return;
+    }
+    
     int nLocalChannel                           = decoderOutVideoFrame->nLocalChannelID;
     JVCCloudSEEManagerHelper *currentChannelObj = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
     
@@ -2296,7 +2308,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
             }
             
             if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
-                
+
                 [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
             }
             
@@ -2307,8 +2319,17 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
         
     });
     
+
     [self.jvcCloudSEESDKDelegate videoDataCallBackMath:currentChannelObj.nShowWindowID+1 withPlayBackFrametotalNumber:nPlayBackFrametotalNumber];
     
+}
+
+-(void)pauseVideo:(int)nLocalChannel{
+    isPause = true;
+}
+
+-(void)resumeVideo:(int)nLocalChannel{
+    isPause = false;
 }
 
 /**
@@ -3258,17 +3279,61 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
  *  @param strChannelNumber 通道号
  */
 -(void)showOpenGLView{
+
+    [self showOpenGLViewAtView:nil];
+}
+
+/**
+ *  隐藏OpenGL的显示
+ *
+ *  @param strChannelNumber 通道号
+ *  @param view 显示的view
+ */
+-(void)showOpenGLViewAtView:(UIView *)view{
     int nJvchannelID   = 0;
     JVCCloudSEEManagerHelper  *currentChannelObj  = jvChannel[nJvchannelID];
     GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
     [glView showWithOpenGLView];
-    [currentChannelObj.showView addSubview:glView._kxOpenGLView];
+
+    if ([glView._kxOpenGLView superview]) {
+        [glView._kxOpenGLView removeFromSuperview];
+    }
+    if (view) {
+        [view addSubview:glView._kxOpenGLView];
+    }else
+    {
+
+        [currentChannelObj.showView addSubview:glView._kxOpenGLView];
+    }
     [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
-    
+
 }
 
 
 /**
+<<<<<<< HEAD
+=======
+ *  判断一个连接的设备录像是否是Mp4文件
+ *
+ *  @param nLocalChannel 远程本地通道号
+ *
+ *  @return YES：是
+ */
+-(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel{
+    
+    JVCCloudSEEManagerHelper  *currentChannelObj  = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    
+    if (nil == currentChannelObj) {
+        
+        return FALSE;
+    }
+    
+    //JVC_ConnectRTMP(1,"http:://",rtmp_connectchange,rtmp_videoCallBack);
+    return [currentChannelObj isMp4File];
+}
+
+/**
+>>>>>>> master
  * 设置本地的服务器
  * @param pGroup
  * @param pServer

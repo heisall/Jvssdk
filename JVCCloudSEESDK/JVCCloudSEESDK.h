@@ -593,6 +593,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 - (void)MP4PlayerRelease;
 
+/*
+  暂停播放。 */
+-(void)pauseVideo:(int)nLocalChannel;
+
+/*
+  继续播放。 */
+-(void)resumeVideo:(int)nLocalChannel;
 
 /**
  *  播放MP4文件
@@ -624,4 +631,16 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)hiddenOpenGLView;
 
 -(void)showOpenGLView;
+
+-(void)showOpenGLViewAtView:(UIView *)view;
+
+/**
+ *  判断一个连接的设备录像是否是Mp4文件
+ *
+ *  @param nLocalChannel 远程本地通道号
+ *
+ *  @return YES：是
+ */
+-(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel;
+
 @end

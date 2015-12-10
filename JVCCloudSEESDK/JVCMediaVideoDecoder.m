@@ -25,9 +25,11 @@
 -(void)dealloc {
     
     pthread_mutex_destroy(&videoMutex);
+    if (outVideoFrame!=NULL) {
+        free(outVideoFrame);
+        outVideoFrame = NULL;
+    }
     
-    free(outVideoFrame);
-    outVideoFrame = NULL;
     
     [super dealloc];
 }

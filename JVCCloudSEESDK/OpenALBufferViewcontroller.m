@@ -235,7 +235,9 @@ static OpenALBufferViewcontroller *_OpenALBufferViewcontroller = nil;
     alSourceStop(sourceID);
     
 }
-
+-(void)setNil{
+    _OpenALBufferViewcontroller = nil;
+}
 /**
  *  清除缓存声音
  */

@@ -58,12 +58,14 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
     int                    nConnectStartCode;   //设备的StartCode
     BOOL                   isDisplayVideo;      //是否已经显示过图像 YES:显示过
     int                    nSystemVersion;      //当前手机的操作系统版本
-    
+    BOOL                   isTcp;               //是否tcp连接 1 tcp  0 UDp
+
     BOOL                   isOnlyIState;        //是否是只发I帧状态 YES:是
     BOOL                   isVideoPause;        //视频是否暂停过    YES:是
     BOOL                   isConnectShowVideo;  //连接是否显示视频 默认显示
     int                    nConnectType;        //连接类型
     BOOL                   isHomeIPC;           //是否是家用IPC YES: 是
+    BOOL                   isTextChat;          //YES正在文本聊天
     int                    videoCodecID;         //视频格式
     
     JVCVideoDecoderHelper                   * decodeModelObj;      //解码器属性类
@@ -102,10 +104,12 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
 @property (nonatomic,assign) BOOL                     isConnectShowVideo;
 @property (nonatomic,assign) int                      nConnectType;
 @property (nonatomic,assign) BOOL                     isHomeIPC;
+@property (nonatomic,assign) BOOL                     isTcp;
 @property (nonatomic,assign) int                      videoCodecID;
 @property (nonatomic,retain) JVCVideoDecoderHelper                     * decodeModelObj;
 @property (nonatomic,retain) JVCRemotePlayBackWithVideoDecoderHelper   * playBackDecoderObj;
 @property (nonatomic,retain) JVCQueueHelper                            * jvcQueueHelper;
+@property (nonatomic,retain) JVCQueueHelper                            * jvcRemoteQueueHelper;
 @property (nonatomic,assign) id<JVCCloudSEEManagerHelperDelegate>        jvConnectDelegate;
 @property (nonatomic,retain) JVCPlaySoundHelper                        * jvcPlaySound;
 @property (nonatomic,retain) JVCAudioQueueHelper                       * jvcAudioQueueHelper;    //音频的缓存队列
@@ -137,6 +141,11 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
 -(void)startPopVideoDataThread;
 
 /**
+ *  开启音频数据出队线程
+ */
+-(void)startPopAudioDataThread;
+
+/**
  *  缓存队列的入队函数 （视频）
  *
  *  @param videoData         视频帧数据
@@ -155,6 +164,15 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
  *  打开解码器
  */
 -(void)openVideoDecoder;
+
+
+/**
+ *  根据视频的宽高 初始化frame大小
+ *
+ *  @param width  <#width description#>
+ *  @param height height description
+ */
+-(void)initFrameSizeByWidth:(int)width ByHeight:(int) height;
 
 /**
  *  关闭解码器
@@ -199,6 +217,15 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
  *  @param requestOutCommand         输出的发送命令
  */
 -(void)getRequestSendPlaybackVideoCommand:(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
+
+/**
+ *  判断录像文件是否是Mp4文件
+ *
+ *  @param nConnectDevcieType 链接的设备类型
+ *
+ *  @return YES：是 NO:不是
+ */
+-(BOOL)isMp4File;
 
 
 #pragma mark 音频监听处理模块

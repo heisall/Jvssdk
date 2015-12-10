@@ -8,16 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import "OpenALBufferViewcontroller.h"
+#import "JVCRecordVideoHelper.h"
 
 @interface JVCPlaySoundHelper : NSObject {
 
     int    nAudioType;           //音频编码的类别
     BOOL   isOpenDecoder;        //解码器是否打开   YES:打开
+
 }
 
 @property (nonatomic,assign)int   nAudioType;
 @property (nonatomic,assign)BOOL  isOpenDecoder;
-
+@property (nonatomic,retain) JVCRecordVideoHelper *jvcRecodVideoHelper;
 /**
  *  上锁
  */
@@ -39,17 +41,11 @@
 -(BOOL)openAudioDecoder:(int)nConnectDeviceType isExistStartCode:(BOOL)isExistStartCode;
 
 /**
- *   打开播放器的音频解码器
- */
--(void)openAudioDecoderForMedia:(int)AudioType;
-
-/**
  *  关闭音频解码器
  *
  *  @return YES:成功关闭 NO:不存在
  */
 -(BOOL)closeAudioDecoder;
-
 
 /**
  *  音频解码

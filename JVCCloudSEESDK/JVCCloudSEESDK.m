@@ -16,7 +16,6 @@
 #import "JVCRemotePlayBackWithVideoDecoderHelper.h"
 #import "GlView.h"
 #import "JVCStruct2Dic.h"
-#import "JVCCloudSEEManagerHelper.h"
 #import "JVCCloudSEENetworkMacro.h"
 #import "JVNetConst.h"
 #import "JVCConstansALAssetsMathHelper.h"
@@ -28,6 +27,7 @@
 #import "JVCAudioCodecInterface.h"
 #import "JVCMediaPlayer.h"
 #import "Jmp4pkg.h"
+//#import "JVCNPlayer.h"
 
 
 static const NSString      *kRecoedVideoFileFormat  = @".mp4";                             //保存录像的单个文件后缀
@@ -79,25 +79,8 @@ enum DEVICE_AP_LEVEL {
 //
 //@end
 
-@protocol ystNetWorkHelpRemoteOperationDelegate <NSObject>
 
-@optional
-
-/**
- *  获取当前连接通道的码流参数以及是否是家用IPC
- *
- *  @param nLocalChannel 本地连接通道编号
- *  @param nStreamType   码流类型  1:高清 2：标清 3：流畅 0:默认不支持切换码流
- *  @param isHomeIPC     YES是家用IPC
- *  @param effectType    图像翻转标志
- *  @param storageType   小于0不支持
- *  @param isNewHomeIPC  YES：新的家用IPC(MobileQuality这个字段做区分)
- */
--(void)deviceWithFrameStatus:(int)nLocalChannel withStreamType:(int)nStreamType withIsHomeIPC:(BOOL)isHomeIPC withEffectType:(int)effectType withStorageType:(int)storageType withIsNewHomeIPC:(BOOL)isNewHomeIPC withIsOldStreeamType:(int)nOldStreamType;
-
-@end
-
-@protocol ystNetWorkHelpTextDataDelegate <NSObject>
+@protocol YstNetWorkHelpTextDataDelegate <NSObject>
 
 @optional
 
@@ -141,20 +124,17 @@ enum DEVICE_AP_LEVEL {
     
         
 //    id <ystNetWorkHelpDelegate>                      ystNWHDelegate;   //视频
-    id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;    //远程请求操作
-//    id <ystNetWorkHelpRemotePlaybackVideoDelegate>   ystNWRPVDelegate; //远程回放
-    id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
-    id <ystNetWorkHelpVideoDelegate>                 videoDelegate;      //录像
+//    id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;    //远程请求操作
+    id <ystNetWorkHelpRemoteOperationDelegate>   ystNWRPVDelegate; //远程回放
+    
 //    id <JVCCloudSEENetworkHelperCaptureDelegate>     jvcCloudSEENetworkHelperCaptureDelegate; //抓拍
     
     NSMutableString  *savePath;
     NSMutableString *saveAlbum;
-    
+    BOOL isPause;
 }
 
-@property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
-@property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;
-@property(nonatomic,assign)id <ystNetWorkHelpVideoDelegate>                 videoDelegate;
+
 //@property(nonatomic,assign)id <JVCCloudSEENetworkHelperCaptureDelegate>     jvcCloudSEENetworkHelperCaptureDelegate; //抓拍
 
 enum DEVICETYPE {
@@ -259,7 +239,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
 @synthesize jvcAudioDelegate;
 @synthesize jvcRemotePlaybackVideoDelegate;
 @synthesize ystNWTDDelegate;
-//@synthesize videoDelegate;
+@synthesize videoDelegate;
 @synthesize jvcVideoDelegate;
 @synthesize jvcWifiListDelegate;
 @synthesize jvcCloudSEENetworkHelperCaptureDelegate;
@@ -274,7 +254,8 @@ BOOL          isRequestTimeoutSecondFlag;            //远程请求用于跳出�
 BOOL          isRequestRunFlag;                      //远程请求用于正在请求的标志位 FALSE :执行结束
 static NSString const *kCheckHomeFlagKey = @"MobileCH";
 static NSString const *kBindAlarmFlagKey = @"$";
-
+static NSString const *kConnectDefaultIP             = @"10.10.0.1";
+static const  int      kConnectDefaultPort           = 9101;
 FILE *downloadHandle = NULL;
 
 JVCCloudSEEManagerHelper *jvChannel[kJVCCloudSEENetworkHelperWithConnectMaxNumber];
@@ -295,10 +276,9 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
         if (jvcCloudSEENetworkHelper == nil) {
             
             jvcCloudSEENetworkHelper = [[self alloc] init];
-            
             [jvcCloudSEENetworkHelper initSdkParams];
             
-            jvcCloudSEENetworkHelper.ystNWTDDelegate = self;
+            
         }
         
         return jvcCloudSEENetworkHelper;
@@ -320,7 +300,7 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
         if (jvcCloudSEENetworkHelper == nil) {
             
             jvcCloudSEENetworkHelper = [super allocWithZone:zone];
-            
+            jvcCloudSEENetworkHelper.ystNWTDDelegate=self;
             return jvcCloudSEENetworkHelper;
         }
     }
@@ -344,7 +324,7 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
         InitDecode();      //板卡语音解码
         InitEncode();      //板卡语音编解]
         JVC_EnableHelp(true,3);  //手机端是3
-        
+//        [JVCNPlayer initCore];
         //注册各种回调函数
         JVC_RegisterCallBack(ConnectMessageCallBack,VideoDataCallBack,RemoteplaybackSearchCallBack,VoiceIntercomCallBack,TextChatDataCallBack,RemoteDownLoadCallback,RemotePlaybackDataCallBack);
         
@@ -502,7 +482,6 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
  *  @return 成功返回YES  重复连接返回NO
  */
 -(BOOL)ystConnectVideobyDeviceInfo:(int)nLocalChannel nRemoteChannel:(int)nRemoteChannel strYstNumber:(NSString *)strYstNumber strUserName:(NSString *)strUserName strPassWord:(NSString *)strPassWord nSystemVersion:(int)nSystemVersion isConnectShowVideo:(BOOL)isConnectShowVideo withConnectType:(int)nConnectType withShowView:(UIView *)showVew{
-    
     
     JVCCloudSEEManagerHelper *currentChannelObj        = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
     int               nJvchannelID             = [self returnCurrentChannelBynLocalChannelID:nLocalChannel];
@@ -702,7 +681,7 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
             
             if (jvChannel[nJvchannelID].showView) {
                 
-                [self performSelectorOnMainThread:@selector(hiddenOpenGLView:) withObject:[NSString stringWithFormat:@"%d",nJvchannelID] waitUntilDone:YES];
+                [self performSelectorOnMainThread:@selector(hiddenOpenGLView) withObject:nil waitUntilDone:YES];
             }
             
             [jvChannel[nJvchannelID] exitQueue];
@@ -716,26 +695,6 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
     [connectCallBackInfo release];
 }
 
-/**
- *  隐藏OpenGL的显示
- *
- *  @param strChannelNumber 通道号
- */
--(void)hiddenOpenGLView:(NSString *)strChannelNumber{
-    
-    int nJvchannelID   = [strChannelNumber intValue];
-    JVCCloudSEEManagerHelper  *currentChannelObj  = jvChannel[nJvchannelID];
-    
-    GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
-    
-    if (currentChannelObj.isDisplayVideo) {
-        
-         [glView clearVideo];
-    }
-   
-    [glView hiddenWithOpenGLView];
-    
-}
 
 #pragma mark  视频数据的回调函数
 
@@ -968,9 +927,9 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     
     [currentChannelObj stopRecordVideo];
     
-    if (self.videoDelegate !=nil && [self.videoDelegate respondsToSelector:@selector(videoEndCallBack:)]) {
+    if (self.videoDelegate !=nil && [self.videoDelegate respondsToSelector:@selector(videoEndCallBack)]) {
         
-        [self.videoDelegate videoEndCallBack:isContinue];
+        [self.videoDelegate videoEndCallBack];
     }
 }
 
@@ -1094,14 +1053,14 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             EXTEND *extend = (EXTEND *)m_stPacket.acData;
             
-            JVC_SendData(currentChannelObj.nLocalChannel, JVN_RSP_TEXTDATA, (PAC*)&m_stPacket, 20+strlen(extend->acData));
+            JVC_SendData(currentChannelObj.nLocalChannel, JVN_RSP_TEXTDATA, (unsigned char *)&m_stPacket, 20+(int)strlen(extend->acData));
             
         }
             break;
             
         default:{
             
-            JVC_SendData(currentChannelObj.nLocalChannel, JVN_RSP_TEXTDATA, (PAC*)&m_stPacket, 4+strlen(m_stPacket.acData));
+            JVC_SendData(currentChannelObj.nLocalChannel, JVN_RSP_TEXTDATA, (unsigned char *)&m_stPacket, 4+(int)strlen(m_stPacket.acData));
             
         }
             break;
@@ -1178,6 +1137,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
         case TextChatType_setDeviceFlashMode:
         case TextChatType_setDevicePNMode:
         case TextChatType_setDeviceTimezone:
+        case TextChatType_setDeviceAlarmSound:
         case TextChatType_Capture:{
             
             [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand];
@@ -1204,7 +1164,40 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             break;
     }
 }
+/**
+ *  远程控制指令
+ *
+ *  @param nLocalChannel              视频显示的窗口编号
+ *  @param remoteOperationType        控制的类型
+ *  @param remoteOperationCommandData 控制的指令内容
+ */
+-(void)remoteOperationDeviceInfo:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand{
+    JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    
+    if (currentChannelObj == nil) {
+        
+        return;
+    }
+    
+    switch (remoteOperationType) {
+            
+        case TextChatType_setSensitivity:{
+            
+            [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:TextChatType_setSensitivity remoteOperationCommandSensitivityStr:remoteOperationCommand];
+            
+            //            if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
+            //
+            //                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+            //            }
+            
+        }
+            break;
+        default:
+            break;
+    }
 
+}
 /**
  *  远程控制指令
  *
@@ -1423,6 +1416,7 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
                     //偏移带帧头的数据和视频数据的大小
                     [jvcCloudSEENetworkHelper videoDataInExistStartCode:&pBuffer isFrameOStartCode:playBackDecoderObj.isExistStartCode nbufferSize:&nSize nBufferType:&bufferType];
                     
+//                    NSLog(@"remote playback ");
                     [currentChannelObj pushVideoData:(unsigned char *)pBuffer nVideoDataSize:nSize isVideoDataIFrame:bufferType==JVN_DATA_I isVideoDataBFrame:bufferType==JVN_DATA_B frameType:uchType];
                     
                 }else{
@@ -1614,7 +1608,10 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                             break;
                             
                         case IPCAM_STREAM:{
-                            
+                            if (jvcCloudSEENetworkHelper.ystNWTDDelegate !=nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(RemoteOperationAtTextChatResponse:withResponseDic:)]) {
+                                NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+                                [jvcCloudSEENetworkHelper.ystNWTDDelegate RemoteOperationAtTextChatResponse:currentChannelObj.nShowWindowID+1  withResponseDic:params];
+                            }
                             if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
                                 
                                 NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
@@ -1752,30 +1749,30 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                 }
                                     break;
 
-                                case EX_START_STA:{
-                                    switch (extend->nParam1) {
-
-                                        case -1: //若pstExt->nParam1=-1，则不支持wifi；
-                                            NSLog(@"则不支持wifi");
-                                            break;
-                                        case 0:  //若pstExt->nParam1=0，说明目前尚未配置wifi，无法开启STA（开启了也没用）；
-                                            NSLog(@"目前尚未配置wifi");
-                                            break;
-                                        case 1:  //若pstExt->nParam1=1，说明STA模式已经开启；
-                                            NSLog(@"STA模式已经开启");
-                                            break;
-                                        case 2:  //若pstExt->nParam1=2，则可以开启STA。
-                                        {
-                                             NSLog(@"可以开启STA");
-                                            [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveSTAModedateCallback:extend->acData length:extend->nParam3];
-                                        }
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                                                        
-                                }
-                                    break;
+//                                case EX_START_STA:{
+//                                    switch (extend->nParam1) {
+//
+//                                        case -1: //若pstExt->nParam1=-1，则不支持wifi；
+//                                            NSLog(@"则不支持wifi");
+//                                            break;
+//                                        case 0:  //若pstExt->nParam1=0，说明目前尚未配置wifi，无法开启STA（开启了也没用）；
+//                                            NSLog(@"目前尚未配置wifi");
+//                                            break;
+//                                        case 1:  //若pstExt->nParam1=1，说明STA模式已经开启；
+//                                            NSLog(@"STA模式已经开启");
+//                                            break;
+//                                        case 2:  //若pstExt->nParam1=2，则可以开启STA。
+//                                        {
+//                                             NSLog(@"可以开启STA");
+//                                            [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveSTAModedateCallback:extend->acData length:extend->nParam3];
+//                                        }
+//                                            break;
+//                                        default:
+//                                            break;
+//                                    }
+//                                                                        
+//                                }
+//                                    break;
                                     
                                 case EX_WIFI_AP_CONFIG:{
                                     
@@ -1855,11 +1852,6 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                     break;
                             }
                             
-                            if (jvcCloudSEENetworkHelper.ystNWTDDelegate !=nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(RemoteOperationAtTextChatResponse:withResponseDic:)]) {
-                                
-                                [jvcCloudSEENetworkHelper.ystNWTDDelegate RemoteOperationAtTextChatResponse:currentChannelObj.nShowWindowID+1  withResponseDic:[JVCStruct2Dic dicWithPacketStrcut:pBuffer withSize:nSize withOffset:packetAcDataOffset]];
-                            }
-                            
                         }
                             break;
                         case RC_EX_FlashJpeg:{
@@ -1876,19 +1868,19 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                         }
                             break;
                             
-                        case  RC_EX_COMTRANS:
-                            
-                            switch (extend->nType) {
-                                case  EX_COMTRANS_RESV:
-                                    
-                                    [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveNetTransparentdateCallback:extend->acData length:extend->nParam3];
-                                    
-                                    break;
-                                    
-                                default:
-                                    break;
-                            }
-                            break;
+//                        case  RC_EX_COMTRANS:
+//                            
+//                            switch (extend->nType) {
+//                                case  EX_COMTRANS_RESV:
+//                                    
+//                                    [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveNetTransparentdateCallback:extend->acData length:extend->nParam3];
+//                                    
+//                                    break;
+//                                    
+//                                default:
+//                                    break;
+//                            }
+//                            break;
                             
                         default:
                             break;
@@ -2163,6 +2155,10 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
  */
 -(void)decoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
     
+    if (isPause) {
+        return;
+    }
+    
     int nLocalChannel                           = decoderOutVideoFrame->nLocalChannelID;
     JVCCloudSEEManagerHelper *currentChannelObj = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
     
@@ -2187,7 +2183,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
             }
             
             if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
-                
+
                 [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
             }
             
@@ -2198,8 +2194,18 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
         
     });
     
+//    [self.jvcRemotePlaybackVideoDelegate videoDataCallBackMath:currentChannelObj.nShowWindowID+1 withPlayBackFrametotalNumber:nPlayBackFrametotalNumber];
+    
     [self.jvcCloudSEESDKDelegate videoDataCallBackMath:currentChannelObj.nShowWindowID+1 withPlayBackFrametotalNumber:nPlayBackFrametotalNumber];
     
+}
+
+-(void)pauseVideo:(int)nLocalChannel{
+    isPause = true;
+}
+
+-(void)resumeVideo:(int)nLocalChannel{
+    isPause = false;
 }
 
 /**
@@ -2525,8 +2531,6 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
 -(void)operationPlayVideo:(BOOL)buttonState channel:(int )channel{
     
     JVCCloudSEESDK *jvcCloudObj = [JVCCloudSEESDK shareJVCCloudSEESDK];
-    jvcCloudObj.videoDelegate             = self;
-    
     if (buttonState) {
         
         /**
@@ -2572,13 +2576,15 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
             [jvcCloudObj openRecordVideo:channel  saveLocalVideoPath:videoPath];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showAletWithTitle:@"开始录像"];
+                if (self.videoDelegate!=nil&&[self.videoDelegate respondsToSelector:@selector(videoStartCallBack)]) {
+                    [self.videoDelegate videoStartCallBack];
+                }
             });
             
         };
         
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        NSUInteger groupTypes =ALAssetsGroupFaces;// ALAssetsGroupAlbum;// | ALAssetsGroupEvent | ALAssetsGroupFaces;
+        NSUInteger groupTypes =ALAssetsGroupFaces;
         [library enumerateGroupsWithTypes:groupTypes usingBlock:listGroupBlock failureBlock:failureblock];
         
     }else{
@@ -2607,39 +2613,10 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     }
     
     return;
-    
-//        ALAssetsLibraryAccessFailureBlock failureblock = ^(NSError *myerror){
-//            
-//            NSLog(@"==%s====error=%@==",__FUNCTION__,[myerror description]);
-//            
-//            if ([myerror.localizedDescription rangeOfString:NSLocalizedString(@"userDefine", nil)].location!=NSNotFound) {
-//                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    
-//                    [self showAletWithTitle:@"未授权"];
-//                    
-//                });
-//                
-//            }else{
-//                
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    
-//                    [self showAletWithTitle:@"保存错误"];
-//                    
-//                });
-//            }
-//        };
-//        
-//        JVCConstansALAssetsMathHelper *alassetLibrary = [[[JVCConstansALAssetsMathHelper alloc] init] autorelease];
-//        alassetLibrary.AseeetDelegate                 = self;
-//        [alassetLibrary saveVideoToAlbumPhoto:[NSURL URLWithString:urlString] albumGroupName:(NSString *)albumName returnALAssetsLibraryAccessFailureBlock:failureblock];
-//        
-//    }
 }
 
 - (void)showAletWithTitle:(NSString *)title
 {
-    
     UIAlertView *aleret = [[UIAlertView alloc] initWithTitle:title message:nil delegate:nil
                                            cancelButtonTitle:@"确定" otherButtonTitles: nil];
     [aleret show];
@@ -2934,7 +2911,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     
     [ystRemoteOperationHelperObj RemoteModifyDeviceInfo:nLocalChannel
                                            withUserName:userName
-                                           withPassWord:passWord];
+                                           withPassWord:passWord describe:@""];
     
 }
 
@@ -2968,7 +2945,12 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
  *  @param passWord 密码
  */
 -(void)setDevicesHelper:(NSString *)deviceDguid  userName:(NSString *)userName  passWord:(NSString *)passWord{
-    
+    if (userName.length==0) {
+        userName=@"";
+    }
+    if (passWord.length==0) {
+        passWord=@"";
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         unsigned char bBuffer[1*sizeof(STBASEYSTNO)];
@@ -3108,14 +3090,14 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
  */
 - (void)setPlaySountType:(int)voiceType
 {
-    if(voiceType == VoiceType_Speaker)
-    {
-        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"VOICETYPE"];
-    }else{
-    
-        [[NSUserDefaults standardUserDefaults] setObject:@"listen" forKey:@"VOICETYPE"];
-
-    }
+//    if(voiceType == 1)
+//    {
+//        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:@"VOICETYPE"];
+//    }else{
+//    
+//        [[NSUserDefaults standardUserDefaults] setObject:@"listen" forKey:@"VOICETYPE"];
+//
+//    }
 }
 
 
@@ -3147,6 +3129,90 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
 {
     [[JVCMediaPlayer shareMediaPlayer] openMP4File:fileName];
 }
+/**
+ *  隐藏OpenGL的显示
+ *
+ *  @param strChannelNumber 通道号
+ */
+-(void)hiddenOpenGLView{
+    
+    int nJvchannelID   = 0;
+    JVCCloudSEEManagerHelper  *currentChannelObj  = jvChannel[nJvchannelID];
+    
+    GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
+    
+    if (currentChannelObj.isDisplayVideo) {
+        
+        [glView clearVideo];
+    }
+    
+    [glView hiddenWithOpenGLView];
+    
+}
+/**
+ *  隐藏OpenGL的显示
+ *
+ *  @param strChannelNumber 通道号
+ */
+-(void)showOpenGLView{
+    [self showOpenGLViewAtView:nil];
+}
 
+/**
+ *  隐藏OpenGL的显示
+ *
+ *  @param strChannelNumber 通道号
+ *  @param view 显示的view
+ */
+-(void)showOpenGLViewAtView:(UIView *)view{
+    int nJvchannelID   = 0;
+    JVCCloudSEEManagerHelper  *currentChannelObj  = jvChannel[nJvchannelID];
+    GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
+    [glView showWithOpenGLView];
+    if ([glView._kxOpenGLView superview]) {
+        [glView._kxOpenGLView removeFromSuperview];
+    }
+    if (view) {
+        [view addSubview:glView._kxOpenGLView];
+    }else
+    {
+
+        [currentChannelObj.showView addSubview:glView._kxOpenGLView];
+    }
+    [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
+}
+
+
+/**
+ *  判断一个连接的设备录像是否是Mp4文件
+ *
+ *  @param nLocalChannel 远程本地通道号
+ *
+ *  @return YES：是
+ */
+-(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel{
+    
+    JVCCloudSEEManagerHelper  *currentChannelObj  = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    
+    if (nil == currentChannelObj) {
+        
+        return FALSE;
+    }
+    
+    //JVC_ConnectRTMP(1,"http:://",rtmp_connectchange,rtmp_videoCallBack);
+    return [currentChannelObj isMp4File];
+}
+
+/**
+ * 设置本地的服务器
+ * @param pGroup
+ * @param pServer
+ * @return   0:成功         其他：失败
+ */
+//-(int)setSelfServerWithGroup:(NSString *)pGroup service:(NSString *)pServer{
+//    int result=JVC_SetSelfServer_I((char*) [pGroup UTF8String],(char*) [pServer UTF8String]);
+//    //    int result=JVC_EnableHelp(true,3);
+//    return result;
+//}
 
 @end

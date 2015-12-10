@@ -140,31 +140,6 @@
  *  @param userName     用户名
  *  @param passWord     密码
  */
-- (void)RemoteModifyDeviceInfo:(int)nJVChannleID  withUserName:(NSString *)userName withPassWord:(NSString *)passWord;
-
-/**
- *  获取设备的用户名密码
- *
- *  @param nJVChannleID 本地的id
- */
-- (void)getModifyDeviceList:(int)nJVChannleID;
-
-/**
- *  透传协议，
- *
- *  @param nJvChannelID    本地连接的通道号
- *  @param content         发送的内容
- */
--(void)RemoteComtrans:(int)nJvChannelID content:(const char *) acBuffer contentLength:(int)length;
-
-/**
- *  OSD显示问题
- *
- *  @param nPosition    显示位置
- *  @param nTimePosition  是否隐藏
- */
--(void)RemoteSendOSDOperation:(int)nJvChannelID nPosition:(int) nPosition nTimePosition:(int)nTimePosition;
-
 /**
  *  修改设备的用户名密码
  *
@@ -175,45 +150,41 @@
 - (void)RemoteModifyDeviceInfo:(int)nJVChannleID  withUserName:(NSString *)userName withPassWord:(NSString *)passWord describe:(NSString *)describe;
 
 /**
- *  玩具协议开启AP请求
+ *  设备报警声音打开（关闭）
  *
- *  @param nJvChannelID    本地连接的通道号
+ *  @param nJvChannelID 本地连接的通道号
+ *  @param nStatus      1：开 0：关闭
  */
--(void)RemoteSendOpenAPRequest:(int)nJvChannelID;
-
+-(void)RemoteSetDeviceAlarmSoundStatus:(int)nJvChannelID withStatus:(int)nStatus;
 /**
- *  玩具协议开启AP
+ *  获取设备的用户名密码
  *
- *  @param nJvChannelID    本地连接的通道号
+ *  @param nJVChannleID 本地的id
  */
--(void)RemoteSendOpenAPCmd:(int)nJvChannelID;
+- (void)getModifyDeviceList:(int)nJVChannleID;
+//获取基本信息
+-(void)getBasicInfoRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)SDSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)stopVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)stopOldVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)startOldVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)AlarmVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)ManualVedioSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+-(void)FormatSDSendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
 
+-(void)onlySendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand;
+//读取移动侦测灵敏度
+-(void)onlySendRemoteOperationSensitivity:(int)nJvChannelID remoteOperationType:(int)remoteOperationType;
+//设置移动侦测灵敏度
+-(void)onlySendRemoteOperation:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommandSensitivityStr:(NSString *)remoteOperationCommand;
 /**
- *  玩具协议开启STA请求
+ *  远程发送的命令（仅仅发送 没有返回结果）
  *
- *  @param nJvChannelID    本地连接的通道号
+ *  @param nJvChannelID           控制本地连接的通道号
+ *  @param remoteOperayionType    控制的类型
+ *  @param remoteOperayionCommand 控制的命令
+ *  @param speedValue             云台控制速度
  */
--(void)RemoteSendOpenSTARequest:(int)nJvChannelID;
-
-/**
- *  玩具协议开启STA
- *
- *  @param nJvChannelID    本地连接的通道号
- */
--(void)RemoteSendOpenSTACmd:(int)nJvChannelID;
-
-/**
- *  玩具协议获取wifi信息
- *
- *  @param nJvChannelID    本地连接的通道号
- */
--(void)RemoteSendRequestCurrentNetworkInfo:(int)nJvChannelID;
-
-/**
- *  玩具协议设备搜索wifi热点
- *
- *  @param nJvChannelID    本地连接的通道号
- */
--(void)RemoteSendDeviceSearchAP:(int)nJvChannelID;
+- (void)onlySendYtOperaton:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speedValue;
 
 @end

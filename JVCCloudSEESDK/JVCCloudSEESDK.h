@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "JVCCloudSEENetworkMacro.h"
 #import <UIKit/UIKit.h>
+#import "JVCCloudSEEManagerHelper.h"
 
 static NSString const *kConfigWifiEnc    =  @"wifiEnc";
 static NSString const *kConfigWifiAuth   =  @"wifiAuth";
@@ -77,6 +78,9 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)remoteplaybackState:(int)remoteplaybackState;
 
+
+//-(void)videoDataCallBackMath:(int)nLocalChannel  withPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber;
+
 /**
  *  获取远程回放检索文件列表的回调
  *
@@ -106,9 +110,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 /**
  *   录像结束的回调函数
  *
- *  @param isContinue 是否结束后继续录像 YES：继续
  */
--(void)videoEndCallBack:(BOOL)isContinueVideo;
+-(void)videoEndCallBack;
+/**
+*   录像开始的回调函数
+*
+*/
+-(void)videoStartCallBack;
 
 @end
 
@@ -195,6 +203,44 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 - (void)JVCLancSearchDeviceCallBack:(NSMutableArray *)arraySearchList;
 
 @end
+@protocol ystNetWorkHelpTextDataDelegate <NSObject>
+
+@optional
+
+/**
+ *  文本聊天返回的回调
+ *
+ *  @param nYstNetWorkHelpTextDataType 文本聊天的状态类型
+ *  @param objYstNetWorkHelpSendData   文本聊天返回的内容
+ */
+-(void)ystNetWorkHelpTextChatCallBack:(int)nLocalChannel withTextDataType:(int)nYstNetWorkHelpTextDataType objYstNetWorkHelpSendData:(id)objYstNetWorkHelpSendData;
+
+/**
+ *  远程控制指令(文本聊天)
+ *
+ *  @param nLocalChannel          视频显示的窗口编号
+ *  @param dic                    返回的内容
+ */
+-(void)RemoteOperationAtTextChatResponse:(int)nLocalChannel withResponseDic:(NSDictionary *)dic;
+
+@end
+@protocol ystNetWorkHelpRemoteOperationDelegate <NSObject>
+
+@optional
+
+/**
+ *  获取当前连接通道的码流参数以及是否是家用IPC
+ *
+ *  @param nLocalChannel 本地连接通道编号
+ *  @param nStreamType   码流类型  1:高清 2：标清 3：流畅 0:默认不支持切换码流
+ *  @param isHomeIPC     YES是家用IPC
+ *  @param effectType    图像翻转标志
+ *  @param storageType   小于0不支持
+ *  @param isNewHomeIPC  YES：新的家用IPC(MobileQuality这个字段做区分)
+ */
+-(void)deviceWithFrameStatus:(int)nLocalChannel withStreamType:(int)nStreamType withIsHomeIPC:(BOOL)isHomeIPC withEffectType:(int)effectType withStorageType:(int)storageType withIsNewHomeIPC:(BOOL)isNewHomeIPC withIsOldStreeamType:(int)nOldStreamType;
+
+@end
 
 @interface JVCCloudSEESDK : NSObject
 
@@ -202,6 +248,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign)id <JVCRemotePlaybackVideoDelegate>    jvcRemotePlaybackVideoDelegate; //远程回放
 @property(nonatomic,assign)id <JVCAudioDelegate>                  jvcAudioDelegate;               //音频代理
 @property(nonatomic,assign)id<jvcVideoSaveDelegate>                   jvcVideoDelegate;
+@property(nonatomic,assign)id<ystNetWorkHelpVideoDelegate>                   videoDelegate;
 @property(nonatomic,assign)id<JVCGetWifiListDelegate>             jvcWifiListDelegate;
 @property(nonatomic,assign)id<JVCnetTransparentDelegate>             jvcTransParentDelegate;//透传的协议
 @property(nonatomic,assign)id<JVCAPModeDelegate>             jvcAPModeDelegate;//AP模式
@@ -210,6 +257,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign) id <JVCCloudSEENetworkHelperCaptureDelegate>     jvcCloudSEENetworkHelperCaptureDelegate;  //抓拍
 @property(nonatomic,assign)id<JVCModifyDeviceInfoDelegate>             jvcModifyDeviceDelegate;//修改设备的回调
 @property(nonatomic,assign)id<JVCLanSearchDelegate >                   jvcLanSearchDelegate;//广播的回调
+@property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
+@property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
 /**
  *  单例 (所有操作请先初始化SDK)
  *
@@ -302,7 +351,14 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param remoteOperationCommand 控制的命令
  */
 -(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationCommand:(int)remoteOperationCommand;
-
+/**
+ *  远程控制指令
+ *
+ *  @param nLocalChannel              视频显示的窗口编号
+ *  @param remoteOperationType        控制的类型
+ *  @param remoteOperationCommandData 控制的指令内容
+ */
+-(void)remoteOperationDeviceInfo:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand;
 /**
  *  远程控制指令
  *
@@ -330,7 +386,21 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)RemoteRequestSendPlaybackVideo:(int)nLocalChannel withPlayBackPath:(NSString *)playBackVideoPath;
 
-
+/**
+ *  设置安全防护时间段
+ *
+ *  @param nLocalChannel  本地通道
+ *  @param strBeginTime   开始时间
+ *  @param strEndTime     结束时间
+ */
+-(void)RemoteSetAlarmTime:(int)nLocalChannel withstrBeginTime:(NSString *)strBeginTime withStrEndTime:(NSString *)strEndTime;
+/**
+ *  远程控制指令(文本聊天)
+ *
+ *  @param nLocalChannel          视频显示的窗口编号
+ *  @param dicCommand             控制的命令
+ */
+-(void)RemoteOperationAtTextChatSendDataToDevice:(int)nLocalChannel withDicCommand:(NSDictionary *)dicCommand;
 /**
  *  Ap连接设备
  *
@@ -511,6 +581,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 - (void)MP4PlayerRelease;
 
+/*
+  暂停播放。 */
+-(void)pauseVideo:(int)nLocalChannel;
+
+/*
+  继续播放。 */
+-(void)resumeVideo:(int)nLocalChannel;
 
 /**
  *  播放MP4文件
@@ -519,6 +596,39 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 - (void)playMP4File:(NSString *)fileName;
 
+/**
+ * 设置本地的服务器
+ * @param pGroup
+ * @param pServer
+ * @return   0:成功         其他：失败
+ */
+-(int)setSelfServerWithGroup:(NSString*)pGroup service:(NSString *)pServer;
+/**
+ *  根据本地通道号返回对应的JVCCloudSEEManagerHelper
+ *
+ *  @param nLocalChannel 本地通道号
+ *
+ *  @return 本地通道号返回对应的JVCCloudSEEManagerHelper
+ */
+-(JVCCloudSEEManagerHelper *)returnCurrentChannelBynLocalChannel:(int)nLocalChannel;
+/**
+ *  隐藏OpenGL的显示
+ *
+ *  @param strChannelNumber 通道号
+ */
+-(void)hiddenOpenGLView;
 
+-(void)showOpenGLView;
+
+-(void)showOpenGLViewAtView:(UIView *)view;
+
+/**
+ *  判断一个连接的设备录像是否是Mp4文件
+ *
+ *  @param nLocalChannel 远程本地通道号
+ *
+ *  @return YES：是
+ */
+-(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel;
 
 @end

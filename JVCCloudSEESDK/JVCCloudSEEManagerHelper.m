@@ -13,8 +13,8 @@
 #import "JVCPlaySoundHelper.h"
 #import "JVCVoiceIntercomHelper.h"
 #import "JVCCloudSEENetworkMacro.h"
+//#import "JVCLogHelper.h"
 #import "JVCCloudSEESendGeneralHelper.h"
-#import "JVCDecoderMacro.h"
 
 @interface JVCCloudSEEManagerHelper (){
     
@@ -29,17 +29,19 @@
 @synthesize linkModel,nConnectDeviceType,decodeModelObj,isRunDisconnect;
 @synthesize nShowWindowID,isAudioListening,isVoiceIntercom;
 @synthesize isPlaybackVideo,playBackDecoderObj,nConnectStartCode;
-@synthesize isDisplayVideo,jvcQueueHelper,jvConnectDelegate,nSystemVersion;
+@synthesize isDisplayVideo,jvcRemoteQueueHelper,jvConnectDelegate,nSystemVersion;
 @synthesize jvcPlaySound,jvcAudioQueueHelper,jvcVoiceIntercomHelper;
 @synthesize isOnlyIState,isVideoPause;
-@synthesize nConnectType,isHomeIPC;
+@synthesize nConnectType,isHomeIPC,isTcp;
 @synthesize jvcRecodVideoHelper,isConnectShowVideo;
 @synthesize isNvrDevice,showView;
 @synthesize videoCodecID;
 
 char          pcmBuffer[1024] ={0};
-
+int nChannelIndex ;
 -(void)dealloc{
+    
+    NSLog(@"JVCCloudSEE Manager dealloc %@ count %d channelId %d ",self,self.retainCount,nLocalChannel);
     
     [strYstGroup    release];
     [strRemoteIP    release];
@@ -54,8 +56,8 @@ char          pcmBuffer[1024] ={0};
     [jvcRecodVideoHelper release];
     
     [showView release];
-    //free(jvcOutVideoFrame);
-    jvcOutVideoFrame = NULL;
+//    free(jvcOutVideoFrame);
+//    jvcOutVideoFrame = NULL;
     [super dealloc];
 }
 
@@ -63,6 +65,7 @@ char          pcmBuffer[1024] ={0};
     
     if (self = [super init]) {
         
+        NSLog(@"JVCCloudSEE Manager init");
         JVCVideoDecoderHelper    * decodemodel   =  [[JVCVideoDecoderHelper alloc] init];
         self.decodeModelObj                      =  decodemodel;
         decodeModelObj.delegate                  =  self;
@@ -86,13 +89,13 @@ char          pcmBuffer[1024] ={0};
         [jvcRecordObj release];
         
 //        jvcOutVideoFrame = malloc(sizeof(DecoderOutVideoFrame));
-//        
+//        memset(jvcOutVideoFrame, 0, sizeof(DecoderOutVideoFrame));
+        
 //        memset(jvcOutVideoFrame->decoder_y, 0, sizeof(jvcOutVideoFrame->decoder_y));
 //        memset(jvcOutVideoFrame->decoder_u, 0, sizeof(jvcOutVideoFrame->decoder_u));
 //        memset(jvcOutVideoFrame->decoder_v, 0, sizeof(jvcOutVideoFrame->decoder_v));
         
         self.isConnectShowVideo = TRUE;
-        //self.isHomeIPC          = YES;
     }
     
     return self;
@@ -118,10 +121,11 @@ char          pcmBuffer[1024] ={0};
  */
 -(void)ystConnectWorker
 {
+//    DDLogVerbose(@"%s--RemoteChannel=%d,Group=%@,ystNumber=%d,port=%d,userName=%@,password=%@",__FUNCTION__,self.nRemoteChannel,self.strYstGroup,self.nYstNumber,self.nRemotePort,self.strUserName,self.strPassWord);
     
-//    JVC_Connect(self.nLocalChannel, self.nRemoteChannel, (char *)[@"" UTF8String], self.nRemotePort, (char *)[self.strUserName UTF8String], (char *)[self.strPassWord UTF8String],self.nYstNumber, (char *)[self.strYstGroup UTF8String], YES, JVN_TRYTURN,NO,nConnectType,self.isConnectShowVideo );
+//    [[JVCLogHelper shareJVCLogHelper] writeDataToFile:[NSString stringWithFormat:@"%s--RemoteChannel=%d,Group=%@,ystNumber=%d,port=%d,userName=%@,password=%@",__FUNCTION__,self.nRemoteChannel,self.strYstGroup,self.nYstNumber,self.nRemotePort,self.strUserName,self.strPassWord]fileType:LogType_OperationPLayLogPath];
+    
     JVC_Connect(self.nLocalChannel, self.nRemoteChannel, (char *)[@"" UTF8String], self.nRemotePort, (char *)[self.strUserName UTF8String], (char *)[self.strPassWord UTF8String],self.nYstNumber, (char *)[self.strYstGroup UTF8String], YES, JVN_TRYTURN,NO,nConnectType,self.isConnectShowVideo,0,0);
-
 }
 
 /**
@@ -129,10 +133,11 @@ char          pcmBuffer[1024] ={0};
  */
 -(void)ipConnectWorker
 {
-  
-//    JVC_Connect(self.nLocalChannel, self.nRemoteChannel, (char *)[self.strRemoteIP UTF8String], self.nRemotePort, (char *)[self.strUserName UTF8String], (char *)[self.strPassWord UTF8String],-1, (char *)[@"" UTF8String], YES, JVN_TRYTURN,NO,nConnectType,self.isConnectShowVideo);
-    JVC_Connect(self.nLocalChannel, self.nRemoteChannel, (char *)[self.strRemoteIP UTF8String], self.nRemotePort, (char *)[self.strUserName UTF8String], (char *)[self.strPassWord UTF8String],-1, (char *)[@"" UTF8String], YES, JVN_TRYTURN,NO,nConnectType,self.isConnectShowVideo,0,0);//tcpLickType_Select
-
+//    DDLogVerbose(@"%s--RemoteChannel=%d,Group=%@,ystNumber=%d,remoIP=%@,port=%d,userName=%@,password=%@",__FUNCTION__,self.nRemoteChannel,self.strYstGroup,self.nYstNumber,self.strRemoteIP,self.nRemotePort,self.strUserName,self.strPassWord);
+    
+//     [[JVCLogHelper shareJVCLogHelper] writeDataToFile:[NSString stringWithFormat:@"%s--RemoteChannel=%d,Group=%@,ystNumber=%d,remoIP=%@,port=%d,userName=%@,password=%@",__FUNCTION__,self.nRemoteChannel,self.strYstGroup,self.nYstNumber,self.strRemoteIP,self.nRemotePort,self.strUserName,self.strPassWord]fileType:LogType_OperationPLayLogPath];
+    
+    JVC_Connect(self.nLocalChannel, self.nRemoteChannel, (char *)[self.strRemoteIP UTF8String], self.nRemotePort, (char *)[self.strUserName UTF8String], (char *)[self.strPassWord UTF8String],-1, (char *)[@"" UTF8String], YES, JVN_TRYTURN,NO,nConnectType,self.isConnectShowVideo,0,self.isTcp ==1?1:0);//tcpLickType_Select
 }
 
 /**
@@ -159,9 +164,10 @@ char          pcmBuffer[1024] ={0};
 -(void)disconnect {
     
     [self exitQueue];
-    
+//    [self.jvcVoiceIntercomHelper setHelperNil];
+//    DDLogVerbose(@"%s----%d----start",__FUNCTION__,nLocalChannel);
     JVC_DisConnect(self.nLocalChannel);
-  
+//    DDLogVerbose(@"%s----%d----end",__FUNCTION__,nLocalChannel);
 }
 
 #pragma mark ----------------  JVCQueueHelper 处理模块
@@ -227,14 +233,14 @@ char          pcmBuffer[1024] ={0};
         
         [self saveRecordVideoDataToLocal:(char *)decodervideoFrame->buf isVideoDataI:decodervideoFrame->is_i_frame isVideoDataB:decodervideoFrame->is_b_frame videoDataSize:decodervideoFrame->nSize];
     }
-    printf("channel %d nDecoderStatus : %d \n",self.nLocalChannel, nDecoderStatus);
+    //printf("nDecoderStatus : %d \n",nDecoderStatus);
     if ( nDecoderStatus >= 0 && self.showView) {
         
         if (decodervideoFrame->is_i_frame ) {
+        
+//            NSLog(@"=====%s====is_i_frame==",__FUNCTION__);
             
-            //            NSLog(@"=====%s====is_i_frame==",__FUNCTION__);
-            
-            //            if()
+//            if()
         }
         
         if (self.jvConnectDelegate != nil && [self.jvConnectDelegate respondsToSelector:@selector(decoderOutVideoFrameCallBack:nPlayBackFrametotalNumber:)]) {
@@ -248,12 +254,8 @@ char          pcmBuffer[1024] ={0};
     return nDecoderStatus;
 }
 
-
 #pragma mark 解码处理模块
 
-/**
- *  打开解码器
- */
 /**
  *  打开解码器
  */
@@ -270,7 +272,7 @@ char          pcmBuffer[1024] ={0};
  *  @param nVideoDecodeID 解码器编号
  */
 -(void)closeVideoDecoder{
-    
+
     [self.jvcQueueHelper clearEnqueueData];
     
     [self.decodeModelObj closeVideoDecoder];
@@ -305,7 +307,6 @@ char          pcmBuffer[1024] ={0};
     return nDecoderStatus;
 }
 
-
 /**
  *  抓拍图像
  */
@@ -329,7 +330,7 @@ char          pcmBuffer[1024] ={0};
  */
 -(void)decoderModelCaptureImageCallBack:(NSData *)captureOutImageData {
     
-    [captureOutImageData retain];
+  [captureOutImageData retain];
     
     if (self.jvConnectDelegate != nil && [self.jvConnectDelegate respondsToSelector:@selector(JVCCloudSEEManagerHelperCaptureImageData:withShowWindowID:)]) {
         
@@ -337,10 +338,10 @@ char          pcmBuffer[1024] ={0};
         
 //        self.decodeModelObj.isCaptureImage      == YES ? [self.jvConnectDelegate JVCCloudSEEManagerHelperCaptureImageData:captureOutImageData withCaptureType:JVCCloudSEENetworkCaptureImageTypeWithCapture]:nil;
 //        
-//        self.decodeModelObj.IsEnableSceneImages == YES ? [self.jvConnectDelegate JVCCloudSEEManagerHelperCaptureImageData:captureOutImageData withCaptureType:JVCCloudSEENetworkCaptureImageTypeWithScene]:nil;
+//        self.decodeModelObj.IsEnableSceneImages == YES ? [self.jvConnectDelegate JVCCloudSEEManagerHelperCaptureImageData:captureOutImageData withCaptureTy//pe:JVCCloudSEENetworkCaptureImageTypeWithScene]:nil;
     }
     
-    [captureOutImageData release];
+   [captureOutImageData release];
 }
 
 #pragma mark 远程回放处理模块
@@ -377,6 +378,40 @@ char          pcmBuffer[1024] ={0};
     [requestPlayBackFileInfo release];
 }
 
+/**
+ *  判断录像文件是否是Mp4文件
+ *
+ *  @param nConnectDevcieType 链接的设备类型
+ *
+ *  @return YES：是 NO:不是
+ */
+-(BOOL)isMp4File{
+    
+    BOOL isMp4File = FALSE;
+    
+    switch (self.nConnectDeviceType) {
+            
+        case DEVICEMODEL_DVR:
+        case DEVICEMODEL_IPC:
+        case DEVICEMODEL_SoftCard:{
+            
+            if (self.decodeModelObj.isExistStartCode) {
+                
+                isMp4File = YES;
+            }
+        }
+            break;
+            
+            
+        default:
+            break;
+    }
+    
+    return isMp4File;
+}
+
+
+
 #pragma mark 音频监听处理模块
 
 /**
@@ -409,7 +444,6 @@ char          pcmBuffer[1024] ={0};
 }
 
 -(void)popAudioDataThread{
-    
     [self.jvcAudioQueueHelper startAudioPopDataThread];
 }
 
@@ -417,7 +451,6 @@ char          pcmBuffer[1024] ={0};
  *  关闭音频解码
  */
 -(void)closeAudioDecoder{
-    
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
     
@@ -440,27 +473,32 @@ char          pcmBuffer[1024] ={0};
 }
 
 /**
- *  缓存队列的出队入口数据
- *
+ *  缓存队列的出队入口数据，并播放
  *  @param bufferData 队列出队的Buffer
  *
  */
 -(void)popAudioDataCallBack:(void *)bufferData{
     
+//    NSLog(@"%s popAudioData ",__FUNCTION__);
     frame *decoderAudioFrame = (frame *)bufferData;
     
     BOOL isConvertStatus =  FALSE;
-    
-    if (!self.isVoiceIntercom) {
-        
-        isConvertStatus= [self.jvcPlaySound convertSoundBufferByNetworkBuffer:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
-    }else {
-        
-        isConvertStatus= [self.jvcVoiceIntercomHelper convertSoundBufferByNetworkBuffer:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+    if(self.jvcRecodVideoHelper.isRecordVideo){
+        [self.jvcRecodVideoHelper saveMP4AudioData:(char *)decoderAudioFrame->buf size:decoderAudioFrame->nSize];
     }
     
+    if (!self.isVoiceIntercom) {
+    
+        isConvertStatus= [self.jvcPlaySound convertSoundBufferByNetworkBuffer:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+
+    }else {
+
+        isConvertStatus= [self.jvcVoiceIntercomHelper convertSoundBufferByNetworkBuffer:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode networkBuffer:(char *)decoderAudioFrame->buf nBufferSize:decoderAudioFrame->nSize];
+    }
+
     if (isConvertStatus) {
         
+       // DDLogVerbose(@"%s--------",__FUNCTION__);
     }
 }
 
@@ -471,7 +509,6 @@ char          pcmBuffer[1024] ={0};
  */
 -(void)openVoiceIntercomDecoder{
 
-    
     [self.jvcVoiceIntercomHelper openAudioDecoder:self.nConnectDeviceType isExistStartCode:self.decodeModelObj.isExistStartCode];
     self.isVoiceIntercom  = self.jvcVoiceIntercomHelper.isOpenDecoder;
     self.jvcVoiceIntercomHelper.jvcVoiceIntercomHelperDeleage = self;
@@ -482,17 +519,18 @@ char          pcmBuffer[1024] ={0};
     if (!self.jvcAudioQueueHelper) {
         
         JVCAudioQueueHelper *jvcAudioQueueObj         = [[JVCAudioQueueHelper alloc] init:self.nLocalChannel];
+        nChannelIndex = self.nLocalChannel;
         jvcAudioQueueObj.jvcAudioQueueHelperDelegate  = self;
         self.jvcAudioQueueHelper                      = jvcAudioQueueObj;
         [jvcAudioQueueObj release];
     }
     
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate  = self;
-    [self performSelectorOnMainThread:@selector(popAudioDataThread) withObject:nil waitUntilDone:NO];;
+    [self performSelectorOnMainThread:@selector(popAudioDataThread) withObject:nil waitUntilDone:NO];
 }
 
 /**
- *  设置采集模块大工作模式
+ *  设置采集模块作模式
  *
  *  @param type YES:采集不发送（针对家用） NO:采集发送
  */
@@ -500,7 +538,7 @@ char          pcmBuffer[1024] ={0};
     
     if (self.jvcVoiceIntercomHelper.isOpenDecoder) {
         
-        [self.jvcVoiceIntercomHelper setRecordState:type];
+        self.jvcVoiceIntercomHelper.isRecoderState = type;
     }
 }
 
@@ -538,7 +576,7 @@ char          pcmBuffer[1024] ={0};
     
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
-    
+    self.jvcAudioQueueHelper = nil;
     [self.jvcVoiceIntercomHelper closeAudioDecoder];
     self.isVoiceIntercom = self.jvcVoiceIntercomHelper.isOpenDecoder;
 }
@@ -571,8 +609,9 @@ char          pcmBuffer[1024] ={0};
     int     nRecoedHeight = self.isPlaybackVideo == NO?self.decodeModelObj.nVideoHeight:self.playBackDecoderObj.nVideoHeight;
     double  dRate         = self.isPlaybackVideo == NO?self.decodeModelObj.dVideoframeFrate:self.playBackDecoderObj.dVideoframeFrate;
     
-    [self.jvcRecodVideoHelper openRecordVideo:strRecordVideoPath nRecordChannelID:self.nLocalChannel-1 nWidth:nRecoedWidth nHeight:nRecoedHeight dRate:dRate];
+    [self.jvcRecodVideoHelper openRecordVideo:strRecordVideoPath nRecordChannelID:self.nLocalChannel-1 nWidth:nRecoedWidth nHeight:nRecoedHeight dRate:dRate audiotype:self.jvcPlaySound.nAudioType];
     
+    self.jvcPlaySound.jvcRecodVideoHelper = self.jvcRecodVideoHelper;
     [strRecordVideoPath release];
 }
 

@@ -25,6 +25,7 @@ enum CONNECTRESULTTYPE{
     CONNECTRESULTTYPE_VerifyFailed                   = 10, //身份验证失败
     CONNECTRESULTTYPE_ConnectMaxNumber               = 11, //超过连接最大数
     CONNECTRESULTTYPE_ChannelIsNotOpen               = 12, //通道不存在
+    CONNECTRESULTTYPE_FirstIFrameShow                = 13, //第一帧I帧显示
     
 };
 
@@ -49,10 +50,8 @@ enum DEVICEMODEL{
     DEVICEMODEL_HardwareCard_950  = 2,         //硬压缩卡 950
     DEVICEMODEL_HardwareCard_951  = 3,         //硬压缩卡 951
     DEVICEMODEL_IPC               = 4,         //IPC
-    MP4_AUDIO_DECODER_SAMR        = 5,         //MP4音频 samr
-    MP4_AUDIO_DECODER_ALAW        = 6,         //MP4音频 alaw
-    MP4_AUDIO_DECODER_ULAW        = 7          //MP4音频 ulaw
-    
+    DEVICEMODEL_NVR               = 5,         //NVR
+
 };
 
 enum AudioType {
@@ -80,6 +79,7 @@ enum VoiceInterStateType {
     
     VoiceInterStateType_Succeed  = 0,
     VoiceInterStateType_End      = 1,
+    VoiceInterStateType_stop     = 2,
     
 };
 
@@ -128,13 +128,35 @@ enum TextChatType {
     TextChatType_setAlarm               = 1015,  //设置安全防护按钮的 （0：关 1：开）
     TextChatType_setMobileMonitoring    = 1016,  //设置移动侦测      （0：关 1：开）
     TextChatType_setOldMainStream       = 1017,  //设置老设备主码流的画质
-    
+    TextChatType_setDeviceAlarmSound    = 1034,  //设置设备的报警声音
+     TextChatType_setDeviceBabyCry    = 1033,  //设置设备的婴儿啼哭
+    TextChatType_getDeviePTZSpeed       = 1035,  //获取设备的云台速度
+
+
     //惠通的设备
     TextChatType_setDeviceTimezone      = 1018,  //设置设备的时区
     TextChatType_setDevicePNMode        = 1019,  //设置设备的P/N制式切换
     TextChatType_setDeviceFlashMode     = 1020,  //设置设备的闪光灯
     TextChatType_setDeviceAPMode        = 1021,  //设置设备AP/STA（WIFI模块工作方式)
     TextChatType_Capture                = 1022,  //惠通设备抓拍
+    TextChatType_setDeviceTimeFormat    = 1023,  //设置设备的时区
+    TextChatType_setDeviceNetTime    = 1024,  //设置设备的时间
+    TextChatType_getDeviceSDCardInfo    = 1025,  //获取设备SD信息
+     TextChatType_stopVedio    = 1026,  //sd卡停止录像
+    TextChatType_getBasicInfo    = 1027,  //获取设备SD信息
+    TextChatType_AlarmVedio    = 1028,  //sd卡停止录像
+    TextChatType_ManualVedio    = 1029,  //sd卡停止录像
+    TextChatType_FormatSD    = 1030,  //格式化SD
+     TextChatType_stopOldVedio    = 1031,  //sd卡停止录像
+     TextChatType_startOldVedio    = 1032,  //sd卡开始录像
+    TextChatType_setSensitivity    = 1088,  //设置灵敏度
+    TextChatType_readSensitivity    = 1089,  //设置灵敏度
+    TextChatType_setDeviceEmailStatus  = 1037,  //设置设备报警邮件开关
+    TextChatType_sendDeviceEmailInfo  = 1038,  //设置设备报警邮件开关
+    TextChatType_SetDeviceEmailInfo  = 1039,  //设置设备报警邮件开关
+
+
+   
     
 };
 
@@ -193,12 +215,23 @@ static NSString const *kDeviceOldFrameFlagKey     =  @"MainStreamQos";    // 1:�
 static NSString const *kDeviceMobileFrameFlagKey  =  @"MobileQuality";    // 1:高清 2：标清 3：流畅 0:默认不支持切换码流
 static NSString const *kDeviceTalkModelFlagKey    =  @"talkSwitch";       // 0:设备采集 不播放声音 1:设备播放声音，不采集声音
 
+static NSString const *kDevicePTZSpeedFlagKey  =  @"moveSpeed";    //标志设备有，是家中的
+static NSString const *kDeviceReGetPTZSpeedFlagKey  =  @"motorspeed";    //标志设备有，是家用的，重新获取的
+
+
 static NSString const *kDeviceAlarmType           =  @"type";             // 1:门磁  2手环
 static NSString const *KEFFECTFLAG                =  @"effect_flag";      //图像翻转的
 static NSString const *KStorageMode               =  @"storageMode";      //设置录像的模式
 static NSString const *kDeviceMotionDetecting     =  @"bMDEnable";        //移动侦测
+static NSString const *kDeviceMotionDetectingSensitivity     =  @"nMDSensitivity";        //移动侦测灵敏度
+
+static NSString const *kDeviceEmailStatus         = @"nMDOutEMail";         //发送邮件报警
+static NSString const *kDeviceEmailSet         =  @"deviceEmail";   //邮件报警设置
+static NSString const *kDeviceAlarmSound          =  @"bAlarmSound";        //设备报警
 static NSString const *kDeviceAlarm               =  @"bAlarmEnable";     //安全防护
 static NSString const *kDeviceAlarmTime0          =  @"alarmTime0";       //安全防护时间段
+static NSString const *kDeviceCloud          =  @"cloud";       //云存储服务
+
 static NSString const *kDeviceAlarmStart          =  @"dayStart";         //开始时间
 static NSString const *kDeviceAlarmEnd            =  @"dayEnd";           //结束时间
 static NSString const *kDeviceModify              =  @"DeviceModify";     //修改设备用户名密码
@@ -206,10 +239,24 @@ static NSString const *kDeviceModify              =  @"DeviceModify";     //修�
 //惠通设备的相应键值
 static NSString const *kDevicePNMode              =  @"PNMode";           //制式切换
 static NSString const *kDeviceFlashMode           =  @"FlashMode";        //闪光灯切换
-static NSString const *kDeviceTimezone            =  @"timezone";         //设置时区
+static NSString const *kDeviceTimezone            =  @"timezone";         //时间时区
+static NSString const *kDeviceTimez            =  @"timez";         //时区设置
+static NSString const *kDeviceTimebSntp            =  @"bSntp";         //设置时区
+static NSString const *kDevicenTimeFormat          =  @"nTimeFormat";         //设置时间
+static NSString const *kDeviceTimeFormat          =  @"timeFormat";         //设置时间
+static NSString const *kDeviceHomeIPCFlag         =  @"HomeIPCFlag";         //判断新旧设备
 static NSString const *kDeviceApModeOn            =  @"apModeOn";         //设置AP和STA
+static NSString const *ksysManagement               =  @"sysManagement";      //系统管理
+
+static NSString const *ksaveManagement               =  @"saveManagement";      //存储管理
+
+static NSString const *kDeviceReset               =  @"deviceReset";      //设备重置
+static NSString const *kDeviceRestart             =  @"deviceRestart";      //设备重启
+static NSString const *kDeviceCloudSer               =  @"CloudType";      //云存储
+static NSString const *kDeviceBabyCry               =  @"bBCEnable";      //婴儿啼哭
 
 
+static NSString const *kDevicelast               =  @"last";      //云存储
 static NSString const *KOldHomeIPCHeight          =  @"height";           //高
 static NSString const *KOldHomeIPCWidth           =  @"width";            //宽
 
@@ -239,6 +286,11 @@ typedef NS_ENUM(int, JVCOEMCellType)
     JVCOEMCellType_FlashModel       =   3,//闪光灯
     JVCOEMCellType_TimerZone        =   4,//时区
     JVCOEMCellType_Modify           =   1,//修改设备用户名密码
+    JVCOEMCellType_DeviceRestart    =   5,
+    JVCOEMCellType_DeviceReset      =   6,
+    JVCOEMCellType_TimerFormat      =   7,//时区
+    JVCOEMCellType_CloudSee         =   8,//云存储开关
+
 
 };
 
@@ -258,25 +310,14 @@ enum JVCCloudSEENetworkCaptureImageType {
     JVCCloudSEENetworkCaptureImageTypeWithScene   = 1, //场景图
 };
 
-
-static NSString const *kConnectDefaultUsername       = @"jwifiApuser";
-static NSString const *kConnectDefaultPassword       = @"^!^@#&1a**U";
-static NSString const *kConnectDefaultIP             = @"10.10.0.1";
-static const  int      kConnectDefaultPort           = 9101;
-
-enum CONNECTTYPE{
+//远程回放下载的Type
+enum JVCCloudSEENetworkDownLoadState {
     
-    CONNECTTYPE_YST=0,
-    CONNECTTYPE_IP=1,
-    CONNECTTYPE_Stream=2,
-    
+    JVCCloudSEENetworkDownLoadStateSucceed = 0,
+    JVCCloudSEENetworkDownLoadStateFailed,
 };
 
-typedef NS_ENUM(int , VoiceType) {
-
-    VoiceType_Speaker =0,//扬声器
-    VoiceType_Liseten =1,//听筒
-
-};
+static NSString const *kOfflineWithCacheDeviceListData  = @"kOfflineWithCacheDeviceListData";
+static NSString const *kOfflineWithCacheChannelListData = @"kOfflineWithCacheChannelListData";
 
 #endif

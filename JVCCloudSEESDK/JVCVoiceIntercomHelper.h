@@ -8,6 +8,7 @@
 
 #import "JVCPlaySoundHelper.h"
 #import "AQSController.h"
+//#import "JVCNPlayer.h"
 
 @protocol JVCVoiceIntercomHelperDeleage <NSObject>
 
@@ -22,7 +23,7 @@
 -(void)sendRecordAudioData:(char *)encoderAudioData withAudioDataSize:(int)nSize;
 
 @end
-
+//extern JVCNPlayer *jvcNPlayer;
 @interface JVCVoiceIntercomHelper : JVCPlaySoundHelper <receiveAudioDataDelegate>{
 
    int      nAudioCollectionType;     //语音对讲音频采集的类型
@@ -33,9 +34,10 @@
 
 @property (nonatomic,assign) int  nAudioCollectionType;
 @property (nonatomic,assign) BOOL isTalkMode;
-@property (nonatomic,assign) BOOL isRecoderState; //YES:采集发送 NO:采集不发送 
+@property (nonatomic,assign) BOOL isRecoderState; //YES:采集发送 NO:采集不发送
 @property (nonatomic,assign) id<JVCVoiceIntercomHelperDeleage> jvcVoiceIntercomHelperDeleage;
-
+//@property (nonatomic,assign) JVCNPlayer *audioNPlayer;
+void fetchd(const unsigned char *data, size_t size, uint64_t ts);
 
 /**
  *  打开语音对讲的采集模块

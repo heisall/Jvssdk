@@ -109,20 +109,20 @@ enum JVCHomeIPCTalkType {
     JVCHomeIPCTalkTypeNoTalk  = 0, // 0:设备采集 不播放声音
 };
 
-static const  int KJVCMediaColumNUm                = 3;//一行的最大值
-static const  NSString *kKYCustomPhotoAlbumName    = @"test_photo";
-static const  NSString *kKYCustomVideoAlbumName    = @"test_Video";
-
-/**
- *  图片浏览枚举
- */
-enum PHOTOBROWSING{
-    
-    TYPE_PHOTO   = 0,
-    TYPE_VIDEO   = 1,
-    TYPE_ANOTHER = 2,
-};
-
+//static const  int KJVCMediaColumNUm                = 3;//一行的最大值
+//static const  NSString *kKYCustomPhotoAlbumName    = @"test_photo";
+//static const  NSString *kKYCustomVideoAlbumName    = @"test_Video";
+//
+///**
+// *  图片浏览枚举
+// */
+//enum PHOTOBROWSING{
+//    
+//    TYPE_PHOTO   = 0,
+//    TYPE_VIDEO   = 1,
+//    TYPE_ANOTHER = 2,
+//};
+//
 enum resultType{
     
     RESULT_ERROR      = 0,

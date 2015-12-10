@@ -22,8 +22,8 @@
 
 @implementation JVCPlaySoundHelper
 @synthesize nAudioType,isOpenDecoder;
-
 char          pcmOutBuffer[1024] = {0};
+FILE *audiofile;
 
 -(void)dealloc{
     
@@ -59,21 +59,6 @@ char          pcmOutBuffer[1024] = {0};
 }
 
 /**
- *   打开播放器的音频解码器
- */
--(void)openAudioDecoderForMedia:(int)AudioType
-{
-    
-    if(!self.isOpenDecoder){
-        [self lock];
-        JAD_DecodeOpen(0,AudioType);
-        [self unLock];
-    }
-    
-    [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] initOpenAL];
-    self.isOpenDecoder = TRUE;
-}
-/**
  *   解码器打开
  *
  *  @param nConnectDeviceType 连接的设备类型
@@ -86,6 +71,8 @@ char          pcmOutBuffer[1024] = {0};
     BOOL result = YES;
     
     if (!self.isOpenDecoder) {
+        
+        self.isOpenDecoder = TRUE;
         
         switch (nConnectDeviceType) {
                 
@@ -114,12 +101,28 @@ char          pcmOutBuffer[1024] = {0};
         }
         
         [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] initOpenAL];
-        self.isOpenDecoder = TRUE;
         
     }else{
         
         result = FALSE;
+//        DDLogCVerbose(@"%s----audio is open",__FUNCTION__);
     }
+    
+    NSString *documentPaths = NSTemporaryDirectory();
+    NSString      *kRecoedVideoFileFormat  = @".pcm";
+    static const NSString      *kRecoedVideoFileName    = @"LocalValue";
+    
+    NSString *filePath = [documentPaths stringByAppendingPathComponent:(NSString *)kRecoedVideoFileName];
+    
+    if(![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        [[NSFileManager defaultManager] createDirectoryAtPath:filePath withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"YYYYMMddHHmmssSSSS"];
+    NSString *videoPath =[NSString stringWithFormat:@"%@/%@%@",filePath,[df stringFromDate:[NSDate date]],kRecoedVideoFileFormat];
+    [df release];
+    
+    audiofile = fopen((char *)[videoPath UTF8String], "w+");
     
     return result;
 }
@@ -135,6 +138,7 @@ char          pcmOutBuffer[1024] = {0};
     
     if (self.isOpenDecoder) {
         
+        self.isOpenDecoder = FALSE;
         [self lock];
         JAD_DecodeClose(0);
         [self unLock];
@@ -143,14 +147,12 @@ char          pcmOutBuffer[1024] = {0};
         
         [openAL stopSound];
         [openAL cleanUpOpenALMath];
-        self.isOpenDecoder = FALSE;
-        
         
     }else {
     
         result = FALSE;
     }
-    
+    fclose(audiofile);
     return result;
 }
 
@@ -176,6 +178,7 @@ char          pcmOutBuffer[1024] = {0};
     
     if (!self.isOpenDecoder) {
         
+//        DDLogVerbose(@"%s-----audio is not open!",__FUNCTION__);
         return NO;
     }
     
@@ -191,10 +194,10 @@ char          pcmOutBuffer[1024] = {0};
                 
                 [self lock];
                 
-                JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
+                JAD_DecodeOneFrame(0, (unsigned char *)networkBuffer,  &audioPcmBuf);
                 memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
                 
-                JAD_DecodeOneFrame(0, networkBuffer+21,  &audioPcmBuf);
+                JAD_DecodeOneFrame(0, (unsigned char *)networkBuffer+21,  &audioPcmBuf);
                 memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
                 
                 [self unLock];
@@ -225,7 +228,7 @@ char          pcmOutBuffer[1024] = {0};
                 unsigned char *audioPcmBuf = NULL;
                 
                 [self lock];
-                JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
+                JAD_DecodeOneFrame(0, (unsigned char *)networkBuffer,  &audioPcmBuf);
                 [self unLock];
                 
                 memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
@@ -250,7 +253,7 @@ char          pcmOutBuffer[1024] = {0};
                 unsigned char *audioPcmBuf = NULL;
                 
                 [self lock];
-                JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
+                JAD_DecodeOneFrame(0, (unsigned char *)networkBuffer,  &audioPcmBuf);
                 [self unLock];
                 
                 memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
@@ -262,45 +265,17 @@ char          pcmOutBuffer[1024] = {0};
             
         }
             break;
-            
-        case MP4_AUDIO_DECODER_SAMR:
-        {
-            unsigned char *audioPcmBuf = NULL;
-            
-            [self lock];
-            
-            JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
-            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
-            
-            JAD_DecodeOneFrame(0, networkBuffer+21,  &audioPcmBuf);
-            memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
-            
-            [self unLock];
-        }
-            break;
-            
-        case MP4_AUDIO_DECODER_ALAW:
-        case MP4_AUDIO_DECODER_ULAW:
-        {
-            unsigned char *audioPcmBuf = NULL;
-            
-            [self lock];
-            JAD_DecodeOneFrame(0, networkBuffer,  &audioPcmBuf);
-            [self unLock];
-            
-            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
-        }
-            break;
         default:
             break;
     }
     
     if (isDecoderAudioState  == YES ) {
         
+        fwrite(pcmOutBuffer, 1, nAudioDataSize, audiofile);
+
           [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:nAudioDataSize playSoundType:isAudioType == YES ? playSoundType_8k16B : playSoundType_8k8B];
     }
-    
-    
+  
     return YES;
 }
 

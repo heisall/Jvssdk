@@ -9,6 +9,7 @@
 #import "JVCLANScanWithSetHelpYSTNOHelper.h"
 #import "JVCCloudSEENetworkInterface.h"
 #import "JVCCloudSEENetworkMacro.h"
+#import "JVCDeviceMacro.h"
 
 @interface JVCLANScanWithSetHelpYSTNOHelper (){
 

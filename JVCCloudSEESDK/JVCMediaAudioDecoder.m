@@ -24,7 +24,7 @@
 
 @synthesize nAudioType,isOpenDecoder;
 
-char          pcmOutBuffer[1024] = {0};
+char          pcmOutBuffer1[1024] = {0};
 
 -(void)dealloc{
     
@@ -124,10 +124,10 @@ char          pcmOutBuffer[1024] = {0};
             [self lock];
             
             JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
-            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_PCM);
+            memcpy(pcmOutBuffer1, audioPcmBuf, AudioSize_PCM);
             
             JAD_DecodeOneFrame(0, audioBuffer+21,  &audioPcmBuf);
-            memcpy(pcmOutBuffer+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
+            memcpy(pcmOutBuffer1+AudioSize_PCM, audioPcmBuf, AudioSize_PCM);
             
             [self unLock];
             
@@ -138,11 +138,11 @@ char          pcmOutBuffer[1024] = {0};
             JAD_DecodeOneFrame(0, audioBuffer,  &audioPcmBuf);
             [self unLock];
             
-            memcpy(pcmOutBuffer, audioPcmBuf, AudioSize_G711);
+            memcpy(pcmOutBuffer1, audioPcmBuf, AudioSize_G711);
             
         }
         
-        [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:AudioSize_G711 playSoundType:playSoundType_8k16B];
+        [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer1 dataSize:AudioSize_G711 playSoundType:playSoundType_8k16B];
         return true;
     }
     

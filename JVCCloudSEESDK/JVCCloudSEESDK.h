@@ -642,4 +642,11 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)hiddenOpenGLView;
 
 -(void)showOpenGLView;
+/**
+ *  开启录像
+ *
+ *  @param nLocalChannel      连接的本地通道号
+ *  @param saveLocalVideoPath 录像文件存放的地址
+ */
+-(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 @end

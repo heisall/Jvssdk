@@ -661,4 +661,12 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel;
 
+/**
+ *  开启录像
+ *
+ *  @param nLocalChannel      连接的本地通道号
+ *  @param saveLocalVideoPath 录像文件存放的地址
+ */
+-(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
+>>>>>>> aa4f68b782b8c146a14f4118897911cdde684724
 @end

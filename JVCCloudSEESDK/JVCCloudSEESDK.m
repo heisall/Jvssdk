@@ -1098,7 +1098,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     
     JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
     JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
-    
+    currentChannelObj.isVoiceIntercom=YES;
     if (currentChannelObj == nil) {
         
         return;
@@ -1133,7 +1133,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
                 
-//                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
                 [currentChannelObj closeVoiceIntercomDecoder];
             }
             

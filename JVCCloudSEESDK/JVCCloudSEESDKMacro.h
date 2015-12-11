@@ -56,6 +56,13 @@ enum JVCRemoteOperationType {
     JVCRemoteOperationTypeRemotePlaybackSEEK      = 6, //远程回放快进
 };
 
+
+enum DEVICETALKMODEL {
+    
+    DEVICETALKMODEL_Talk   = 1, // 1:设备播放声音，不采集声音
+    DEVICETALKMODEL_Notalk = 0, // 0:设备采集 不播放声音
+};
+
 /**
  *  云台操作的枚举类型
  */

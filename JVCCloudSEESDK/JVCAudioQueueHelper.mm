@@ -12,11 +12,11 @@
 #import  "JVCQueueMacro.h"
 
 @interface JVCAudioQueueHelper (){
-
+    
     DataQueue      *audioqueue;
     BOOL            bm_exit;
     BOOL            playThreadExit;
-
+    
 }
 
 @end
@@ -49,8 +49,9 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
     audioqueue->ClearQueue();
     delete audioqueue;
     
+    NSLog(@"%s",__FUNCTION__);
     
-	[super dealloc];
+    [super dealloc];
 }
 
 /**
@@ -64,7 +65,7 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
  */
 -(int)jvcAudioOffer:(unsigned char *)data nSize:(int)nSize
 {
-	if (audioqueue==NULL || !bm_exit)
+    if (audioqueue==NULL || !bm_exit)
         return  OPERATION_TYPE_ERROR;
     
     int result = 0;
@@ -75,7 +76,7 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
         
         frame *bufferFrame      = (frame *)malloc(size);
         memset(bufferFrame, 0, size);
-
+        
         bufferFrame->nSize      = nSize;
         bufferFrame->buf = (unsigned char *)malloc(sizeof(unsigned char)*nSize);
         
@@ -97,7 +98,7 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
     
     if (!bm_exit) {
         
-        printf("%s-090909\n",__FUNCTION__);
+        NSLog(@"%s-090909",__FUNCTION__);
         
         [NSThread detachNewThreadSelector:@selector(popAudioDataCallBack) toTarget:self withObject:nil];
     }
@@ -111,6 +112,8 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
     playThreadExit = TRUE;
     bm_exit = TRUE;
     
+    NSLog(@"%s-----start popDataCallBack",__FUNCTION__);
+    
     while (TRUE) {
         
         if (!bm_exit) {
@@ -119,12 +122,14 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
         }
         
         frame *frameBuffer = (frame * )audioqueue->PopData();
+        // DDLogInfo(@"%s-----audio",__FUNCTION__);
         
         if (NULL == frameBuffer) {
             
             continue;
         }
-     
+        
+        //DDLogInfo(@"%s-----audioCount=%d",__FUNCTION__,audioCount);
         if (self.jvcAudioQueueHelperDelegate != nil && [self.jvcAudioQueueHelperDelegate respondsToSelector:@selector(popAudioDataCallBack:)]) {
             
             [self.jvcAudioQueueHelperDelegate popAudioDataCallBack:frameBuffer];
@@ -133,6 +138,7 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
         free(frameBuffer);
     }
     
+    NSLog(@"%s----playThread---end",__FUNCTION__);
     playThreadExit = FALSE;
 }
 
@@ -142,13 +148,13 @@ static NSString const * kAudioQueueSemNameDefaultHead = @"audio";
  */
 void jvcAudioQueueMsleep(int millisSec) {
     
-	if (millisSec > 0) {
+    if (millisSec > 0) {
         
-		struct timeval tt;
-		tt.tv_sec = 0;
-		tt.tv_usec = millisSec * 1000;
-		select(0, NULL, NULL, NULL, &tt);
-	}
+        struct timeval tt;
+        tt.tv_sec = 0;
+        tt.tv_usec = millisSec * 1000;
+        select(0, NULL, NULL, NULL, &tt);
+    }
 }
 
 /**
@@ -192,7 +198,7 @@ void jvcAudioQueueMsleep(int millisSec) {
         }
     }
     
-    printf("%s----exit--successful\n",__FUNCTION__);
+    NSLog(@"%s----exit--successful",__FUNCTION__);
     
     return result;
 }

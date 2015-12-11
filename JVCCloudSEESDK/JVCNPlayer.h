@@ -24,7 +24,7 @@ typedef void (*fetchcb)(const unsigned char* data, size_t size, uint64_t ts);
     卸载方法最后调用*/
 
 +(void)deinitCore;
-
++(JVCNPlayer *)shareJVCNPlayer;
 /*
     初始化播放器，开启回声抑制和降噪功能 */
 -(void)initPlayer;
@@ -59,5 +59,5 @@ typedef void (*fetchcb)(const unsigned char* data, size_t size, uint64_t ts);
 /*
   继续音频  */
 -(void)resumeAudio;
-
+-(void)soundConfig:(const char*)audioData size:(int)frameSize;
 @end

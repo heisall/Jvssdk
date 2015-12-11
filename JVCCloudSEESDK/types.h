@@ -56,17 +56,17 @@ typedef struct _ts_suit {
 } TSSuit;
 
 typedef struct _frame {
-    FrameType type;
-    int offset;
-
     TSSuit* ts;
     byte* data;
     size_t size;
+
+    int offset;
+    FrameType type;
 } Frame;
 
-extern const size_t ts_size;
-extern const size_t frame_size;
-extern const size_t frame_ts_page_size;
+extern const size_t kTSPageSize;
+extern const size_t kFramePageSize;
+extern const size_t kFrameTSPageSize;
 
 namespace audio {
 typedef enum _type {

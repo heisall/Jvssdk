@@ -18,7 +18,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
-//static JVCNPlayer *jvcNPlayer = nil;
+static JVCNPlayer *jvcNPlayer = nil;
 
 #define FRAME_SIZE 640
 #define DUMMY_FILE "org.pcm"
@@ -76,25 +76,25 @@ void shutdown_audio() {
 //    nplayer::NPlayer::deinit();
 }
 //
-///**
-// *  单例
-// *
-// *  @return 对象
-// */
-//+(JVCNPlayer *)shareJVCNPlayer
-//{
-//    @synchronized(self)
-//    {
-//        if (jvcNPlayer == nil) {
-//            
-//            jvcNPlayer = [[self alloc] init];
-//            
-//        }
-//        return jvcNPlayer;
-//    }
-//    
-//    return jvcNPlayer;
-//}
+/**
+ *  单例
+ *
+ *  @return 对象
+ */
++(JVCNPlayer *)shareJVCNPlayer
+{
+    @synchronized(self)
+    {
+        if (jvcNPlayer == nil) {
+            
+            jvcNPlayer = [[self alloc] init];
+            
+        }
+        return jvcNPlayer;
+    }
+    
+    return jvcNPlayer;
+}
 //
 //+ (id)allocWithZone:(struct _NSZone *)zone
 //{
@@ -175,7 +175,6 @@ void shutdown_audio() {
            false == player->append_audio_data(audioData, frameSize)) {
        [NSThread sleepForTimeInterval:0.05];
     }
-    
 //    player->append_audio_data(audioData, frameSize);
 }
 
@@ -186,6 +185,7 @@ void shutdown_audio() {
     }
     player->resume();
     player->enable_audio(true);
+    
 }
 
 -(void)pauseAudio{
@@ -219,5 +219,7 @@ void shutdown_audio() {
 {
     shutdown_audio();
 }
-
+-(void)soundConfig:(const char *)audioData size:(int)frameSize{
+    nplayer::NPlayer::gen_sound_config(audioData, frameSize);
+}
 @end

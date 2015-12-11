@@ -53,7 +53,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param nStatus       文本聊天的状态
  */
 -(void)RequestTextChatStatusCallBack:(int)nLocalChannel withStatus:(int)nStatus;
-
+/**
+ *  设备场景图片的代理
+ *
+ *  @param imageData      输出的图片
+ *  @param nShowWindowID  显示视频的窗口ID
+ */
+-(void)sceneOutImageDataCallBack:(NSData *)imageData withShowWindowID:(int)nShowWindowID;
 @end
 
 //远程回放协议
@@ -281,7 +287,19 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)initCloudSEESdk;
 
+/**
+ *  设置MTU值
+ */
+-(void)setMTUWithValue:(int)mtuValue;
 
+/**
+ *  停止小助手
+ */
+-(void)stopHelp;
+/**
+ *  启动小助手
+ */
+-(void)enableHelp;
 /**
  *  检测当前窗口连接是否已存在
  *
@@ -665,4 +683,11 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)RemoteDownloadFile:(int)nLocalChannel withDownLoadPath:(char *)downloadPath withSavePath:(NSString *)SavePath;
 
+ *  开启录像
+ *
+ *  @param nLocalChannel      连接的本地通道号
+ *  @param saveLocalVideoPath 录像文件存放的地址
+ */
+-(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
+>>>>>>> aa4f68b782b8c146a14f4118897911cdde684724
 @end

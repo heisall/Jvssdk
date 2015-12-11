@@ -97,7 +97,7 @@ JVCNPlayer* audiorecorder;
         [aqControllerobj stopRecord];
         aqControllerobj.delegate = nil;
     }
-    
+    [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] setNil];
     return result;
     
 }
@@ -157,15 +157,15 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
     BOOL result = [super openAudioDecoder:nConnectDeviceType isExistStartCode:isExistStartCode];
     
     if (result) {
+        AQSController *aqsControllerObj = [AQSController shareAQSControllerobjInstance];
+        aqsControllerObj.delegate       = self;
         
-        //                AQSController *aqsControllerObj = [AQSController shareAQSControllerobjInstance];
-        //                aqsControllerObj.delegate       = self;
-        //
-        //                int nAudioBit                   = 0;
-        //                int nAudioCollectionDataSize    = 0;
-        //
-        //                [self getAudioCollectionBitAndDataSize:nConnectDeviceType isExistStartCode:isExistStartCode nAudioBit:&nAudioBit nAudioCollectionDataSize:&nAudioCollectionDataSize];
-        //                [aqsControllerObj record:nAudioCollectionDataSize mChannelBit:nAudioBit];
+        int nAudioBit                   = 0;
+        int nAudioCollectionDataSize    = 0;
+        
+        [self getAudioCollectionBitAndDataSize:nConnectDeviceType isExistStartCode:isExistStartCode nAudioBit:&nAudioBit nAudioCollectionDataSize:&nAudioCollectionDataSize];
+        [aqsControllerObj record:nAudioCollectionDataSize mChannelBit:nAudioBit];
+        
     }
     
     return result;
@@ -286,14 +286,14 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
             }
                 break;
             case DEVICEMODEL_IPC:{
-                BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
-                BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
-                if (!isDoubleTalk&&isLongPressedStartTalk) {
-                    [openAlObj clear];
-                }else{
+//                BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
+//                BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
+//                if (!isDoubleTalk&&isLongPressedStartTalk) {
+//                    [openAlObj clear];
+//                }else{
                     [openAlObj clear];
                     [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer dataSize:nAudioDataSize playSoundType:playSoundType];
-                }
+//                }
             }
                 break;
             default:{
@@ -466,9 +466,9 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
         BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
         BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
         BOOL isIPCDevic=[[NSUserDefaults standardUserDefaults] boolForKey:@"isIPCDevice"];
-        if (isIPCDevic&&!isDoubleTalk&&!isLongPressedStartTalk) {
-            return;
-        }
+//        if (isIPCDevic&&!isDoubleTalk&&!isLongPressedStartTalk) {
+//            return;
+//        }
         int nAudioSize = (int)audioDataSize;
         memset(encodeAudioOutData, 0, sizeof(encodeAudioOutData));
         BOOL isEncoderSuccessFul = [self encoderLocalRecorderData:audionData nEncodeAudioOutdataSize:&nAudioSize encodeOutAudioData:(char *)encodeAudioOutData encodeOutAudioDataSize:sizeof(encodeAudioOutData)];

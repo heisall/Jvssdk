@@ -454,7 +454,7 @@ int nChannelIndex ;
 -(void)closeAudioDecoder{
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
-    
+    self.jvcPlaySound.isOpenDecoder=NO;
     [self.jvcPlaySound closeAudioDecoder];
     self.isAudioListening = self.jvcPlaySound.isOpenDecoder;
 }

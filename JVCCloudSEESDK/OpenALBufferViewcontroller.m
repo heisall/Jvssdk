@@ -8,6 +8,7 @@
 
 #import "OpenALBufferViewcontroller.h"
 #import <AudioToolbox/AudioFile.h>
+#import "JVCNPlayer.h"
 
 
 @interface OpenALBufferViewcontroller (){
@@ -167,6 +168,8 @@ static OpenALBufferViewcontroller *_OpenALBufferViewcontroller = nil;
         case playSoundType_16k16B:{
             
              alBufferData(bufferID, AL_FORMAT_MONO16, (short*)[tmpData bytes], (ALsizei)[tmpData length], 48000);
+            
+//            [[JVCNPlayer shareJVCNPlayer] playOneAudioFrame:(const unsigned char*)data size:dataSize];
         }
             
             break;
@@ -235,7 +238,9 @@ static OpenALBufferViewcontroller *_OpenALBufferViewcontroller = nil;
     alSourceStop(sourceID);
     
 }
-
+-(void)setNil{
+    _OpenALBufferViewcontroller = nil;
+}
 /**
  *  清除缓存声音
  */

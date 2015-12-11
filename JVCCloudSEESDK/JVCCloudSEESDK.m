@@ -27,7 +27,7 @@
 #import "JVCAudioCodecInterface.h"
 #import "JVCMediaPlayer.h"
 #import "Jmp4pkg.h"
-//#import "JVCNPlayer.h"
+#import "JVCNPlayer.h"
 
 
 static const NSString      *kRecoedVideoFileFormat  = @".mp4";                             //保存录像的单个文件后缀
@@ -145,11 +145,6 @@ enum DEVICETYPE {
     
 };
 
-enum DEVICETALKMODEL {
-    
-    DEVICETALKMODEL_Talk   = 1, // 1:设备播放声音，不采集声音
-    DEVICETALKMODEL_Notalk = 0, // 0:设备采集 不播放声音
-};
 
 /**
  *  云视通连接的回调函数
@@ -325,6 +320,15 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
         JP_InitSDK(32 * 1024, 1);
         InitDecode();      //板卡语音解码
         InitEncode();      //板卡语音编解]
+        [JVCNPlayer initCore];
+        NSString *mtuValue=[[NSUserDefaults standardUserDefaults] objectForKey:@"kMtuValue"];
+        int mtuValueInt;
+        if (mtuValue.length==0||mtuValue==nil) {
+            mtuValueInt=20000;
+        }else{
+            mtuValueInt=[mtuValue intValue];
+            JVC_SetMTU(mtuValueInt);
+        }
         JVC_EnableHelp(true,3);  //手机端是3
 //        [JVCNPlayer initCore];
         //注册各种回调函数
@@ -344,8 +348,25 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
     }
 }
 
+/**
+ *  设置MTU值
+ */
+-(void)setMTUWithValue:(int)mtuValue{
+    JVC_SetMTU(mtuValue);
+}
 
-
+/**
+ *  停止小助手
+ */
+-(void)stopHelp{
+    JVC_StopHelp();
+}
+/**
+ *  启动小助手
+ */
+-(void)enableHelp{
+    JVC_EnableHelp(1, 3);
+}
 /**
  *  网络获取设备的通道数
  *
@@ -646,9 +667,7 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
     }
     
     NSString *connectResultInfo=[[NSString alloc] initWithCString:pMsg encoding:NSUTF8StringEncoding];
-    
     [jvcCloudSEENetworkHelper runConnectMessageCallBackMath:connectResultInfo nLocalChannel:nLocalChannel connectResultType:uchType];
-    
     [connectResultInfo release];
 }
 
@@ -667,7 +686,6 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
     int               nJvchannelID       = [self returnCurrentChannelBynLocalChannelID:nlocalChannel];
     
     int               nshowWindowNumber  = [self returnCurrentChannelNShowWindowIDBynLocalChannel:nlocalChannel];
-    
     if (self.jvcCloudSEESDKDelegate != nil && [self.jvcCloudSEESDKDelegate respondsToSelector:@selector(ConnectMessageCallBackMath:nLocalChannel:connectResultType:)]) {
         
         [[JVCCloudSEENetworkGeneralHelper shareJVCCloudSEENetworkGeneralHelper] getConnectFailedDetailedInfoByConnectResultInfo:connectCallBackInfo conenctResultType:&connectResultType];
@@ -1080,7 +1098,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     
     JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
     JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
-    
+    currentChannelObj.isVoiceIntercom=YES;
     if (currentChannelObj == nil) {
         
         return;
@@ -1113,10 +1131,11 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand];
             
-//            if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
-//                
-//                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
-//            }
+            if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
+                
+                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+                [currentChannelObj closeVoiceIntercomDecoder];
+            }
             
         }
             break;
@@ -1306,7 +1325,7 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
             
         case JVN_CMD_CHATSTOP://"终止语音"
             
-            [jvcCloudSEENetworkHelper returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+            [jvcCloudSEENetworkHelper returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:currentChannelObj.isVoiceIntercom == YES?VoiceInterStateType_End:VoiceInterStateType_stop];
             
             break;
         case JVN_RSP_CHATDATA:{
@@ -2346,14 +2365,14 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
     
     
     if (decoderObj.IsEnableSceneImages) {
-        
-//        if (self.ystNWHDelegate != nil && [self.ystNWHDelegate respondsToSelector:@selector(sceneOutImageDataCallBack:withShowWindowID:)]) {
-//            
-//            [self.ystNWHDelegate sceneOutImageDataCallBack:captureOutImageData withShowWindowID:currentChannelObj.nShowWindowID+1];
-//        }
+    
+        if (self.jvcCloudSEESDKDelegate != nil && [self.jvcCloudSEESDKDelegate respondsToSelector:@selector(sceneOutImageDataCallBack:withShowWindowID:)]) {
+            
+            [self.jvcCloudSEESDKDelegate sceneOutImageDataCallBack:captureOutImageData withShowWindowID:currentChannelObj.nShowWindowID+1];
+        }
         
     }else{
-        
+    
         if (self.jvcCloudSEENetworkHelperCaptureDelegate != nil && [self.jvcCloudSEENetworkHelperCaptureDelegate respondsToSelector:@selector(captureImageCallBack:)]) {
             
             [self.jvcCloudSEENetworkHelperCaptureDelegate captureImageCallBack:captureOutImageData];

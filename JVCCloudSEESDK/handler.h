@@ -4,7 +4,6 @@
 #define _UTILS_HANDLER_H_
 
 #include "defines.h"
-
 namespace utils {
 class HandlerBody;
 

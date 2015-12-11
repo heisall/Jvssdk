@@ -90,6 +90,19 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param playbackSearchFileListMArray 远程回放检索文件列表
  */
 -(void)remoteplaybackSearchFileListInfoCallBack:(NSMutableArray *)playbackSearchFileListMArray;
+/**
+ *  远程下载文件的回调
+ *
+ *  @param downLoadStatus 下载的状态
+ 
+ JVN_RSP_DOWNLOADOVER  //文件下载完毕
+ JVN_CMD_DOWNLOADSTOP  //停止文件下载
+ JVN_RSP_DOWNLOADE     //文件下载失败
+ JVN_RSP_DLTIMEOUT     //文件下载超时
+ 
+ *  @param path           下载保存的路径
+ */
+-(void)remoteDownLoadCallBack:(int)downLoadStatus withDownloadSavePath:(NSString *)savepath;
 
 @end
 
@@ -662,6 +675,14 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel;
 
 /**
+ *  远程下载命令
+ *
+ *  @param nLocalChannel 视频显示的窗口编号
+ *  @param downloadPath  视频下载的地址
+ *  @param SavePath      保存的路径
+ */
+-(void)RemoteDownloadFile:(int)nLocalChannel withDownLoadPath:(char *)downloadPath withSavePath:(NSString *)SavePath;
+
  *  开启录像
  *
  *  @param nLocalChannel      连接的本地通道号

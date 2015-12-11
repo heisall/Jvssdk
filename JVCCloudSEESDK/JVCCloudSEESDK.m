@@ -2439,6 +2439,8 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         case JVN_RSP_DOWNLOADE:    //文件下载失败
         case JVN_RSP_DLTIMEOUT:{   //文件下载超时
             
+            [jvcCloudSEENetworkHelper closeDownloadHandle:uchType];
+            
             
         }
             break;
@@ -2483,10 +2485,10 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         downloadHandle = NULL;
     }
     
-//    if (self.ystNWRPVDelegate != nil && [self.ystNWRPVDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
-//        
-//        [jvcCloudSEENetworkHelper.ystNWRPVDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
-//    }
+    if (self.jvcRemotePlaybackVideoDelegate != nil && [self.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
+        
+        [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
+    }
     
 }
 

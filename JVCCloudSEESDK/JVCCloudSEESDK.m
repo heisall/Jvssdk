@@ -611,6 +611,11 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
     }
 }
 
+-(void)setShowView:(UIView *)view atLocalChannel:(int)channel{
+    JVCCloudSEEManagerHelper *newCurrentChannelObj  = [self returnCurrentChannelBynLocalChannel:channel];
+    newCurrentChannelObj.showView = view;
+}
+
 #pragma mark  断开连接
 
 /**
@@ -684,6 +689,7 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
     
     
     int               nJvchannelID       = [self returnCurrentChannelBynLocalChannelID:nlocalChannel];
+    
     
     int               nshowWindowNumber  = [self returnCurrentChannelNShowWindowIDBynLocalChannel:nlocalChannel];
     if (self.jvcCloudSEESDKDelegate != nil && [self.jvcCloudSEESDKDelegate respondsToSelector:@selector(ConnectMessageCallBackMath:nLocalChannel:connectResultType:)]) {
@@ -1447,10 +1453,12 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
         return;
     }
     
+//    NSLog(@"%p",__FUNCTION__);
     switch (uchType) {
             
         case JVN_DATA_O:{
             
+            NSLog(@"o frame is here ");
             int     width       = -1;
             int     height      = -1;
             double  frameRate   = 0 ;
@@ -2453,6 +2461,8 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         case JVN_RSP_DOWNLOADE:    //文件下载失败
         case JVN_RSP_DLTIMEOUT:{   //文件下载超时
             
+            [jvcCloudSEENetworkHelper closeDownloadHandle:uchType];
+            
             
         }
             break;
@@ -2497,10 +2507,10 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         downloadHandle = NULL;
     }
     
-//    if (self.ystNWRPVDelegate != nil && [self.ystNWRPVDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
-//        
-//        [jvcCloudSEENetworkHelper.ystNWRPVDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
-//    }
+    if (self.jvcRemotePlaybackVideoDelegate != nil && [self.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
+        
+        [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
+    }
     
 }
 
@@ -3234,7 +3244,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
         
 //        NSLog(@"==444==%s===%@___",__FUNCTION__,[arrayLanSearch description]);
 
-        [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:arrayLanSearch];
+        [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:SerachLANAllDeviceList];
     }
 
     [arrayLanSearch release];

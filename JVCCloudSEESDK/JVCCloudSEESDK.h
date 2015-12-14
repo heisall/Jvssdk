@@ -113,8 +113,10 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 /**
  *   录像结束的回调函数
  *
+ *  @param isContinue 是否结束后继续录像 YES：继续
  */
--(void)videoEndCallBack;
+-(void)videoEndCallBack:(BOOL)isContinueVideo;
+
 /**
 *   录像开始的回调函数
 *
@@ -668,5 +670,4 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param saveLocalVideoPath 录像文件存放的地址
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
->>>>>>> aa4f68b782b8c146a14f4118897911cdde684724
 @end

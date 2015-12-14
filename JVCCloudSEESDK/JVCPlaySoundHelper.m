@@ -133,7 +133,7 @@ FILE *audiofile;
  *  @return YES:成功关闭 NO:不存在
  */
 -(BOOL)closeAudioDecoder{
-    
+     NSLog(@"closeAudioDecoder:playsound........");
     BOOL result = YES;
     
     if (self.isOpenDecoder) {

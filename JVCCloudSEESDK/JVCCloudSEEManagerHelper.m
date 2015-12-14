@@ -145,7 +145,7 @@ int nChannelIndex ;
  *  退出缓存队列
  */
 -(void)exitQueue{
-    
+    NSLog(@"managerHelper.......");
     self.jvcQueueHelper.jvcQueueHelperDelegate = nil;
     [self.jvcQueueHelper exitPopDataThread];
     
@@ -452,6 +452,7 @@ int nChannelIndex ;
  *  关闭音频解码
  */
 -(void)closeAudioDecoder{
+    NSLog(@"closeAudioDecoder:managerHelper.......");
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
     self.jvcPlaySound.isOpenDecoder=NO;
@@ -574,7 +575,7 @@ int nChannelIndex ;
  *  关闭音频解码
  */
 -(void)closeVoiceIntercomDecoder{
-    
+    NSLog(@"closeVoiceIntercomDecoder:managerHelper.......");
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
     self.jvcAudioQueueHelper = nil;

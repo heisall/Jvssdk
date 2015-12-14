@@ -87,7 +87,7 @@ JVCNPlayer* audiorecorder;
 }
 
 -(BOOL)closeAudioDecoder{
-    
+    NSLog(@"closeAudioDecoder:voiceIntercomhelper........");
     BOOL result = [super closeAudioDecoder];
     
     if (result) {
@@ -286,14 +286,14 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
             }
                 break;
             case DEVICEMODEL_IPC:{
-//                BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
-//                BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
-//                if (!isDoubleTalk&&isLongPressedStartTalk) {
-//                    [openAlObj clear];
-//                }else{
+                BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
+                BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
+                if (!isDoubleTalk&&isLongPressedStartTalk) {
+                    [openAlObj clear];
+                }else{
                     [openAlObj clear];
                     [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer dataSize:nAudioDataSize playSoundType:playSoundType];
-//                }
+                }
             }
                 break;
             default:{
@@ -465,10 +465,9 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
     if (self.jvcVoiceIntercomHelperDeleage != nil && [self.jvcVoiceIntercomHelperDeleage respondsToSelector:@selector(sendRecordAudioData:withAudioDataSize:)] ) {
         BOOL isLongPressedStartTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isLongPressedStartTalk"];
         BOOL isDoubleTalk=[[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
-        BOOL isIPCDevic=[[NSUserDefaults standardUserDefaults] boolForKey:@"isIPCDevice"];
-//        if (isIPCDevic&&!isDoubleTalk&&!isLongPressedStartTalk) {
-//            return;
-//        }
+        if (!isDoubleTalk&&!isLongPressedStartTalk) {
+            return;
+        }
         int nAudioSize = (int)audioDataSize;
         memset(encodeAudioOutData, 0, sizeof(encodeAudioOutData));
         BOOL isEncoderSuccessFul = [self encoderLocalRecorderData:audionData nEncodeAudioOutdataSize:&nAudioSize encodeOutAudioData:(char *)encodeAudioOutData encodeOutAudioDataSize:sizeof(encodeAudioOutData)];

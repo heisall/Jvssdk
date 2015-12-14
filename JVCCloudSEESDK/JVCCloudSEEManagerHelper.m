@@ -178,6 +178,7 @@ int nChannelIndex ;
  */
 -(void)startPopVideoDataThread{
     
+    NSLog(@"start pop video");
     if (!self.jvcQueueHelper) {
         
         JVCQueueHelper      *jvcQueueHelperObj     = [[JVCQueueHelper alloc] init:self.nLocalChannel];
@@ -226,6 +227,7 @@ int nChannelIndex ;
 -(int)popDataCallBack:(void *)bufferData {
     
     
+    NSLog(@"pop datacallback");
     frame *decodervideoFrame = (frame *)bufferData;
     
     int nDecoderStatus = [self decodeOneVideoFrame:decodervideoFrame];

@@ -335,6 +335,11 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(BOOL)ystConnectVideobyDeviceInfo:(int)nLocalChannel nRemoteChannel:(int)nRemoteChannel strYstNumber:(NSString *)strYstNumber strUserName:(NSString *)strUserName strPassWord:(NSString *)strPassWord nSystemVersion:(int)nSystemVersion isConnectShowVideo:(BOOL)isConnectShowVideo withConnectType:(int)nConnectType withShowView:(id)showVew;
 
 /**
+ *  设置showView
+ */
+-(void)setShowView:(UIView *)view atLocalChannel:(int)channel;
+
+/**
  *  IP连接视频的函数 (子线程调用)
  *
  *  @param nLocalChannel  本地连接的通道号 >=1

@@ -227,7 +227,7 @@ int nChannelIndex ;
 -(int)popDataCallBack:(void *)bufferData {
     
     
-    NSLog(@"pop datacallback");
+//    NSLog(@"pop datacallback");
     frame *decodervideoFrame = (frame *)bufferData;
     
     int nDecoderStatus = [self decodeOneVideoFrame:decodervideoFrame];

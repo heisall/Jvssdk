@@ -3222,7 +3222,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
         
 //        NSLog(@"==444==%s===%@___",__FUNCTION__,[arrayLanSearch description]);
 
-        [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:arrayLanSearch];
+        [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:SerachLANAllDeviceList];
     }
 
     [arrayLanSearch release];

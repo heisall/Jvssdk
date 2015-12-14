@@ -10,6 +10,7 @@
 #import "JVCCloudSEENetworkInterface.h"
 #import "JVCCloudSEENetworkMacro.h"
 #import "JVCDeviceMacro.h"
+#import "JVCCloudSEENetworkGeneralHelper.h"
 
 @interface JVCLANScanWithSetHelpYSTNOHelper (){
 
@@ -218,6 +219,21 @@ void JVCLANScanWithSetHelpYSTNOHelperQueryDevce(STLANSRESULT_01 *stlanResultData
         lanModel.iDeviceVariety = stlanResultData->nVariety;
         lanModel.dcs=stlanResultData->nChannelCount;
         lanModel.dvlt           = CONNECTTYPE_IP;
+        
+        if (stlanResultData->nPrivateSize>0) {
+            JVCCloudSEENetworkGeneralHelper *ystNetworkHelperCMObj = [JVCCloudSEENetworkGeneralHelper shareJVCCloudSEENetworkGeneralHelper];
+            NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stlanResultData->chPrivateInfo];
+            if (params.count>0) {
+                if (params[@"timer_count"]!=nil&&[params[@"timer_count"] intValue]>0) {
+                    lanModel.timer_count=1;
+                }else{
+                    lanModel.timer_count=-1;
+                }
+            }else{
+                lanModel.timer_count=-1;
+            }
+        }
+
         
         if (_isUserWIfi==1) {
             

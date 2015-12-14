@@ -9,22 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "JVCCloudSEESDK/JVCCloudSEESDK.m"
-            timestampString = "449309554.894172"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2373"
-            endingLineNumber = "2373"
-            landmarkName = "-RemoteOperationSendDataToDeviceWithfullOrOnlyIFrame:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "JVCCloudSEESDK/JVCCloudSEEManagerHelper.m"
             timestampString = "449397513.936712"
             startingColumnNumber = "9223372036854775807"

@@ -954,10 +954,10 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     
     [currentChannelObj stopRecordVideo];
     
-    if (self.videoDelegate !=nil && [self.videoDelegate respondsToSelector:@selector(videoEndCallBack)]) {
-        
-        [self.videoDelegate videoEndCallBack];
-    }
+//    if (self.videoDelegate !=nil && [self.videoDelegate respondsToSelector:@selector(videoEndCallBack:)]) {
+    
+        [self videoEndCallBack:isContinue];
+//    }
 }
 
 
@@ -1134,14 +1134,25 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                 [currentChannelObj openAudioDecoder];
             }
         }
+//        case RemoteOperationType_AudioListeningStaus:{
+//            
+//            if (remoteOperationCommand==0) {
+//                
+//                [currentChannelObj closeAudioDecoder];
+//                
+//            }else{
+//                
+//                [currentChannelObj openAudioDecoder];
+//            }
+//        }
         case RemoteOperationType_VoiceIntercom:{
             
             [ystRemoteOperationHelperObj onlySendRemoteOperation:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand];
             
             if (remoteOperationCommand == JVN_CMD_CHATSTOP) {
-                
-                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
-                [currentChannelObj closeVoiceIntercomDecoder];
+//                [currentChannelObj setVoiceIntercomMode:NO];
+//                [self returnVoiceIntercomCallBack:currentChannelObj nVoiceInterStateType:VoiceInterStateType_End];
+//                [currentChannelObj closeVoiceIntercomDecoder];
             }
             
         }
@@ -1359,7 +1370,7 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
 -(void)returnVoiceIntercomCallBack:(JVCCloudSEEManagerHelper *)currentChannelObj nVoiceInterStateType:(int)nVoiceInterStateType{
     
     [currentChannelObj retain];
-    
+    NSLog(@"nVoiceInterStateType:%d",nVoiceInterStateType);
     if (self.jvcAudioDelegate !=nil && [self.jvcAudioDelegate respondsToSelector:@selector(VoiceInterComCallBack:)]) {
         
         [self.jvcAudioDelegate VoiceInterComCallBack:nVoiceInterStateType];
@@ -1370,8 +1381,11 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
         [currentChannelObj openVoiceIntercomDecoder];
         
     }else{
+        BOOL isDoubleTalk=[[[NSUserDefaults standardUserDefaults] objectForKey:@"isDoubleTalk"] boolValue];
+        if (isDoubleTalk&&!currentChannelObj.isAudioListening) {
+            [currentChannelObj closeVoiceIntercomDecoder];
+        }
         
-        [currentChannelObj closeVoiceIntercomDecoder];
     }
     
     [currentChannelObj release];

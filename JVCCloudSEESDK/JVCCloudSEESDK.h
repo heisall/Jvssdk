@@ -90,19 +90,6 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param playbackSearchFileListMArray 远程回放检索文件列表
  */
 -(void)remoteplaybackSearchFileListInfoCallBack:(NSMutableArray *)playbackSearchFileListMArray;
-/**
- *  远程下载文件的回调
- *
- *  @param downLoadStatus 下载的状态
- 
- JVN_RSP_DOWNLOADOVER  //文件下载完毕
- JVN_CMD_DOWNLOADSTOP  //停止文件下载
- JVN_RSP_DOWNLOADE     //文件下载失败
- JVN_RSP_DLTIMEOUT     //文件下载超时
- 
- *  @param path           下载保存的路径
- */
--(void)remoteDownLoadCallBack:(int)downLoadStatus withDownloadSavePath:(NSString *)savepath;
 
 @end
 
@@ -147,8 +134,10 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 /**
  *   录像结束的回调函数
  *
+ *  @param isContinue 是否结束后继续录像 YES：继续
  */
--(void)videoEndCallBack;
+-(void)videoEndCallBack:(BOOL)isContinueVideo;
+
 /**
 *   录像开始的回调函数
 *
@@ -356,11 +345,6 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @return 成功返回YES  重复连接返回NO
  */
 -(BOOL)ystConnectVideobyDeviceInfo:(int)nLocalChannel nRemoteChannel:(int)nRemoteChannel strYstNumber:(NSString *)strYstNumber strUserName:(NSString *)strUserName strPassWord:(NSString *)strPassWord nSystemVersion:(int)nSystemVersion isConnectShowVideo:(BOOL)isConnectShowVideo withConnectType:(int)nConnectType withShowView:(id)showVew;
-
-/**
- *  设置showView
- */
--(void)setShowView:(UIView *)view atLocalChannel:(int)channel;
 
 /**
  *  IP连接视频的函数 (子线程调用)

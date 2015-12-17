@@ -828,13 +828,14 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
  *  远程下载文件接口
  *
  *  @param nJvChannelID 本地连接的通道号
- *  @param path         下载的路径
+ *  @param path /Users/Sun/GitRep/JVCCloudSEESDK/JVCCloudSEESDK/JVCCloudSEENetworkGeneralHelper.m        下载的路径
  */
 -(void)RemoteDownloadFile:(int)nJvChannelID withDownloadPath:(char *)path{
 
 
     JVC_SendData(nJvChannelID,JVN_CMD_DOWNLOADSTOP, NULL, 0);
     
+    NSLog(@"path %d %s %x",nJvChannelID ,path,JVN_REQ_DOWNLOAD);
     JVC_SendData(nJvChannelID,JVN_REQ_DOWNLOAD, path, strlen(path));
 }
 
@@ -1574,5 +1575,6 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     [array release];
     [self RemoteWithDeviceGetFrameParam:nJvChannelID];
 }
+
 
 @end

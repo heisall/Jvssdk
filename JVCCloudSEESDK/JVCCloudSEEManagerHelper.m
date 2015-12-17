@@ -371,7 +371,7 @@ int nChannelIndex ;
  *  @param requestOutCommand         输出的发送命令
  */
 -(void)getRequestSendPlaybackVideoCommand:(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand{
-    
+
     [requestPlayBackFileInfo retain];
     [requestPlayBackFileDate retain];
     

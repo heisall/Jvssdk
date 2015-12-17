@@ -154,6 +154,8 @@ long long currentMillisSec() {
  */
 -(void)startPopDataThread {
     
+    NSLog(@"exit %d",bm_exit);
+    
     if (!bm_exit) {
         
         [NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
@@ -166,7 +168,7 @@ long long currentMillisSec() {
 -(void)popDataCallBack{
     
     
-//    NSLog(@"queuer start pop video thread");
+    NSLog(@"queuer start pop video thread");
 
     playThreadExit = TRUE;
     bm_exit = TRUE;

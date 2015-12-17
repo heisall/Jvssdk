@@ -235,6 +235,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
 @synthesize ystNWRODelegate;
 @synthesize jvcAudioDelegate;
 @synthesize jvcRemotePlaybackVideoDelegate;
+@synthesize jvcRemoteDownloadVideoDelegate;
 @synthesize ystNWTDDelegate;
 @synthesize videoDelegate;
 @synthesize jvcVideoDelegate;
@@ -1572,7 +1573,7 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
     
     //组合一条发送的远程回放文件的信息
     [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:requestPlayBackFileIndex requestOutCommand:(char *)acBuff];
-    
+    NSLog(@"remote playback path %s",acBuff);
     [ystRemoteOperationHelperObj remoteSendDataToDevice:currentChannelObj.nLocalChannel remoteOperationType:JVN_REQ_PLAY remoteOperationCommandData:acBuff];
     [ystRemoteOperationHelperObj remoteSendDataToDevice:currentChannelObj.nLocalChannel remoteOperationType:JVN_REQ_PLAY remoteOperationCommandData:acBuff];
     
@@ -2454,6 +2455,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         return;
     }
     
+    NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
     switch (uchType) {
             
         case JVN_RSP_DOWNLOADOVER: //文件下载完毕
@@ -2461,13 +2463,16 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         case JVN_RSP_DOWNLOADE:    //文件下载失败
         case JVN_RSP_DLTIMEOUT:{   //文件下载超时
             
+            
             [jvcCloudSEENetworkHelper closeDownloadHandle:uchType];
             
+            [[JVCCloudSEESDK shareJVCCloudSEESDK].jvcRemoteDownloadVideoDelegate remoteDownLoadCallBackStatus:uchType size:0 withFilesize:0];
             
         }
             break;
         case JVN_RSP_DOWNLOADDATA:{
             
+            [[JVCCloudSEESDK shareJVCCloudSEESDK].jvcRemoteDownloadVideoDelegate remoteDownLoadCallBackStatus:uchType size:nSize withFilesize:nFileLen];
             [jvcCloudSEENetworkHelper openDownFileHandle:pBuffer withSaveBufferSize:nSize];
         }
             break;
@@ -2475,6 +2480,8 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
             break;
     }
 }
+
+
 
 /**
  *  打开文件写入流句柄并写入数据
@@ -2530,7 +2537,6 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         
         return;
     }
-    
     if (remoteDownSavePath == nil) {
         
         remoteDownSavePath  = [[NSMutableString alloc] initWithCapacity:10];
@@ -3374,6 +3380,32 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     //JVC_ConnectRTMP(1,"http:://",rtmp_connectchange,rtmp_videoCallBack);
     return [currentChannelObj isMp4File];
 }
+
+/**
+ *  获取请求远程回放的一条命令
+ *
+ *  @param requestPlayBackFileInfo   当前选中的远程回放的远程文件信息
+ *  @param requestPlayBackFileDate   远程回放的日期
+ *  @param requestPlayBackFileIndex  当前选中的远程文件列表的索引
+ *  @param requestOutCommand         输出的发送命令
+ */
+-(void)getRequestPlaybackDownloadCommandChannel:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand{
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:nRequestPlayBackFileIndex requestOutCommand:requestOutCommand];
+}
+
+-(BOOL)setHelpYSTNO:(unsigned char *)pbuf :(int)nSize{
+    
+    BOOL result ;
+    result = JVC_SetHelpYSTNO(pbuf, nSize);
+    return  result;
+}
+
+//-(BOOL)JVC_SetHelpYSTNON(unsigned char *pBuffer, int nSize){
+//    
+//     JVC_SetHelpYSTNO(unsigned char *pBuffer, int nSize);
+//
+//}
 
 /**
 >>>>>>> master

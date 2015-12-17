@@ -106,6 +106,27 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 @end
 
+//远程下载
+@protocol JVCremoteDownloadDelegate <NSObject>
+
+@optional
+/**
+ *  远程下载文件的回调
+ *
+ *  @param downLoadStatus 下载的状态
+ 
+ JVN_RSP_DOWNLOADOVER  //文件下载完毕
+ JVN_CMD_DOWNLOADSTOP  //停止文件下载
+ JVN_RSP_DOWNLOADE     //文件下载失败
+ JVN_RSP_DLTIMEOUT     //文件下载超时
+ 
+ *  @param filesize           文件大小
+ @param size              下载大小
+ */
+-(void)remoteDownLoadCallBackStatus:(int)status size:(int)size withFilesize:(int )filesize;
+
+@end
+
 @protocol JVCAudioDelegate <NSObject>
 
 @optional
@@ -262,6 +283,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 @property(nonatomic,assign)id <JVCCloudSEESDKDelegate>            jvcCloudSEESDKDelegate;         //视频、连接信息
 @property(nonatomic,assign)id <JVCRemotePlaybackVideoDelegate>    jvcRemotePlaybackVideoDelegate; //远程回放
+@property(nonatomic,assign)id <JVCremoteDownloadDelegate>    jvcRemoteDownloadVideoDelegate; //远程下载
+
 @property(nonatomic,assign)id <JVCAudioDelegate>                  jvcAudioDelegate;               //音频代理
 @property(nonatomic,assign)id<jvcVideoSaveDelegate>                   jvcVideoDelegate;
 @property(nonatomic,assign)id<ystNetWorkHelpVideoDelegate>                   videoDelegate;
@@ -651,14 +674,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  * @return   0:成功         其他：失败
  */
 -(int)setSelfServerWithGroup:(NSString*)pGroup service:(NSString *)pServer;
-/**
- *  根据本地通道号返回对应的JVCCloudSEEManagerHelper
- *
- *  @param nLocalChannel 本地通道号
- *
- *  @return 本地通道号返回对应的JVCCloudSEEManagerHelper
- */
--(JVCCloudSEEManagerHelper *)returnCurrentChannelBynLocalChannel:(int)nLocalChannel;
+
 /**
  *  隐藏OpenGL的显示
  *
@@ -688,12 +704,22 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)RemoteDownloadFile:(int)nLocalChannel withDownLoadPath:(char *)downloadPath withSavePath:(NSString *)SavePath;
 /**
-
+ *  获取请求远程回放的一条命令
+ *
+ *  @param requestPlayBackFileInfo   当前选中的远程回放的远程文件信息
+ *  @param requestPlayBackFileDate   远程回放的日期
+ *  @param requestPlayBackFileIndex  当前选中的远程文件列表的索引
+ *  @param requestOutCommand         输出的发送命令
+ */
+-(void)getRequestPlaybackDownloadCommandChannel:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
+ 
 /*开启录像
  *
  *  @param nLocalChannel      连接的本地通道号
  *  @param saveLocalVideoPath 录像文件存放的地址
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
+
+-(BOOL)setHelpYSTNO:(unsigned char *)pbuf :(int)nSize;
 
 @end

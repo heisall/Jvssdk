@@ -670,4 +670,12 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param saveLocalVideoPath 录像文件存放的地址
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
+
+/**
+ *  查询设置小助手设备列表
+ *
+ *  @param nLocalChannel      连接的本地通道号
+ *  @param saveLocalVideoPath 录像文件存放的地址
+ */
+-(void)getDeviceHelpList:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 @end

@@ -832,7 +832,6 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
  */
 -(void)RemoteDownloadFile:(int)nJvChannelID withDownloadPath:(char *)path{
 
-
     JVC_SendData(nJvChannelID,JVN_CMD_DOWNLOADSTOP, NULL, 0);
     
     NSLog(@"path %d %s %x",nJvChannelID ,path,JVN_REQ_DOWNLOAD);

@@ -222,11 +222,11 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
             
             if (self.isExistStartCode) {
                 
-                sprintf(acBuff, "./rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.mp4",remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2]-'C',year, month, day,remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
+                sprintf(acBuff, "/progs/rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.mp4",remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2]-'C',year, month, day,remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
                 
             }else{
                 
-                sprintf(acBuff, "./rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.sv5",remotePlaybackCacheBuffer[2*2]-'C',year, month, day,remotePlaybackCacheBuffer[2*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
+                sprintf(acBuff, "/progs/rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.sv5",remotePlaybackCacheBuffer[2*2]-'C',year, month, day,remotePlaybackCacheBuffer[2*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
             }
             
         }

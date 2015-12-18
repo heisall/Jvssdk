@@ -3394,18 +3394,21 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:nRequestPlayBackFileIndex requestOutCommand:requestOutCommand];
 }
 
--(BOOL)setHelpYSTNO:(unsigned char *)pbuf :(int)nSize{
+-(NSString *)setHelpYSTNO{
+    int ssize = sizeof(STBASEYSTNO);
+    int msize = ssize * 200;
     
-    BOOL result ;
-    result = JVC_SetHelpYSTNO(pbuf, nSize);
+    unsigned char* buffer = (unsigned char*) malloc(sizeof(unsigned char) * msize);
+    memset(buffer, 0, msize);
+    JVC_GetHelpYSTNO(buffer, &msize);
+    
+//    int count = msize / ssize;
+    NSString *result = [NSString stringWithUTF8String:(char *)buffer];
+    free(buffer);
+    NSLog(@"getAllDeviceStatus X, buf %s string %@", buffer,result);
+    
     return  result;
 }
-
-//-(BOOL)JVC_SetHelpYSTNON(unsigned char *pBuffer, int nSize){
-//    
-//     JVC_SetHelpYSTNO(unsigned char *pBuffer, int nSize);
-//
-//}
 
 /**
 >>>>>>> master

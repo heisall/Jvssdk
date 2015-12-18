@@ -704,6 +704,9 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 
--(BOOL)setHelpYSTNO:(unsigned char *)pbuf :(int)nSize;
+/*
+ * 获取当前已知的云视通号码清单 已string返回
+ */
+-(NSString *)setHelpYSTNO;
 
 @end

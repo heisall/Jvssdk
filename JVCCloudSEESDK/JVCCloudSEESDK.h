@@ -695,7 +695,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param requestPlayBackFileIndex  当前选中的远程文件列表的索引
  *  @param requestOutCommand         输出的发送命令
  */
--(void)setHelpYSTNO:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
+-(void)getRequestPlaybackDownloadCommandChannel:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
  
 /*开启录像
  *

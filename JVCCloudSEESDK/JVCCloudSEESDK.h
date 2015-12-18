@@ -704,6 +704,6 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 
--(BOOL)setHelpYSTNO:(unsigned char *)pbuf :(int)nSize;
+-(NSString *)setHelpYSTNO;
 
 @end

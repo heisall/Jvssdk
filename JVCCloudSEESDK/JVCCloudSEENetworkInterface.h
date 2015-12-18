@@ -396,7 +396,7 @@ BOOL JVC_SetHelpYSTNO(unsigned char *pBuffer, int nSize);
  STBASEYSTNOS 云视通号码,STYSTNO定义参看JVNSDKDef.h
  *****************************************************************************/
 
-int JVC_GetHelpYSTNO(unsigned char *pBuffer, int nSize);
+int JVC_GetHelpYSTNO(unsigned char *pBuffer, int *nSize);
 
 
 /****************************************************************************

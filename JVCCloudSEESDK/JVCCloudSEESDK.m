@@ -2455,7 +2455,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         return;
     }
     
-    NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
+//    NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
     switch (uchType) {
             
         case JVN_RSP_DOWNLOADOVER: //文件下载完毕
@@ -2492,11 +2492,18 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
 -(void)openDownFileHandle:(const char *)buffer withSaveBufferSize:(int)nSize{
     
     if (NULL == downloadHandle) {
-        
+        if (!remoteDownSavePath) {
+
+            NSLog(@"%sremoteDownSavePath is nil %@",__FUNCTION__,remoteDownSavePath);
+            return;
+        }
+        NSLog(@"%sremoteDownSavePath %@",__FUNCTION__,remoteDownSavePath);
         downloadHandle = fopen([remoteDownSavePath UTF8String], "ab+");
     }
     
+    
     flockfile(downloadHandle);
+//    NSLog(@"write data file");
     fwrite(buffer,1,nSize, downloadHandle);
     fflush(downloadHandle);
     funlockfile(downloadHandle);
@@ -2510,8 +2517,9 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
     if (NULL != downloadHandle) {
         
         fclose(downloadHandle);
-        
+        NSLog(@"%sremoteDownSavePath %@",__FUNCTION__,remoteDownSavePath);
         downloadHandle = NULL;
+        remoteDownSavePath = nil;
     }
     
     if (self.jvcRemotePlaybackVideoDelegate != nil && [self.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
@@ -2545,8 +2553,9 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         
         [remoteDownSavePath deleteCharactersInRange:NSMakeRange(0, remoteDownSavePath.length)];
     }
-    
+
     [remoteDownSavePath appendString:SavePath];
+    NSLog(@"%sremoteDownSavePath %@",__FUNCTION__,remoteDownSavePath);
     
     [ystRemoteOperationHelperObj RemoteDownloadFile:currentChannelObj.nLocalChannel withDownloadPath:downloadPath];
     

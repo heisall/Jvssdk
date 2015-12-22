@@ -90,6 +90,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param playbackSearchFileListMArray 远程回放检索文件列表
  */
 -(void)remoteplaybackSearchFileListInfoCallBack:(NSMutableArray *)playbackSearchFileListMArray;
+
+@end
+
+//远程下载
+@protocol JVCremoteDownloadDelegate <NSObject>
+
+@optional
 /**
  *  远程下载文件的回调
  *
@@ -100,9 +107,10 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  JVN_RSP_DOWNLOADE     //文件下载失败
  JVN_RSP_DLTIMEOUT     //文件下载超时
  
- *  @param path           下载保存的路径
+ *  @param filesize           文件大小
+ @param size              下载大小
  */
--(void)remoteDownLoadCallBack:(int)downLoadStatus withDownloadSavePath:(NSString *)savepath;
+-(void)remoteDownLoadCallBackStatus:(int)status size:(int)size withFilesize:(int )filesize;
 
 @end
 
@@ -264,6 +272,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 @property(nonatomic,assign)id <JVCCloudSEESDKDelegate>            jvcCloudSEESDKDelegate;         //视频、连接信息
 @property(nonatomic,assign)id <JVCRemotePlaybackVideoDelegate>    jvcRemotePlaybackVideoDelegate; //远程回放
+@property(nonatomic,assign)id <JVCremoteDownloadDelegate>    jvcRemoteDownloadVideoDelegate; //远程下载
+
 @property(nonatomic,assign)id <JVCAudioDelegate>                  jvcAudioDelegate;               //音频代理
 @property(nonatomic,assign)id<jvcVideoSaveDelegate>                   jvcVideoDelegate;
 @property(nonatomic,assign)id<ystNetWorkHelpVideoDelegate>                   videoDelegate;
@@ -335,11 +345,6 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @return 成功返回YES  重复连接返回NO
  */
 -(BOOL)ystConnectVideobyDeviceInfo:(int)nLocalChannel nRemoteChannel:(int)nRemoteChannel strYstNumber:(NSString *)strYstNumber strUserName:(NSString *)strUserName strPassWord:(NSString *)strPassWord nSystemVersion:(int)nSystemVersion isConnectShowVideo:(BOOL)isConnectShowVideo withConnectType:(int)nConnectType withShowView:(id)showVew;
-
-/**
- *  设置showView
- */
--(void)setShowView:(UIView *)view atLocalChannel:(int)channel;
 
 /**
  *  IP连接视频的函数 (子线程调用)
@@ -653,14 +658,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  * @return   0:成功         其他：失败
  */
 -(int)setSelfServerWithGroup:(NSString*)pGroup service:(NSString *)pServer;
-/**
- *  根据本地通道号返回对应的JVCCloudSEEManagerHelper
- *
- *  @param nLocalChannel 本地通道号
- *
- *  @return 本地通道号返回对应的JVCCloudSEEManagerHelper
- */
--(JVCCloudSEEManagerHelper *)returnCurrentChannelBynLocalChannel:(int)nLocalChannel;
+
 /**
  *  隐藏OpenGL的显示
  *
@@ -690,15 +688,29 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)RemoteDownloadFile:(int)nLocalChannel withDownLoadPath:(char *)downloadPath withSavePath:(NSString *)SavePath;
 /**
-
+ *  获取请求远程回放的一条命令
+ *
+ *  @param requestPlayBackFileInfo   当前选中的远程回放的远程文件信息
+ *  @param requestPlayBackFileDate   远程回放的日期
+ *  @param requestPlayBackFileIndex  当前选中的远程文件列表的索引
+ *  @param requestOutCommand         输出的发送命令
+ */
+-(void)getRequestPlaybackDownloadCommandChannel:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
+ 
 /*开启录像
  *
  *  @param nLocalChannel      连接的本地通道号
  *  @param saveLocalVideoPath 录像文件存放的地址
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
-<<<<<<< HEAD
-=======
 
->>>>>>> 2d06b557fe236ebaf5ba24fbf6608ce52ed5b156
+<<<<<<< HEAD
+-(NSString *)getHelpYSTNO;
+=======
+/*
+ * 获取当前已知的云视通号码清单 已string返回
+ */
+-(NSString *)setHelpYSTNO;
+>>>>>>> 4f591f1d09db4dc0af6a9e8e8d72cb78671da3ec
+
 @end

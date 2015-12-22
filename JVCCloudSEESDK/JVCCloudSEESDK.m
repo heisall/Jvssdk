@@ -3394,7 +3394,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:nRequestPlayBackFileIndex requestOutCommand:requestOutCommand];
 }
 
--(NSString *)setHelpYSTNO{
+-(NSString *)getHelpYSTNO{
     int ssize = sizeof(STBASEYSTNO);
     int msize = ssize * 200;
     

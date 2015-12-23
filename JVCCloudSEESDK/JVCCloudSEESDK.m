@@ -3442,9 +3442,8 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     
 //    int count = msize / ssize;
     NSString *result = [NSString stringWithUTF8String:(char *)buffer];
-    free(buffer);
     NSLog(@"getAllDeviceStatus X, buf %s string %@", buffer,result);
-    
+     free(buffer);
     return  result;
 }
 

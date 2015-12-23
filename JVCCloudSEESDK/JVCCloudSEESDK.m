@@ -1206,6 +1206,34 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     }
 }
 /**
+ *  云台控制
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed{
+    JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    currentChannelObj.isVoiceIntercom=YES;
+    if (currentChannelObj == nil) {
+        
+        return;
+    }
+    
+    switch (remoteOperationType) {
+            
+        case RemoteOperationType_YTO:
+        {
+            
+            [ystRemoteOperationHelperObj onlySendYtOperaton:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand speed:speed];
+        }
+            break;
+        default:
+            break;
+    }
+}
+/**
  *  远程控制指令
  *
  *  @param nLocalChannel              视频显示的窗口编号

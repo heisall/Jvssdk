@@ -710,4 +710,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(NSString *)setHelpYSTNO;
 
+/**
+ *  远程控制指令
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed;
+
 @end

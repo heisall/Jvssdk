@@ -3446,31 +3446,25 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     memset(buffer, 0, msize);
     JVC_GetHelpYSTNO(buffer, &msize);
     
-<<<<<<< HEAD
-//    int count = msize / ssize;
-    NSString *result = [NSString stringWithUTF8String:(char *)buffer];
-    NSLog(@"getAllDeviceStatus X, buf %s string %@", buffer,result);
-     free(buffer);
-    return  result;
-=======
     int count = msize / ssize;
     for (int i=0; i<count; i++) {
         STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
-        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
+//        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
         NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
-        [array addObject:ystValue];
+        NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%s%d",yst->chGroup,yst->nYSTNO],@"nYSTNO",[NSNumber numberWithInt:yst->nConnectStatus],@"nConnectStatus", nil];
+    
+        [array addObject:dict];
     }
     
     free(buffer);
     
-    for (NSValue *v in array) {
-        STBASEYSTNO ystv;
-        [v getValue:&ystv];
-        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
-    }
+//    for (NSValue *v in array) {
+//        STBASEYSTNO ystv;
+//        [v getValue:&ystv];
+//        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
+//    }
     
     return  array;
->>>>>>> 182d0ea7f9c5f0319d2efcac7a7ec76311a9f6a9
 }
 
 /**

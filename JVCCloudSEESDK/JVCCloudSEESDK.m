@@ -2379,6 +2379,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
             
             if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
 
+                NSLog(@"glshowview width %d height %d showview width %d height %d",glShowViewWidth,glShowViewHeight,showViewWidth,showViewHeight);
                 [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
             }
             
@@ -3382,19 +3383,23 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
     [glView showWithOpenGLView];
 
-    if ([glView._kxOpenGLView superview]) {
-        [glView._kxOpenGLView removeFromSuperview];
-    }
+//    if () {
+//        [glView._kxOpenGLView removeFromSuperview];
+//    }
     if (view) {
-        [view addSubview:glView._kxOpenGLView];
+        if(view != [glView._kxOpenGLView superview])
+            [view addSubview:glView._kxOpenGLView];
     }else
     {
-
-        [currentChannelObj.showView addSubview:glView._kxOpenGLView];
+        if (currentChannelObj.showView != [glView._kxOpenGLView superview])
+            [currentChannelObj.showView addSubview:glView._kxOpenGLView];
     }
+    
     [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
 
 }
+
+
 
 
 /**
@@ -3432,19 +3437,40 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:nRequestPlayBackFileIndex requestOutCommand:requestOutCommand];
 }
 
--(NSString *)getHelpYSTNO{
+-(NSMutableArray *)getHelpYSTNO{
+
     int ssize = sizeof(STBASEYSTNO);
     int msize = ssize * 200;
-    
+    NSMutableArray * array = [NSMutableArray array];
     unsigned char* buffer = (unsigned char*) malloc(sizeof(unsigned char) * msize);
     memset(buffer, 0, msize);
     JVC_GetHelpYSTNO(buffer, &msize);
     
+<<<<<<< HEAD
 //    int count = msize / ssize;
     NSString *result = [NSString stringWithUTF8String:(char *)buffer];
     NSLog(@"getAllDeviceStatus X, buf %s string %@", buffer,result);
      free(buffer);
     return  result;
+=======
+    int count = msize / ssize;
+    for (int i=0; i<count; i++) {
+        STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
+        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
+        NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
+        [array addObject:ystValue];
+    }
+    
+    free(buffer);
+    
+    for (NSValue *v in array) {
+        STBASEYSTNO ystv;
+        [v getValue:&ystv];
+        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
+    }
+    
+    return  array;
+>>>>>>> 182d0ea7f9c5f0319d2efcac7a7ec76311a9f6a9
 }
 
 /**

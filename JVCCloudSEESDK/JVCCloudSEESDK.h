@@ -705,8 +705,9 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 
 /*
- * 获取当前已知的云视通号码清单 已string返回
+ * 获取当前已知的云视通号码清单 
+ * 返回一个数组 ，其存放了结构体STBASEYSTNO的NSValue
  */
--(NSString *)setHelpYSTNO;
+-(NSMutableArray *)getHelpYSTNO;
 
 @end

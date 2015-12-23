@@ -2514,6 +2514,11 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
  */
 -(void)closeDownloadHandle:(int)downloadStatus{
     
+    if (self.jvcRemotePlaybackVideoDelegate != nil && [self.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
+        
+        [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
+    }
+
     if (NULL != downloadHandle) {
         
         fclose(downloadHandle);
@@ -2522,10 +2527,6 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         remoteDownSavePath = nil;
     }
     
-    if (self.jvcRemotePlaybackVideoDelegate != nil && [self.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteDownLoadCallBack:withDownloadSavePath:)]) {
-        
-        [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteDownLoadCallBack:downloadStatus withDownloadSavePath:remoteDownSavePath];
-    }
     
 }
 

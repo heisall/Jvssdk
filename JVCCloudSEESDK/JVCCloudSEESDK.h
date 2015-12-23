@@ -91,6 +91,20 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)remoteplaybackSearchFileListInfoCallBack:(NSMutableArray *)playbackSearchFileListMArray;
 
+/**
+ *  远程下载文件的回调
+ *
+ *  @param downLoadStatus 下载的状态
+ 
+ JVN_RSP_DOWNLOADOVER  //文件下载完毕
+ JVN_CMD_DOWNLOADSTOP  //停止文件下载
+ JVN_RSP_DOWNLOADE     //文件下载失败
+ JVN_RSP_DLTIMEOUT     //文件下载超时
+ 
+ *  @param path           下载保存的路径
+ */
+-(void)remoteDownLoadCallBack:(int)downLoadStatus withDownloadSavePath:(NSString *)savepath;
+
 @end
 
 //远程下载

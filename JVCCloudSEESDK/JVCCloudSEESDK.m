@@ -1382,6 +1382,7 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
         
     }else{
         BOOL isDoubleTalk=[[[NSUserDefaults standardUserDefaults] objectForKey:@"isDoubleTalk"] boolValue];
+        NSLog(@"isDoubletalk %d isaudiolistening %d",isDoubleTalk,currentChannelObj.isAudioListening);
         if (isDoubleTalk&&!currentChannelObj.isAudioListening) {
             [currentChannelObj closeVoiceIntercomDecoder];
         }

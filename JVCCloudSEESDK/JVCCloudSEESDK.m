@@ -1206,6 +1206,34 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     }
 }
 /**
+ *  云台控制
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed{
+    JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    currentChannelObj.isVoiceIntercom=YES;
+    if (currentChannelObj == nil) {
+        
+        return;
+    }
+    
+    switch (remoteOperationType) {
+            
+        case RemoteOperationType_YTO:
+        {
+            
+            [ystRemoteOperationHelperObj onlySendYtOperaton:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand speed:speed];
+        }
+            break;
+        default:
+            break;
+    }
+}
+/**
  *  远程控制指令
  *
  *  @param nLocalChannel              视频显示的窗口编号
@@ -3422,18 +3450,20 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     int count = msize / ssize;
     for (int i=0; i<count; i++) {
         STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
-        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
+//        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
         NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
-        [array addObject:ystValue];
+        NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%s%d",yst->chGroup,yst->nYSTNO],@"nYSTNO",[NSNumber numberWithInt:yst->nConnectStatus],@"nConnectStatus", nil];
+    
+        [array addObject:dict];
     }
     
     free(buffer);
     
-    for (NSValue *v in array) {
-        STBASEYSTNO ystv;
-        [v getValue:&ystv];
-        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
-    }
+//    for (NSValue *v in array) {
+//        STBASEYSTNO ystv;
+//        [v getValue:&ystv];
+//        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
+//    }
     
     return  array;
 }

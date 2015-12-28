@@ -389,6 +389,14 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(BOOL)disconnect:(int)nLocalChannel;
 
 /**
+ *  断开连接（子线程调用）
+ *
+ *  @param nLocalChannel 本地视频窗口编号
+ *
+ *  @return YSE:断开成功 NO:断开失败
+ */
+-(BOOL)disconnectOnly:(int)nLocalChannel;
+/**
  *  远程控制指令(请求)
  *
  *  @param nLocalChannel          视频显示的窗口编号
@@ -718,10 +726,20 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
 
--(NSString *)getHelpYSTNO;
 /*
- * 获取当前已知的云视通号码清单 已string返回
+ * 获取当前已知的云视通号码清单
+ * 返回一个数组 ，其存放了结构体STBASEYSTNO的NSValue
  */
--(NSString *)setHelpYSTNO;
+-(NSMutableArray *)getHelpYSTNO;
+
+
+/**
+ *  远程控制指令
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed;
 
 @end

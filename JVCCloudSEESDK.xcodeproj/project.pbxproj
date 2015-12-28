@@ -21,7 +21,8 @@
 		63CC3BC71AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */; };
 		63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */; };
-		AD13664E1C184FF100E77871 /* libJVDecodeAmrAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD13664D1C184FF100E77871 /* libJVDecodeAmrAudio.a */; settings = {ASSET_TAGS = (); }; };
+		A45947501C2D290700DD8A2E /* libnplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A459474F1C2D290700DD8A2E /* libnplayer.a */; };
+		AD13664E1C184FF100E77871 /* libJVDecodeAmrAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD13664D1C184FF100E77871 /* libJVDecodeAmrAudio.a */; };
 		AD5FB7371A52AFBE00A85CCE /* JVCCloudSEESDK.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7361A52AFBE00A85CCE /* JVCCloudSEESDK.m */; };
 		AD5FB73D1A52AFBE00A85CCE /* libJVCCloudSEESDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */; };
 		AD5FB7671A52B14400A85CCE /* OpenALBufferViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7661A52B14400A85CCE /* OpenALBufferViewcontroller.m */; };
@@ -46,10 +47,9 @@
 		AD5FB7B01A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A21A52B1DC00A85CCE /* JVCCloudSEEManagerHelper.m */; };
 		AD5FB7B11A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A41A52B1DC00A85CCE /* JVCCloudSEESendGeneralHelper.m */; };
 		AD5FB7B21A52B1DC00A85CCE /* JVCStruct2Dic.m in Sources */ = {isa = PBXBuildFile; fileRef = AD5FB7A61A52B1DC00A85CCE /* JVCStruct2Dic.m */; };
-		ADBAF4F91BE3452E00415478 /* JVCNPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADBAF4F81BE3452E00415478 /* JVCNPlayer.mm */; settings = {ASSET_TAGS = (); }; };
-		ADBAF5031BE347F000415478 /* libnplayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBAF5021BE347F000415478 /* libnplayer.a */; settings = {ASSET_TAGS = (); }; };
+		ADBAF4F91BE3452E00415478 /* JVCNPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = ADBAF4F81BE3452E00415478 /* JVCNPlayer.mm */; };
 		ADBEA03C1A8893FF00753852 /* JVCVoiceIntercomHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */; };
-		ADEE6EB61BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */; settings = {ASSET_TAGS = (); }; };
+		ADEE6EB61BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +117,7 @@
 		63CC3BC61AC8353700F62C15 /* JVCConstansALAssetsMathHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCConstansALAssetsMathHelper.m; sourceTree = "<group>"; };
 		63E093B31AFC51F700AB90FA /* libGlView_v2.0.4.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libGlView_v2.0.4.a; sourceTree = "<group>"; };
 		63E093B71AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAndEncodeG729a_2013_6_7_3.a; sourceTree = "<group>"; };
+		A459474F1C2D290700DD8A2E /* libnplayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnplayer.a; sourceTree = "<group>"; };
 		AD13664D1C184FF100E77871 /* libJVDecodeAmrAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libJVDecodeAmrAudio.a; sourceTree = "<group>"; };
 		AD140F021BE70FDC00B4D676 /* JVCDeviceMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCDeviceMacro.h; sourceTree = "<group>"; };
 		AD5FB7311A52AFBD00A85CCE /* libJVCCloudSEESDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJVCCloudSEESDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,7 +184,6 @@
 		ADBAF4FD1BE3459800415478 /* nplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nplayer.h; sourceTree = "<group>"; };
 		ADBAF4FE1BE3459800415478 /* play_suit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = play_suit.h; sourceTree = "<group>"; };
 		ADBAF4FF1BE3459800415478 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		ADBAF5021BE347F000415478 /* libnplayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnplayer.a; sourceTree = "<group>"; };
 		ADBEA03A1A8893FF00753852 /* JVCVoiceIntercomHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCVoiceIntercomHelper.h; sourceTree = "<group>"; };
 		ADBEA03B1A8893FF00753852 /* JVCVoiceIntercomHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JVCVoiceIntercomHelper.m; sourceTree = "<group>"; };
 		ADE7C9761A53F49E006B7144 /* JVCCloudSEESDKMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JVCCloudSEESDKMacro.h; sourceTree = "<group>"; };
@@ -197,9 +197,9 @@
 			files = (
 				AD13664E1C184FF100E77871 /* libJVDecodeAmrAudio.a in Frameworks */,
 				63E093B81AFC520F00AB90FA /* libJVDecodeAndEncodeG729a_2013_6_7_3.a in Frameworks */,
+				A45947501C2D290700DD8A2E /* libnplayer.a in Frameworks */,
 				ADEE6EB61BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a in Frameworks */,
 				360E6CE01AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a in Frameworks */,
-				ADBAF5031BE347F000415478 /* libnplayer.a in Frameworks */,
 				36C59E861B55F9E200DB2014 /* libJDEC05.a in Frameworks */,
 				63E093B41AFC51F700AB90FA /* libGlView_v2.0.4.a in Frameworks */,
 			);
@@ -256,9 +256,9 @@
 		63E093AA1AFC516800AB90FA /* frame */ = {
 			isa = PBXGroup;
 			children = (
+				A459474F1C2D290700DD8A2E /* libnplayer.a */,
 				AD13664D1C184FF100E77871 /* libJVDecodeAmrAudio.a */,
 				AD85E2DA1BE9A8F600F378CE /* libmp4pkt.xcodeproj */,
-				ADBAF5021BE347F000415478 /* libnplayer.a */,
 				ADEE6EB51BBA3BD600C1D726 /* libjvnetsdkv2.0.76.3.78-4.a */,
 				36C59E841B55F9E200DB2014 /* libJDEC05.a */,
 				360E6CDE1AFC9C9C00E6CDAF /* libjvdecoder_01_V2.0.1_2015_1_23.a */,
@@ -637,7 +637,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -669,7 +669,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Debug;
 		};
@@ -677,7 +677,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = armv7;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -708,7 +708,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = armv7;
+				VALID_ARCHS = "armv7 arm64";
 			};
 			name = Release;
 		};

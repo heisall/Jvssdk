@@ -655,7 +655,42 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
     
     return YES;
 }
-
+/**
+ *  断开连接（子线程调用）
+ *
+ *  @param nLocalChannel 本地视频窗口编号
+ *
+ *  @return YSE:断开成功 NO:断开失败
+ */
+-(BOOL)disconnectOnly:(int)nLocalChannel{
+    
+    JVCCloudSEEManagerHelper *currentChannelObj   = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    
+    if (currentChannelObj  != nil) {
+        
+        currentChannelObj.isRunDisconnect = YES;
+        //断开远程连接
+        [currentChannelObj disconnectOnly];
+        
+        int nJvchannelID = nLocalChannel -1;
+        
+        while (true) {
+            
+            if (jvChannel[nJvchannelID] != nil) {
+                
+                usleep(kDisconnectTimeDelay);
+                
+            }else{
+                
+                break;
+            }
+        }
+        
+        return YES;
+    }
+    
+    return YES;
+}
 #pragma mark －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－视频连接的回调处理
 
 /**
@@ -1206,6 +1241,34 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     }
 }
 /**
+ *  云台控制
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed{
+    JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    currentChannelObj.isVoiceIntercom=YES;
+    if (currentChannelObj == nil) {
+        
+        return;
+    }
+    
+    switch (remoteOperationType) {
+            
+        case RemoteOperationType_YTO:
+        {
+            
+            [ystRemoteOperationHelperObj onlySendYtOperaton:currentChannelObj.nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommand:remoteOperationCommand speed:speed];
+        }
+            break;
+        default:
+            break;
+    }
+}
+/**
  *  远程控制指令
  *
  *  @param nLocalChannel              视频显示的窗口编号
@@ -1382,6 +1445,7 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
         
     }else{
         BOOL isDoubleTalk=[[[NSUserDefaults standardUserDefaults] objectForKey:@"isDoubleTalk"] boolValue];
+        NSLog(@"isDoubletalk %d isaudiolistening %d",isDoubleTalk,currentChannelObj.isAudioListening);
         if (isDoubleTalk&&!currentChannelObj.isAudioListening) {
             [currentChannelObj closeVoiceIntercomDecoder];
         }
@@ -2351,6 +2415,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
             
             if (showViewHeight != glShowViewHeight || showViewWidth  != glShowViewWidth) {
 
+                NSLog(@"glshowview width %d height %d showview width %d height %d",glShowViewWidth,glShowViewHeight,showViewWidth,showViewHeight);
                 [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
             }
             
@@ -3252,7 +3317,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
         [tdicModel release];
     }
 
-    [SerachLANAllDeviceList release];
+    
     
 //    NSLog(@"==333==%s===%@___",__FUNCTION__,[arrayLanSearch description]);
 
@@ -3262,7 +3327,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
 
         [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:SerachLANAllDeviceList];
     }
-
+    [SerachLANAllDeviceList release];
     [arrayLanSearch release];
 }
 
@@ -3354,19 +3419,23 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     GlView *glView = (GlView *)[amOpenGLViews objectAtIndex:nJvchannelID];
     [glView showWithOpenGLView];
 
-    if ([glView._kxOpenGLView superview]) {
-        [glView._kxOpenGLView removeFromSuperview];
-    }
+//    if () {
+//        [glView._kxOpenGLView removeFromSuperview];
+//    }
     if (view) {
-        [view addSubview:glView._kxOpenGLView];
+        if(view != [glView._kxOpenGLView superview])
+            [view addSubview:glView._kxOpenGLView];
     }else
     {
-
-        [currentChannelObj.showView addSubview:glView._kxOpenGLView];
+        if (currentChannelObj.showView != [glView._kxOpenGLView superview])
+            [currentChannelObj.showView addSubview:glView._kxOpenGLView];
     }
+    
     [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
 
 }
+
+
 
 
 /**
@@ -3404,20 +3473,34 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     [currentChannelObj getRequestSendPlaybackVideoCommand:requestPlayBackFileInfo requestPlayBackFileDate:requestPlayBackFileDate nRequestPlayBackFileIndex:nRequestPlayBackFileIndex requestOutCommand:requestOutCommand];
 }
 
--(NSString *)getHelpYSTNO{
+-(NSMutableArray *)getHelpYSTNO{
+
     int ssize = sizeof(STBASEYSTNO);
     int msize = ssize * 200;
-    
+    NSMutableArray * array = [NSMutableArray array];
     unsigned char* buffer = (unsigned char*) malloc(sizeof(unsigned char) * msize);
     memset(buffer, 0, msize);
     JVC_GetHelpYSTNO(buffer, &msize);
     
-//    int count = msize / ssize;
-    NSString *result = [NSString stringWithUTF8String:(char *)buffer];
-    free(buffer);
-    NSLog(@"getAllDeviceStatus X, buf %s string %@", buffer,result);
+    int count = msize / ssize;
+    for (int i=0; i<count; i++) {
+        STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
+//        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
+        NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
+        NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%s%d",yst->chGroup,yst->nYSTNO],@"nYSTNO",[NSNumber numberWithInt:yst->nConnectStatus],@"nConnectStatus", nil];
     
-    return  result;
+        [array addObject:dict];
+    }
+    
+    free(buffer);
+    
+//    for (NSValue *v in array) {
+//        STBASEYSTNO ystv;
+//        [v getValue:&ystv];
+//        NSLog(@"ystv %d %d %s",ystv.nYSTNO,ystv.nConnectStatus,ystv.chPName);
+//    }
+    
+    return  array;
 }
 
 /**

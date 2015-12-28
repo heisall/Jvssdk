@@ -134,7 +134,10 @@ JVCAudioQueueHelperDelegate,JVCVoiceIntercomHelperDeleage>{
  *  断开远程连接
  */
 -(void)disconnect;
-
+/**
+ *  断开远程连接
+ */
+-(void)disconnectOnly;
 #pragma mark ----------------  JVCQueueHelper 处理模块
 
 /**

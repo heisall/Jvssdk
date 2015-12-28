@@ -273,6 +273,7 @@ FILE *audiofile;
         
         fwrite(pcmOutBuffer, 1, nAudioDataSize, audiofile);
 
+        NSLog(@"play sound openal play");
           [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] openAudioFromQueue:(short *)pcmOutBuffer dataSize:nAudioDataSize playSoundType:isAudioType == YES ? playSoundType_8k16B : playSoundType_8k8B];
     }
   

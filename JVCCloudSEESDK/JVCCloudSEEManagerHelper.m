@@ -82,6 +82,8 @@ int nChannelIndex ;
         [jvcPlaySoundObj release];
         
         JVCVoiceIntercomHelper *jvcVoiceIntercomObj   = [[JVCVoiceIntercomHelper alloc] init];
+        helperInstance = jvcVoiceIntercomObj;
+        [jvcVoiceIntercomObj startDNoisePlayer:NO];
         self.jvcVoiceIntercomHelper                   = jvcVoiceIntercomObj;
         [jvcVoiceIntercomObj release];
         

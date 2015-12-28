@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 #import "ALAssetsLibrary+CustomPhotoAlbum.h"
 #import <AVFoundation/AVFoundation.h>
+#import "JVCCloudSEENetworkHelper.h"
 
 @implementation JVCVoiceIntercomHelper
 
@@ -29,6 +30,8 @@ char          encodeAudioOutData[1024] = {0}; //语音对讲编码后的数据
 JVCVoiceIntercomHelper *helperInstance = nil;
 static JVCVoiceIntercomHelper *helper = nil;
 JVCNPlayer* audiorecorder;
+JVCNPlayer *jNPlayer ;
+extern int nChannelIndex;
 
 ///**
 // *  单例
@@ -76,10 +79,13 @@ JVCNPlayer* audiorecorder;
     
     return self;
 }
--(void)stopDnoiseAudioRecord{
-    [audiorecorder stopAudioPlayer];
-    [audiorecorder release];
-    audiorecorder = nil ;
+-(void)stopDNoisePlayer{
+//    [audiorecorder stopAudioPlayer];
+//    [audiorecorder release];
+//    audiorecorder = nil ;
+    
+    [jNPlayer stopPlayer];
+    jNPlayer = nil;
     //    if (NULL != dummyFile2) {
     //        fclose(dummyFile2);
     //        dummyFile2 = NULL;
@@ -92,10 +98,12 @@ JVCNPlayer* audiorecorder;
     
     if (result) {
         
-        AQSController  *aqControllerobj = [AQSController shareAQSControllerobjInstance];
-        
-        [aqControllerobj stopRecord];
-        aqControllerobj.delegate = nil;
+//        AQSController  *aqControllerobj = [AQSController shareAQSControllerobjInstance];
+//        
+//        [aqControllerobj stopRecord];
+//        aqControllerobj.delegate = nil;
+        NSLog(@"%s",__FUNCTION__);
+        [jNPlayer stopPlayer];
     }
     [[OpenALBufferViewcontroller shareOpenALBufferViewcontrollerobjInstance] setNil];
     return result;
@@ -106,16 +114,37 @@ JVCNPlayer* audiorecorder;
     helper = nil;
 }
 
--(void)startDnoiseAudioRecord{
-    if (audiorecorder) {
-        [self stopDnoiseAudioRecord];
-    }
-    audiorecorder = [[JVCNPlayer alloc] init];
-    [audiorecorder playerInit];
-    [audiorecorder startRecordAudio:fetchd];
+-(void)startDNoisePlayer:(BOOL)isAec{
+//    if (audiorecorder) {
+//        [self stopDnoiseAudioRecord];
+//    }
+//    audiorecorder = [[JVCNPlayer alloc] init];
+//    [audiorecorder initPlayer];
+//    [audiorecorder startRecordAudio:fetchd];
+    NSLog(@"%s",__FUNCTION__);
+    jNPlayer = [[JVCNPlayer alloc] init];
+    jNPlayer.isAec = isAec;
+    jNPlayer.isDenoise = true;
+    [jNPlayer initPlayer];
+
+}
+
+-(void)pauseAudio{
+    [jNPlayer pauseAudio];
+}
+
+-(void)resumeAudio{
+    [jNPlayer resumeAudio];
+}
+
+-(void)stopRecord{
+    [jNPlayer stopRecordAudio];
+}
+-(void)startRecord{
+    [jNPlayer startRecordAudio:(fetchd)];
 }
 void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
-    printf("fetchd: %p, %ld, %llu\n", data, size, ts);
+//    NSLog(@"fetchd: %p, %ld, %llu\n", data, size, ts);
     
     //    NSData *audio_data = [NSData dataWithBytes:data length:size];
     //    [_library saveImageData:audio_data toAlbum:(NSString *)kKYCustomDownloadAlbumName metadata:nil completion:^(NSURL *assetURL, NSError *error) {
@@ -124,6 +153,10 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
     //        NSLog(@"saveImageData fail %@",error);
     //    }];
     
+//    JVCCloudSEENetworkHelper *jvcCloudseeObj  = [JVCCloudSEENetworkHelper shareJVCCloudSEENetworkHelper];
+
+//    JVCCloudSEEManagerHelper *currentChannelObj = [jvcCloudseeObj returnCurrentChannelBynLocalChannel:nChannelIndex+1];
+//    [currentChannelObj.jvcVoiceIntercomHelper receiveAudioDataCallBack:data audioDataSize:size];
     [helperInstance receiveAudioDataCallBack:data audioDataSize:size];
     //    [[JVCVoiceIntercomHelper shareJVCVoiceIntercomHelper] receiveAudioDataCallBack:data audioDataSize:size];
 }
@@ -156,18 +189,25 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
     
     BOOL result = [super openAudioDecoder:nConnectDeviceType isExistStartCode:isExistStartCode];
     
+    NSLog(@"openAudioDecoder");
     if (result) {
-        AQSController *aqsControllerObj = [AQSController shareAQSControllerobjInstance];
-        aqsControllerObj.delegate       = self;
+//        AQSController *aqsControllerObj = [AQSController shareAQSControllerobjInstance];
+//        aqsControllerObj.delegate       = self;
+//        
+//        int nAudioBit                   = 0;
+//        int nAudioCollectionDataSize    = 0;
+//        
+//        [self getAudioCollectionBitAndDataSize:nConnectDeviceType isExistStartCode:isExistStartCode nAudioBit:&nAudioBit nAudioCollectionDataSize:&nAudioCollectionDataSize];
+//        [aqsControllerObj record:nAudioCollectionDataSize mChannelBit:nAudioBit];
         
-        int nAudioBit                   = 0;
-        int nAudioCollectionDataSize    = 0;
-        
-        [self getAudioCollectionBitAndDataSize:nConnectDeviceType isExistStartCode:isExistStartCode nAudioBit:&nAudioBit nAudioCollectionDataSize:&nAudioCollectionDataSize];
-        [aqsControllerObj record:nAudioCollectionDataSize mChannelBit:nAudioBit];
-        
+        BOOL isDoubleTalk = [[NSUserDefaults standardUserDefaults] boolForKey:@"isDoubleTalk"];
+        if(isDoubleTalk){
+            [self stopDNoisePlayer];
+            NSLog(@"new a aec player ");
+            [self startDNoisePlayer:YES];
+        }
+        [self startRecord];
     }
-    
     return result;
 }
 /**
@@ -280,7 +320,9 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
             case DEVICEMODEL_HardwareCard_951:{
                 for (int i=0; i<3; i++) {
                     
-                    [openAlObj openAudioFromQueue:(short *)(pcmOutVoiceBuffer+i*320) dataSize:nAudioDataSize/3 playSoundType:playSoundType];
+                    [jNPlayer appendAudioData:(const unsigned char *)(pcmOutVoiceBuffer+i*320) size:nAudioDataSize/3];
+
+//                    [openAlObj openAudioFromQueue:(short *)(pcmOutVoiceBuffer+i*320) dataSize:nAudioDataSize/3 playSoundType:playSoundType];
                 }
                 
             }
@@ -292,13 +334,17 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
                     [openAlObj clear];
                 }else{
                     [openAlObj clear];
-                    [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer dataSize:nAudioDataSize playSoundType:playSoundType];
+//                    [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer
+//                dataSize:nAudioDataSize playSoundType:playSoundType];
+                    [jNPlayer appendAudioData:(const unsigned char *)pcmOutVoiceBuffer size:nAudioDataSize];
+
                 }
             }
                 break;
             default:{
-                
-                [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer dataSize:nAudioDataSize playSoundType:playSoundType];
+                [jNPlayer appendAudioData:(const unsigned char *)pcmOutVoiceBuffer size:nAudioDataSize];
+
+//                [openAlObj openAudioFromQueue:(short *)pcmOutVoiceBuffer dataSize:nAudioDataSize playSoundType:playSoundType];
             }
                 break;
         }
@@ -457,8 +503,8 @@ void fetchd(const unsigned char *data, size_t size, uint64_t ts) {
 
 -(void)receiveAudioDataCallBack:(char *)audionData audioDataSize:(long)audioDataSize{
     
+//    NSLog(@"receiveAudioDataCallBack %d %d",self.isTalkMode ,self.isRecoderState);
     if (self.isTalkMode && !self.isRecoderState) {
-        
         return;
     }
     

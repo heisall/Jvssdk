@@ -63,8 +63,8 @@ void nplayer_msleep(int millis) {
 
 void shutdown_audio() {
     if (NULL != player) {
-        player->enable_audio(false);
         player->stop_record_audio();
+        player->enable_audio(false);
         
         nplayer_msleep(150);
         
@@ -175,6 +175,7 @@ void shutdown_audio() {
            false == player->append_audio_data(audioData, frameSize)) {
        [NSThread sleepForTimeInterval:0.05];
     }
+//    NSLog(@"append audio data");
 //    player->append_audio_data(audioData, frameSize);
 }
 
@@ -217,6 +218,7 @@ void shutdown_audio() {
 
 -(void)stopPlayer
 {
+    NSLog(@"stopplayer");
     shutdown_audio();
 }
 -(void)soundConfig:(const char *)audioData size:(int)frameSize{

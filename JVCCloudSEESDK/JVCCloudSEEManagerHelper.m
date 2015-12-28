@@ -172,7 +172,17 @@ int nChannelIndex ;
     JVC_DisConnect(self.nLocalChannel);
 //    DDLogVerbose(@"%s----%d----end",__FUNCTION__,nLocalChannel);
 }
-
+/**
+ *  断开远程连接
+ */
+-(void)disconnectOnly {
+    
+//    [self exitQueue];
+    //    [self.jvcVoiceIntercomHelper setHelperNil];
+    //    DDLogVerbose(@"%s----%d----start",__FUNCTION__,nLocalChannel);
+    JVC_DisConnect(self.nLocalChannel);
+    //    DDLogVerbose(@"%s----%d----end",__FUNCTION__,nLocalChannel);
+}
 #pragma mark ----------------  JVCQueueHelper 处理模块
 
 /**

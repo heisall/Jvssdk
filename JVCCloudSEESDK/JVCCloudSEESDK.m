@@ -655,7 +655,42 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
     
     return YES;
 }
-
+/**
+ *  断开连接（子线程调用）
+ *
+ *  @param nLocalChannel 本地视频窗口编号
+ *
+ *  @return YSE:断开成功 NO:断开失败
+ */
+-(BOOL)disconnectOnly:(int)nLocalChannel{
+    
+    JVCCloudSEEManagerHelper *currentChannelObj   = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    
+    if (currentChannelObj  != nil) {
+        
+        currentChannelObj.isRunDisconnect = YES;
+        //断开远程连接
+        [currentChannelObj disconnectOnly];
+        
+        int nJvchannelID = nLocalChannel -1;
+        
+        while (true) {
+            
+            if (jvChannel[nJvchannelID] != nil) {
+                
+                usleep(kDisconnectTimeDelay);
+                
+            }else{
+                
+                break;
+            }
+        }
+        
+        return YES;
+    }
+    
+    return YES;
+}
 #pragma mark －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－视频连接的回调处理
 
 /**
@@ -3283,7 +3318,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
         [tdicModel release];
     }
 
-    [SerachLANAllDeviceList release];
+    
     
 //    NSLog(@"==333==%s===%@___",__FUNCTION__,[arrayLanSearch description]);
 
@@ -3293,7 +3328,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
 
         [self.jvcLanSearchDelegate JVCLancSearchDeviceCallBack:SerachLANAllDeviceList];
     }
-
+    [SerachLANAllDeviceList release];
     [arrayLanSearch release];
 }
 

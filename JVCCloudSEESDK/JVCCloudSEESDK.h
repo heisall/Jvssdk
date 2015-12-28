@@ -389,6 +389,14 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(BOOL)disconnect:(int)nLocalChannel;
 
 /**
+ *  断开连接（子线程调用）
+ *
+ *  @param nLocalChannel 本地视频窗口编号
+ *
+ *  @return YSE:断开成功 NO:断开失败
+ */
+-(BOOL)disconnectOnly:(int)nLocalChannel;
+/**
  *  远程控制指令(请求)
  *
  *  @param nLocalChannel          视频显示的窗口编号

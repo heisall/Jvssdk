@@ -672,6 +672,7 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
         pMsg="";
     }
     
+
     NSString *connectResultInfo=[[NSString alloc] initWithCString:pMsg encoding:NSUTF8StringEncoding];
     [jvcCloudSEENetworkHelper runConnectMessageCallBackMath:connectResultInfo nLocalChannel:nLocalChannel connectResultType:uchType];
     [connectResultInfo release];
@@ -704,6 +705,8 @@ void ConnectMessageCallBack(int nLocalChannel, unsigned char  uchType, char *pMs
         
         if (jvChannel[nJvchannelID] != nil) {
             
+            NSString *type = [NSString stringWithFormat:@"%d",connectResultType];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"CONNERROR" object:type];
             //设置OpenGL画布
             
             if (jvChannel[nJvchannelID].showView) {
@@ -2485,7 +2488,6 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         return;
     }
     
-//    NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
     switch (uchType) {
             
         case JVN_RSP_DOWNLOADOVER: //文件下载完毕
@@ -2493,6 +2495,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         case JVN_RSP_DOWNLOADE:    //文件下载失败
         case JVN_RSP_DLTIMEOUT:{   //文件下载超时
             
+//  NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
             
             [jvcCloudSEENetworkHelper closeDownloadHandle:uchType];
             
@@ -2776,6 +2779,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
             
             NSString *filePath = [documentPaths stringByAppendingPathComponent:(NSString *)saveAlbum];
             
+//            NSLog(@"savealbum %@ %s",saveAlbum,__FUNCTION__);
             if(![[NSFileManager defaultManager] fileExistsAtPath:filePath]){
                 [[NSFileManager defaultManager] createDirectoryAtPath:filePath withIntermediateDirectories:NO attributes:nil error:nil];
             }
@@ -2813,10 +2817,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     [saveAlbum deleteCharactersInRange:NSMakeRange(0, saveAlbum.length)];
     [saveAlbum appendString:albumName];
     
-
-    
-   
-    //    NSLog(@"%s===保存的录像文件==%@==",__FUNCTION__,urlString);
+//    NSLog(@"%s===保存的录像文件==%@==%@",__FUNCTION__,urlString,albumName);
     if (urlString) {
         
         if ((jvcVideoDelegate !=nil) &&[jvcVideoDelegate respondsToSelector:@selector(saveLocalVideoPath:albumName:)]) {

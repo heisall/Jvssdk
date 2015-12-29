@@ -814,8 +814,8 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             currentChannelObj.isNvrDevice        = [ystNetworkHelperCMObj checkDeviceIsNvrDevice:pBuffer];
             
             
-            if (width != JVCVideoDecoderHelperObj.nVideoWidth || height != JVCVideoDecoderHelperObj.nVideoHeight) {
-                
+//            if (width != JVCVideoDecoderHelperObj.nVideoWidth || height != JVCVideoDecoderHelperObj.nVideoHeight) {
+            
                 /**
                  *  处理解码器对象
                  */
@@ -823,7 +823,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                 JVCVideoDecoderHelperObj.nVideoHeight         = height;
                 
                 [jvcCloudSEENetworkHelper qualityChangeContinueRecoderVideo:nLocalChannel];
-            }
+//            }
             
             dispatch_async(dispatch_get_main_queue(),^{
                 
@@ -969,7 +969,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
     }
     
     if (currentChannelObj.jvcRecodVideoHelper.isRecordVideo) {
-        
+        NSLog(@"正在录像，，重新打包录像。。。。。");
         [self stopRecordVideo:nLocalChannel withIsContinueVideo:YES];
     }
 }

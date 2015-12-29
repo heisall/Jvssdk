@@ -815,7 +815,9 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             
 //            if (width != JVCVideoDecoderHelperObj.nVideoWidth || height != JVCVideoDecoderHelperObj.nVideoHeight) {
-            
+            BOOL isStreamChange=[[NSUserDefaults standardUserDefaults] boolForKey:@"isChangeStream"];
+            if (isStreamChange) {
+                
                 /**
                  *  处理解码器对象
                  */
@@ -823,7 +825,8 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                 JVCVideoDecoderHelperObj.nVideoHeight         = height;
                 
                 [jvcCloudSEENetworkHelper qualityChangeContinueRecoderVideo:nLocalChannel];
-//            }
+                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isChangeStream"];
+            }
             
             dispatch_async(dispatch_get_main_queue(),^{
                 
@@ -2767,9 +2770,12 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
  *  @param isContinue 是否结束后继续录像 YES：继续
  */
 -(void)videoEndCallBack:(BOOL)isContinueVideo{
-    
+    NSLog(@"videoEndCallBack.......");
     [self saveLocalVideo:savePath albumName:(NSString *)saveAlbum];
-    
+    if (isContinueVideo) {
+        
+        [self operationPlayVideo:YES channel:1];
+    }
 }
 
 #pragma mark 开启本地录像
@@ -2841,7 +2847,7 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
         
     }else{
         
-        [jvcCloudObj stopRecordVideo:channel  withIsContinueVideo:NO];
+        [jvcCloudObj stopRecordVideo:1  withIsContinueVideo:NO];
     }
 }
 

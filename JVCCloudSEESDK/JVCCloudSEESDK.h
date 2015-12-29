@@ -301,6 +301,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign)id<JVCLanSearchDelegate >                   jvcLanSearchDelegate;//广播的回调
 @property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
 @property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
+@property(nonatomic,assign)BOOL isStreamChange;
 /**
  *  单例 (所有操作请先初始化SDK)
  *

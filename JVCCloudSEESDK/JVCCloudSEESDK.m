@@ -815,8 +815,8 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             
             
 //            if (width != JVCVideoDecoderHelperObj.nVideoWidth || height != JVCVideoDecoderHelperObj.nVideoHeight) {
-            BOOL isStreamChange=[[NSUserDefaults standardUserDefaults] boolForKey:@"isChangeStream"];
-            if (isStreamChange) {
+//            BOOL isStreamChange=[[NSUserDefaults standardUserDefaults] boolForKey:@"isChangeStream"];
+//            if (isStreamChange) {
                 
                 /**
                  *  处理解码器对象
@@ -825,8 +825,8 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                 JVCVideoDecoderHelperObj.nVideoHeight         = height;
                 
                 [jvcCloudSEENetworkHelper qualityChangeContinueRecoderVideo:nLocalChannel];
-                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isChangeStream"];
-            }
+//                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isChangeStream"];
+//            }
             
             dispatch_async(dispatch_get_main_queue(),^{
                 
@@ -1166,7 +1166,7 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             break;
         case RemoteOperationType_AudioListening:{
             
-            if (currentChannelObj.isAudioListening) {
+            if (remoteOperationCommand==0) {
                 
                 [currentChannelObj closeAudioDecoder];
                 

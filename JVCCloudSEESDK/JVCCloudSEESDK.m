@@ -3509,6 +3509,25 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     
     return  array;
 }
+-(void)releaseCloudSDK{
+    [self disconnect:1];
+    self.jvcAudioDelegate                             = nil;
+    self.jvcCloudSEESDKDelegate                             = nil;
+    self.jvcVideoDelegate                            = nil;
+    self.jvcRemotePlaybackVideoDelegate=nil;
+    self.jvcRemoteDownloadVideoDelegate=nil;
+    self.videoDelegate=nil;
+    self.jvcWifiListDelegate=nil;
+    self.jvcTransParentDelegate=nil;
+    self.jvcAPModeDelegate=nil;
+    self.jvcSTAModeDelegate=nil;
+    self.jvcDeviceNetsDelegate=nil;
+    self.jvcCloudSEENetworkHelperCaptureDelegate=nil;
+    self.jvcModifyDeviceDelegate=nil;
+    self.jvcLanSearchDelegate=nil;
+    self.ystNWTDDelegate=nil;
+    self.ystNWRODelegate=nil;
+}
 
 /**
 >>>>>>> master

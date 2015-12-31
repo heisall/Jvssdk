@@ -742,5 +742,5 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param remoteOperationCommand 控制的命令
  */
 -(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed;
-
+-(void)releaseCloudSDK;
 @end

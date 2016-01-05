@@ -798,4 +798,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *****************************************************************************/
 -(BOOL) sendSelfDataOnceFromBC:(unsigned char *)pBuffer :(int) nSize :(char *)pchDeviceIP :(int)nDestPort;
 
+
+-(void)releaseCloudSDK;
+
 @end

@@ -62,6 +62,11 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)sceneOutImageDataCallBack:(NSData *)imageData withShowWindowID:(int)nShowWindowID;
 @end
 
+@protocol JVCBCbroadcastDelegate <NSObject>
+
+-(void)broadCast:(NSDictionary *)dic;
+
+@end
 //远程回放协议
 @protocol JVCRemotePlaybackVideoDelegate <NSObject>
 
@@ -301,6 +306,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign)id<JVCLanSearchDelegate >                   jvcLanSearchDelegate;//广播的回调
 @property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
 @property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
+@property(nonatomic,assign)id <JVCBCbroadcastDelegate>       ystBroadDelegate;
+
 @property(nonatomic,assign)BOOL isStreamChange;
 /**
  *  单例 (所有操作请先初始化SDK)
@@ -742,5 +749,53 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param remoteOperationCommand 控制的命令
  */
 -(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed;
+
+/****************************************************************************
+ *名称  : JVC_StartBroadcastSelfServer
+ *功能  : 开启自定义广播服务
+ *参数  : [IN] nLPort      本地服务端口，<0时为默认9700
+ [IN] nServerPort 设备端服务端口，<=0时为默认9108,建议统一用默认值与服务端匹配
+ [IN] BCSelfData  自定义广播结果回调函数
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+-(BOOL)startBroadcastSelfServer:(int )nLPort :(int)nServerPort;
+
+
+/****************************************************************************
+ *名称  : JVC_StopBroadcastSelfServer
+ *功能  : 停止自定义广播服务
+ *参数  : 无
+ *返回值: 无
+ *其他  : 无
+ *****************************************************************************/
+-(void)stopBroadcastSelfServer;
+
+
+/****************************************************************************
+ *名称  : JVC_BroadcastSelfOnce
+ *功能  : 发送一次广播消息
+ *参数  :
+ [IN] pBuffer     广播净载数据
+ [IN] nSize        广播净载数据长度
+ [IN] nTimeOut  此参数目前可置为0
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+-(BOOL) broadcastSelfOnce:(unsigned char *)pBuffer :(int) nSize :(int) nTimeOut;
+
+
+/****************************************************************************
+ *名称  : JVC_SendSelfDataOnceFromBC
+ *功能  : 从自定义广播套接字发送一次UDP消息
+ *参数  :
+ [IN] pBuffer     净载数据
+ [IN] nSize       净载数据长度
+ [IN] pchDeviceIP 目的IP地址
+ [IN] nLocalPort	  目的端口
+ *返回值: 无
+ *其他  :
+ *****************************************************************************/
+-(BOOL) sendSelfDataOnceFromBC:(unsigned char *)pBuffer :(int) nSize :(char *)pchDeviceIP :(int)nDestPort;
 
 @end

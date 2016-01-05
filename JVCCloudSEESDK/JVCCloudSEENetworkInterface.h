@@ -38,6 +38,8 @@ typedef void (*FUNC_CPLAYDATA_CALLBACK)(int nLocalChannel, unsigned char uchType
 typedef void (*FUNC_GETDATA_CALLBACK)(unsigned char *chGroup,unsigned char *pBuffer, int *nSize);
 typedef void (*FUNC_WRITE_CALLBACK)(unsigned char *chGroup,unsigned char *pBuffer, int nSize);
 
+typedef void (*FUNC_CBCSELFDATA_CALLBACK)(unsigned char *pBuffer, int nSize, char chIP[16], int nPort,int nType);
+
 typedef int (*FUNC_DEVICE_CALLBACK)(STLANSRESULT_01*);
 
 typedef void (*FUNC_CLANSDATA_CALLBACK)(STLANSRESULT_01 stLSResult);
@@ -453,5 +455,55 @@ int JVC_SetMTU(int nMtu);
  * failed:0
  */
 int JVC_StopHelp();
+
+
+/****************************************************************************
+ *名称  : JVC_StartBroadcastSelfServer
+ *功能  : 开启自定义广播服务
+ *参数  : [IN] nLPort      本地服务端口，<0时为默认9700
+ [IN] nServerPort 设备端服务端口，<=0时为默认9108,建议统一用默认值与服务端匹配
+ [IN] BCSelfData  自定义广播结果回调函数
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+bool JVC_StartBroadcastSelfServer(int nLPort, int nServerPort, FUNC_CBCSELFDATA_CALLBACK BCSelfData);
+
+
+/****************************************************************************
+ *名称  : JVC_StopBroadcastSelfServer
+ *功能  : 停止自定义广播服务
+ *参数  : 无
+ *返回值: 无
+ *其他  : 无
+ *****************************************************************************/
+void JVC_StopBroadcastSelfServer();
+
+
+/****************************************************************************
+ *名称  : JVC_BroadcastSelfOnce
+ *功能  : 发送一次广播消息
+ *参数  :
+ [IN] pBuffer     广播净载数据
+ [IN] nSize        广播净载数据长度
+ [IN] nTimeOut  此参数目前可置为0
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+BOOL JVC_BroadcastSelfOnce(unsigned char *pBuffer, int nSize, int nTimeOut);
+
+
+/****************************************************************************
+ *名称  : JVC_SendSelfDataOnceFromBC
+ *功能  : 从自定义广播套接字发送一次UDP消息
+ *参数  :
+ [IN] pBuffer     净载数据
+ [IN] nSize       净载数据长度
+ [IN] pchDeviceIP 目的IP地址
+ [IN] nLocalPort	  目的端口
+ *返回值: 无
+ *其他  :
+ *****************************************************************************/
+BOOL JVC_SendSelfDataOnceFromBC(unsigned char *pBuffer, int nSize, char *pchDeviceIP, int nDestPort);
+
 
 @end

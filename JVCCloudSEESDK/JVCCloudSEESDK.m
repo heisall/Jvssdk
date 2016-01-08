@@ -223,6 +223,9 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
  */
 void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuffer, int nSize, int nFileLen);
 
+void cBCSelfDataCallback(unsigned char *pBuffer, int nSize, char chIP[16], int nPort,int nType);
+
+
 @end
 
 
@@ -3541,5 +3544,34 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
 //    //    int result=JVC_EnableHelp(true,3);
 //    return result;
 //}
+
+void cBCSelfDataCallback(unsigned char *pBuffer, int nSize, char chIP[16], int nPort,int nType){
+ 
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setObject:[NSString stringWithFormat:@"%s",pBuffer] forKey:@"buffer"];
+    [dic setObject:[NSString stringWithFormat:@"%s",chIP] forKey:@"ip"];
+    [dic setObject:[NSString stringWithFormat:@"%d",nPort] forKey:@"port"];
+    [dic setObject:[NSString stringWithFormat:@"%d",nSize] forKey:@"size"];
+    [dic setObject:[NSString stringWithFormat:@"%d",nType] forKey:@"type"];
+    
+    [[JVCCloudSEESDK shareJVCCloudSEESDK].ystBroadDelegate broadCast:dic];
+}
+
+-(BOOL)startBroadcastSelfServer:(int )nLPort :(int)nServerPort{
+    BOOL re = JVC_StartBroadcastSelfServer(nLPort, nServerPort,cBCSelfDataCallback);
+    return re;
+}
+
+-(void)stopBroadcastSelfServer{
+    JVC_StopBroadcastSelfServer();
+}
+
+-(BOOL) broadcastSelfOnce:(unsigned char *)pBuffer :(int) nSize :(int) nTimeOut{
+    return JVC_BroadcastSelfOnce(pBuffer, nSize, nTimeOut);
+}
+
+-(BOOL) sendSelfDataOnceFromBC:(unsigned char *)pBuffer :(int) nSize :(char *)pchDeviceIP :(int)nDestPort{
+    return JVC_SendSelfDataOnceFromBC(pBuffer, nSize, pchDeviceIP, nDestPort);
+}
 
 @end

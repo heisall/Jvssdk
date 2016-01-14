@@ -155,10 +155,23 @@ enum TextChatType {
     TextChatType_setDeviceEmailStatus  = 1037,  //设置设备报警邮件开关
     TextChatType_sendDeviceEmailInfo  = 1038,  //设置设备报警邮件开关
     TextChatType_SetDeviceEmailInfo  = 1039,  //设置设备报警邮件开关
-
-
-   
-    
+    //猫眼相关
+    TextChatType_getCatShowInfo  = 1040,  //获取猫眼显示信息
+    TextChatType_setCatBellLight  = 1041,  //设置猫眼感应门铃开关
+    TextChatType_setWaitTime  = 1042,  //设置猫眼待机时间
+    TextChatType_getCatSmartInfo  = 1043,  //获取猫眼智能设置信息
+    TextChatType_setCatAlarmTypeInfo=1044,//设置猫眼智能设置报警类型
+    TextChatType_setCatPirEnableInfo  = 1045,  //设置猫眼智能设置红外感应
+    TextChatType_setCatGsensorEnableInfo  = 1046,  //设置猫眼智能设置重力感应
+    TextChatType_setCatMDetectInfo  = 1047,  //设置猫眼智能设置移动侦测
+    TextChatType_getCatMemeryInfo   =1048,
+    TextChatType_setCatMemeryVideoTime  = 1049,  //设置猫眼存储信息录像时长
+    TextChatType_setCatAutoSwitch  = 1050,  //设置猫眼存储信息自动覆盖开关
+    TextChatType_getCatVersionInfo  = 1051,  //获取猫眼版本信息
+    TextChatType_reStartCat  = 1052,  //重启猫眼
+    TextChatType_reSetCat  = 1053,  //重置猫眼
+    TextChatType_closeCat  = 1054,  //猫眼关机
+    TextChatType_CatAlarmSound  = 1055,  //猫眼报警
 };
 
 enum NetWorkType {

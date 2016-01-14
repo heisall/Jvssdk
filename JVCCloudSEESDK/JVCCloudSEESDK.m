@@ -1760,6 +1760,21 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
             }
             
             switch (stpacket.nPacketType) {
+                case RC_EX_DISPLAY:{
+                    //                    NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+                    if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
+                        
+                        NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+                        
+                        [params retain];
+                        NSLog(@"设备基本信息:%@",params);
+                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
+                        
+                        [params release];
+                    }
+                    
+                }
+                break;
                 case RC_GETPARAM:{
 //                    NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                     if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
@@ -1942,31 +1957,6 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                     
                                 }
                                     break;
-
-//                                case EX_START_STA:{
-//                                    switch (extend->nParam1) {
-//
-//                                        case -1: //若pstExt->nParam1=-1，则不支持wifi；
-//                                            NSLog(@"则不支持wifi");
-//                                            break;
-//                                        case 0:  //若pstExt->nParam1=0，说明目前尚未配置wifi，无法开启STA（开启了也没用）；
-//                                            NSLog(@"目前尚未配置wifi");
-//                                            break;
-//                                        case 1:  //若pstExt->nParam1=1，说明STA模式已经开启；
-//                                            NSLog(@"STA模式已经开启");
-//                                            break;
-//                                        case 2:  //若pstExt->nParam1=2，则可以开启STA。
-//                                        {
-//                                             NSLog(@"可以开启STA");
-//                                            [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveSTAModedateCallback:extend->acData length:extend->nParam3];
-//                                        }
-//                                            break;
-//                                        default:
-//                                            break;
-//                                    }
-//                                                                        
-//                                }
-//                                    break;
                                     
                                 case EX_WIFI_AP_CONFIG:{
                                     
@@ -2014,12 +2004,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                             switch (extend->nType) {
                                                     
                                                 case EX_ACCOUNT_REFRESH:{
-//                                                    JVCMonitorConnectionSingleImageView *singleView = [self singleViewAtIndex:nLocalChannel-1];
-//                                                    singleView.bModifyDeviceInfo =  [packetModel checkoutAccountAuthority];
-//                                                    if (singleView.bModifyDeviceInfo) {
-//                                                        singleView.strAccountDescribe = [packetModel checkoutAccountDestribt];
-//                                                        
-//                                                    }
+//
                                                 }
                                                     break;
                                                 case EX_ACCOUNT_MODIFY:
@@ -2061,20 +2046,57 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                             
                         }
                             break;
+                        case RC_EX_DISPLAY:
+                        case RC_EX_INTELLIGENCE:
+                        {
+                            switch (extend->nType) {
+                                case EX_STORAGE_REFRESH:
+                                {
+                                    if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
+                                        
+                                        NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:extend->acData+packetAcDataOffset];
+                                        
+                                        [params retain];
+                                        NSLog(@"猫眼设备基本信息...:%@",params);
+                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_getCatShowInfo objYstNetWorkHelpSendData:params];
+                                        
+                                        [params release];
+                                    }
+
+                                }
+                                    break;
+                                case EX_DISPLAY_BELLLIGHT:{
+                                    if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
+                                        
+                                        NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+                                        
+                                        [params retain];
+                                        NSLog(@"设备基本信息:%@",params);
+                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_setCatBellLight objYstNetWorkHelpSendData:params];
+                                        
+                                        [params release];
+                                    }
+                                }
+                                    break;
+                                default:{
+                                    if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
+                                        
+                                        NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
+                                        
+                                        [params retain];
+                                        NSLog(@"设备基本信息:%@",params);
+                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
+                                        
+                                        [params release];
+                                    }
+                                }
+                                    break;
+                            }
+                            //                    NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                             
-//                        case  RC_EX_COMTRANS:
-//                            
-//                            switch (extend->nType) {
-//                                case  EX_COMTRANS_RESV:
-//                                    
-//                                    [[JVCCloudSEESDK shareJVCCloudSEESDK] receiveNetTransparentdateCallback:extend->acData length:extend->nParam3];
-//                                    
-//                                    break;
-//                                    
-//                                default:
-//                                    break;
-//                            }
-//                            break;
+                            
+                        }
+                            break;
                         case RC_EX_STORAGE:
                             switch (extend->nType) {
                                 case EX_STORAGE_REFRESH:
@@ -2083,7 +2105,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:extend->acData];
                                         [params retain];
                                         
-                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
+                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_getCatMemeryInfo objYstNetWorkHelpSendData:params];
                                         
                                         [params release];
                                         NSLog(@"********params:%@******",params);
@@ -2104,23 +2126,22 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                     }
                                 }
                                     break;
-//                                case EX_STORAGE_SWITCH:
-//                                {
-//                                    if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
-//                                        NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:extend->acData];
-//                                        [params retain];
-//                                        
-//                                        [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
-//                                        
-//                                        [params release];
-//                                        NSLog(@"********params:%@******",params);
-//                                    }
-//                                }
-//                                    break;
+
                                 default:
                                     break;
                             }
-
+                        case RC_EX_ABOUTEYE:{
+                            if (jvcCloudSEENetworkHelper.ystNWTDDelegate != nil && [jvcCloudSEENetworkHelper.ystNWTDDelegate respondsToSelector:@selector(ystNetWorkHelpTextChatCallBack:withTextDataType:objYstNetWorkHelpSendData:)]) {
+                                NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:extend->acData];
+                                [params retain];
+                                
+                                [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_getCatVersionInfo objYstNetWorkHelpSendData:params];
+                                
+                                [params release];
+                                NSLog(@"VERSION******params:%@******",params);
+                            }
+                        }
+                            break;
                         default:
                             break;
                     }
@@ -2700,6 +2721,52 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
     
     [ystRemoteOperationHelperObj RemoteSetAlarmTime:currentChannelObj.nLocalChannel withstrBeginTime:strBeginTime withStrEndTime:strEndTime];
 }
+
+
+/**
+ *  猫眼远程控制指令
+ *
+ *  @param nLocalChannel              视频显示的窗口编号
+ *  @param remoteOperationType        控制的类型
+ *  @param remoteOperationCommandData 控制的指令内容
+ */
+-(void)remoteOperationDeviceInfoCat:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand{
+    JVCCloudSEESendGeneralHelper *ystRemoteOperationHelperObj = [JVCCloudSEESendGeneralHelper shareJVCCloudSEESendGeneralHelper];
+    JVCCloudSEEManagerHelper     *currentChannelObj           = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
+    if (currentChannelObj == nil) {
+        
+        return;
+    }
+    
+    switch (remoteOperationType) {
+        case TextChatType_getCatShowInfo:
+        case TextChatType_getCatSmartInfo:
+        case TextChatType_getCatMemeryInfo:
+        case TextChatType_getCatVersionInfo:
+        case TextChatType_reStartCat:
+        case TextChatType_reSetCat:
+        case TextChatType_closeCat:
+        case TextChatType_CatAlarmSound:
+        {
+            [ystRemoteOperationHelperObj onlySendRemoteOperationCat:nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommandSensitivityStr:remoteOperationCommand];
+        }
+        case TextChatType_setCatBellLight:
+        case TextChatType_setWaitTime:
+        case TextChatType_setCatAlarmTypeInfo:  //设置猫眼智能设置报警类型
+        case TextChatType_setCatPirEnableInfo: //设置猫眼智能设置红外感应
+        case TextChatType_setCatGsensorEnableInfo:  //设置猫眼智能设置重力感应
+        case TextChatType_setCatMDetectInfo: //设置猫眼智能设置移动侦测
+        case TextChatType_setCatMemeryVideoTime: //设置猫眼存储录像时长
+        case TextChatType_setCatAutoSwitch: //设置猫眼自动覆盖开关
+        {
+            [ystRemoteOperationHelperObj onlySendRemoteOperationCat:nLocalChannel remoteOperationType:remoteOperationType remoteOperationCommandSensitivityStr:remoteOperationCommand];
+        }
+            break;
+        
+        break;
+    }
+}
+
 
 /**
  *  Ap连接设备

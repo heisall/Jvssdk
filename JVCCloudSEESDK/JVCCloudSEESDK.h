@@ -306,6 +306,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign)id<JVCLanSearchDelegate >                   jvcLanSearchDelegate;//广播的回调
 @property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
 @property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
+
+//猫眼广播的回调
 @property(nonatomic,assign)id <JVCBCbroadcastDelegate>       ystBroadDelegate;
 
 @property(nonatomic,assign)BOOL isStreamChange;
@@ -786,6 +788,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 
 /****************************************************************************
+ 说明pBuffer发0x8c时表示唤醒 等待ystBroadDelegate中的回调返回0x8c表示成功，此时可以ip连接
  *名称  : JVC_SendSelfDataOnceFromBC
  *功能  : 从自定义广播套接字发送一次UDP消息
  *参数  :
@@ -795,6 +798,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  [IN] nLocalPort	  目的端口
  *返回值: 无
  *其他  :
+ 
  *****************************************************************************/
 -(BOOL) sendSelfDataOnceFromBC:(unsigned char *)pBuffer :(int) nSize :(char *)pchDeviceIP :(int)nDestPort;
 

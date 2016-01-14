@@ -222,6 +222,7 @@ void shutdown_audio() {
     shutdown_audio();
 }
 -(void)soundConfig:(const char *)audioData size:(int)frameSize{
+//    NSLog(<#NSString * _Nonnull format, ...#>)
     nplayer::NPlayer::gen_sound_config(audioData, frameSize);
 }
 @end

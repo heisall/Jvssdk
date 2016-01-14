@@ -1149,7 +1149,8 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     strcat(m_stPacket.acData+nOffset, acBuffer);
     
     JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (const   char*)&m_stPacket, 20+strlen(m_stPacket.acData));
-    [self RemoteWithDeviceGetFrameParam:nJvChannelID];}
+    [self RemoteWithDeviceGetFrameParam:nJvChannelID];
+}
 
 
 /**
@@ -1574,6 +1575,255 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     [array release];
     [self RemoteWithDeviceGetFrameParam:nJvChannelID];
 }
+-(void)onlySendRemoteOperationCat:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommandSensitivityStr:(NSString *)remoteOperationCommand{
+    switch (remoteOperationType) {
+        
+        case TextChatType_getCatShowInfo:{
+            
+            [self RemoteGetCatShowInfo:nJvChannelID];
+        }
+            break;
+        case TextChatType_getCatSmartInfo:{
+            
+            [self RemoteGetSmartInfo];
+        }
+            break;
+        case TextChatType_getCatMemeryInfo:{
+            [self RemoteGetMemeryInfo];
+        }
+            break;
+        case TextChatType_getCatVersionInfo:{
+            [self RemoteGetVersionInfo];
+        }
+            break;
+        case TextChatType_CatAlarmSound:{
+            [self RemoteSetCatAlarmSound];
+        }
+            break;
+        case TextChatType_reStartCat:
+        case TextChatType_reSetCat:
+        case TextChatType_closeCat:{
+            [self RemoteSetCatWithType:remoteOperationType];
+        }
+            break;
+        case TextChatType_setCatBellLight:
+            [self RemoteSetCatShowInfoWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setWaitTime:
+            [self RemoteSetCatWaitInfoWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatAlarmTypeInfo:  //设置猫眼智能设置报警类型
+            [self RemoteSetCatSmartAlarmTypeWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatPirEnableInfo: //设置猫眼智能设置红外感应
+            [self RemoteSetCatSmartPirEnableWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatGsensorEnableInfo:  //设置猫眼智能设置重力感应
+            [self RemoteSetCatSmartGsensorEnableWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatMDetectInfo: //设置猫眼智能设置移动侦测
+            [self RemoteSetCatSmartMDetectWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatMemeryVideoTime: //设置猫眼存储录像时长
+            [self RemoteSetCatRecordTimeWithString:remoteOperationCommand];
+            break;
+        case TextChatType_setCatAutoSwitch: //设置猫眼自动覆盖开关
+            [self RemoteSetCatAutoSwitchWithString:remoteOperationCommand];
+            break;
+        default:
+            break;
+    }
+}
+//获取猫眼显示的基本信息
+-(void)RemoteGetCatShowInfo:(int)nJvChannelID{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_DISPLAY;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_STORAGE_REFRESH;
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
+//设置猫眼显示的基本信息--感应灯开关
+-(void)RemoteSetCatShowInfoWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_DISPLAY;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_DISPLAY_BELLLIGHT;
+//    char acBuffer[256]={0};
+//    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetCatShowInfo:1];
+}
+//设置猫眼显示的基本信息--待机时间
+-(void)RemoteSetCatWaitInfoWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_DISPLAY;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_DISPLAY_SUSPENDTIME;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetCatShowInfo:1];
+}
 
+//获取猫眼智能设置的基本信息
+-(void)RemoteGetSmartInfo{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_INTELLIGENCE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_INTELLIGENCE_REFRESH;
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
+//设置猫眼智能设置--报警类型
+-(void)RemoteSetCatSmartAlarmTypeWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_INTELLIGENCE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_INTELLIGENCE_ALARMTYPE;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetSmartInfo];
+}
+//设置猫眼智能设置--红外感应灯
+-(void)RemoteSetCatSmartPirEnableWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_INTELLIGENCE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_INTELLIGENCE_PIR;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetSmartInfo];
+}
+//设置猫眼智能设置--重力感应
+-(void)RemoteSetCatSmartGsensorEnableWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_INTELLIGENCE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_INTELLIGENCE_GSENSOR;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetSmartInfo];
+}
 
+//设置猫眼智能设置--移动侦测
+-(void)RemoteSetCatSmartMDetectWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_INTELLIGENCE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_INTELLIGENCE_MDETECT;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetSmartInfo];
+}
+//获取猫眼智能设置的基本信息
+-(void)RemoteGetMemeryInfo{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_STORAGE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_STORAGE_REFRESH;
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
+//设置猫眼存储信息--录像时长
+-(void)RemoteSetCatRecordTimeWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_STORAGE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_STORAGE_RECORDTIME;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetMemeryInfo];
+}
+//设置猫眼存储信息--录像时长
+-(void)RemoteSetCatAutoSwitchWithString:(NSString *)key{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_STORAGE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_STORAGE_AUTOSWITCH;
+    //    char acBuffer[256]={0};
+    //    sprintf(acBuffer, "%s;", [key UTF8String]);
+    sprintf(m_pstExt->acData, "%s;", [key UTF8String]);
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+    [self RemoteGetMemeryInfo];
+}
+//获取猫眼智能设置的基本信息
+-(void)RemoteGetVersionInfo{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_ABOUTEYE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_ABOUT_REFRESH;
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
+//获取猫眼智能设置的基本信息
+-(void)RemoteSetCatWithType:(int)type{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_ABOUTEYE;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    switch (type) {
+        case TextChatType_reStartCat:
+            m_pstExt->nType=EX_ABOUT_REBOOT;
+            break;
+        case TextChatType_reSetCat:
+            m_pstExt->nType=EX_ABOUT_FORMAT;
+            break;
+        case TextChatType_closeCat:
+            m_pstExt->nType=EX_ABOUT_SHUTDOWN;
+            break;
+        default:
+            break;
+    }
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
+//猫眼报警
+-(void)RemoteSetCatAlarmSound{
+    PAC	m_stPacket;
+    memset(&m_stPacket, 0, sizeof(PAC));
+    m_stPacket.nPacketType	= RC_EXTEND;
+    m_stPacket.nPacketCount = RC_EX_ALARMOUT;
+    EXTEND *m_pstExt = (EXTEND*) (m_stPacket.acData);
+    m_pstExt->nType=EX_ALARMOUT_ALARM_AUDIO;
+    m_pstExt->acData[0]=0;
+    JVC_SendData(1, JVN_RSP_TEXTDATA, (PAC *)&m_stPacket, 20+strlen(m_pstExt->acData));
+}
 @end

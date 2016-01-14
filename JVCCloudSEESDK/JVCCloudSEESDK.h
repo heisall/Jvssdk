@@ -805,4 +805,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 -(void)releaseCloudSDK;
 
+/**
+ *  猫眼远程控制指令
+ *
+ *  @param nLocalChannel              视频显示的窗口编号
+ *  @param remoteOperationType        控制的类型
+ *  @param remoteOperationCommandData 控制的指令内容
+ */
+-(void)remoteOperationDeviceInfoCat:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand;
+
 @end

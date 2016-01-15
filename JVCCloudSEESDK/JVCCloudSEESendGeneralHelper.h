@@ -186,5 +186,8 @@
  *  @param speedValue             云台控制速度
  */
 - (void)onlySendYtOperaton:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speedValue;
+//获取猫眼显示的基本信息
+//-(void)RemoteGetCatShowInfo:(int)nJvChannelID;
+-(void)onlySendRemoteOperationCat:(int)nJvChannelID remoteOperationType:(int)remoteOperationType remoteOperationCommandSensitivityStr:(NSString *)remoteOperationCommand;
 
 @end

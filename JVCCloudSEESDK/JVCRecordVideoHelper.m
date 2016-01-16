@@ -164,6 +164,10 @@ pthread_mutex_t rec_mutex;
         avPkt.iPts = 0;
         avPkt.iDts = 0;
         
+        if (!pkgHandle) {
+            NSLog(@"pkgHandle is null ");
+            return;
+        }
         JP_PackageOneFrame(pkgHandle, &avPkt);
         
         if (self.isRecordVideoWaitingFrameI) {

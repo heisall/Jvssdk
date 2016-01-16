@@ -647,6 +647,7 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     PAC	g_stPacket;
     g_stPacket.nPacketType	   = RC_LOADDLG; //0x05
     g_stPacket.nPacketID	   = IPCAM_STREAM;
+    g_stPacket.acData[0]=1;
     JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (PAC*)&g_stPacket, 8);
 }
 

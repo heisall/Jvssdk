@@ -28,7 +28,12 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param connectType         连接返回的类型
  */
 -(void)ConnectMessageCallBackMath:(NSString *)connectCallBackInfo nLocalChannel:(int)nlocalChannel connectResultType:(int)connectResultType;
-
+/**
+ *  视频宽度的回调
+ *
+ *  @param width              视频宽度
+ */
+-(void)videoDataCallBackWidth:(CGFloat)width;
 /**
  *  视频数据的回调
  *
@@ -88,7 +93,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  };
  */
 -(void)remoteplaybackState:(int)remoteplaybackState;
+/**
+ *  视频宽度的回调
+ *
+ *  @param width              视频宽度
+ */
 
+-(void)videoPlaybackDataCallBackWidth:(CGFloat)width;
 /**
  *  获取远程回放检索文件列表的回调
  *

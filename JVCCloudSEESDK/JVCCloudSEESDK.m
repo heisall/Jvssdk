@@ -827,7 +827,13 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                  */
                 JVCVideoDecoderHelperObj.nVideoWidth          = width;
                 JVCVideoDecoderHelperObj.nVideoHeight         = height;
+            
+            if (jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate respondsToSelector:@selector(videoDataCallBackWidth:)]) {
                 
+                [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate videoDataCallBackWidth:JVCVideoDecoderHelperObj.nVideoWidth];
+            }
+
+    
                 [jvcCloudSEENetworkHelper qualityChangeContinueRecoderVideo:nLocalChannel];
 //                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isChangeStream"];
 //            }
@@ -1564,7 +1570,15 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
                 if (jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate != nil && [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteplaybackState:)]) {
                     
                     [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteplaybackState:RemotePlayBackVideoStateType_Succeed];
+                    
                 }
+                
+                if (jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate != nil && [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(videoPlaybackDataCallBackWidth:)]) {
+                    
+                    [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate videoPlaybackDataCallBackWidth:playBackDecoderObj.nVideoWidth];
+                    
+                }
+                
             }
         }
             break;

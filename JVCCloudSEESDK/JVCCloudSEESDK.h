@@ -28,7 +28,12 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param connectType         连接返回的类型
  */
 -(void)ConnectMessageCallBackMath:(NSString *)connectCallBackInfo nLocalChannel:(int)nlocalChannel connectResultType:(int)connectResultType;
-
+/**
+ *  视频宽度的回调
+ *
+ *  @param width              视频宽度
+ */
+-(void)videoDataCallBackWidth:(CGFloat)width;
 /**
  *  视频数据的回调
  *
@@ -88,7 +93,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  };
  */
 -(void)remoteplaybackState:(int)remoteplaybackState;
+/**
+ *  视频宽度的回调
+ *
+ *  @param width              视频宽度
+ */
 
+-(void)videoPlaybackDataCallBackWidth:(CGFloat)width;
 /**
  *  获取远程回放检索文件列表的回调
  *
@@ -457,6 +468,26 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param withPlayBackPath        远程文件的路径
  */
 -(void)RemoteRequestSendPlaybackVideo:(int)nLocalChannel withPlayBackPath:(NSString *)playBackVideoPath;
+
+/**
+ *  删除门磁和手环报警
+ *
+ *  @param nLocalChannel 本地连接通道号
+ *  @param alarmType     报警的类型
+ *  @param alarmGuid     报警的唯一标示
+ */
+-(void)RemoteDeleteDeviceAlarm:(int)nLocalChannel withAlarmType:(int)alarmType  withAlarmGuid:(int)alarmGuid;
+
+/**
+ *  编辑门磁和手环报警
+ *
+ *  @param nLocalChannel 本地连接通道号
+ *  @param alarmType     报警的类型
+ *  @param alarmGuid     报警的唯一标示
+ *  @param alarmEnable   报警是否开启
+ *  @param alarmName     报警的别名
+ */
+-(void)RemoteEditDeviceAlarm:(int)nLocalChannel withAlarmType:(int)alarmType  withAlarmGuid:(int)alarmGuid withAlarmEnable:(int)alarmEnable withAlarmName:(NSString *)alarmName;
 
 /**
  *  设置安全防护时间段

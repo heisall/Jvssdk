@@ -631,6 +631,7 @@ static JVCCloudSEESDK *jvcCloudSEENetworkHelper    = nil;
  */
 -(BOOL)disconnect:(int)nLocalChannel{
     
+    NSLog(@"disconnect");
     JVCCloudSEEManagerHelper *currentChannelObj   = [self returnCurrentChannelBynLocalChannel:nLocalChannel];
     
     if (currentChannelObj  != nil) {
@@ -826,7 +827,13 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
                  */
                 JVCVideoDecoderHelperObj.nVideoWidth          = width;
                 JVCVideoDecoderHelperObj.nVideoHeight         = height;
+            
+            if (jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate respondsToSelector:@selector(videoDataCallBackWidth:)]) {
                 
+                [jvcCloudSEENetworkHelper.jvcCloudSEESDKDelegate videoDataCallBackWidth:JVCVideoDecoderHelperObj.nVideoWidth];
+            }
+
+    
                 [jvcCloudSEENetworkHelper qualityChangeContinueRecoderVideo:nLocalChannel];
 //                [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isChangeStream"];
 //            }
@@ -1563,7 +1570,15 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
                 if (jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate != nil && [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(remoteplaybackState:)]) {
                     
                     [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate remoteplaybackState:RemotePlayBackVideoStateType_Succeed];
+                    
                 }
+                
+                if (jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate != nil && [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate respondsToSelector:@selector(videoPlaybackDataCallBackWidth:)]) {
+                    
+                    [jvcCloudSEENetworkHelper.jvcRemotePlaybackVideoDelegate videoPlaybackDataCallBackWidth:playBackDecoderObj.nVideoWidth];
+                    
+                }
+                
             }
         }
             break;
@@ -2415,7 +2430,6 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
  */
 -(void)decoderOutVideoFrameCallBack:(DecoderOutVideoFrame *)decoderOutVideoFrame nPlayBackFrametotalNumber:(int)nPlayBackFrametotalNumber {
     
-
     if (isPause) {
         return;
     }
@@ -2448,7 +2462,6 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                 NSLog(@"glshowview width %d height %d showview width %d height %d",glShowViewWidth,glShowViewHeight,showViewWidth,showViewHeight);
                 [glView updateDecoderFrame:currentChannelObj.showView.bounds.size.width displayFrameHeight:currentChannelObj.showView.bounds.size.height];
             }
-            
             [glView decoder:decoderOutVideoFrame->decoder_y imageBufferU:decoderOutVideoFrame->decoder_u imageBufferV:(char*)decoderOutVideoFrame->decoder_v decoderFrameWidth:decoderOutVideoFrame->nWidth decoderFrameHeight:decoderOutVideoFrame->nHeight];
             
             currentChannelObj.isDisplayVideo = YES;
@@ -2557,7 +2570,7 @@ void RemoteDownLoadCallback(int nLocalChannel, unsigned char uchType, char *pBuf
         case JVN_RSP_DOWNLOADE:    //文件下载失败
         case JVN_RSP_DLTIMEOUT:{   //文件下载超时
             
-//  NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
+        NSLog(@"uchtype %c size %d %s",uchType,nSize,pBuffer);
             
             [jvcCloudSEENetworkHelper closeDownloadHandle:uchType];
             

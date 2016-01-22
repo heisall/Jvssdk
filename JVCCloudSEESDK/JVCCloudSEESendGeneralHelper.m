@@ -590,8 +590,6 @@ static JVCCloudSEESendGeneralHelper *jvcCloudSEESendGeneralHelper = nil;
     
     m_pstExt->nType		= EX_STORAGE_REFRESH;
     JVC_SendData(nJvChannelID, JVN_RSP_TEXTDATA, (PAC*)&m_stPacket, 20);
-    
-    
 }
 -(void)RemoteReadSensitivity:(int)nJvChannelID{
     PAC	m_stPacket;

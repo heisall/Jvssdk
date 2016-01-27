@@ -3576,7 +3576,10 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     for (int i=0; i<count; i++) {
         STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
 //        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
-        NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
+//        NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
+        if (yst == NULL) {
+            continue;
+        }
         NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%s%d",yst->chGroup,yst->nYSTNO],@"nYSTNO",[NSNumber numberWithInt:yst->nConnectStatus],@"nConnectStatus", nil];
     
         [array addObject:dict];

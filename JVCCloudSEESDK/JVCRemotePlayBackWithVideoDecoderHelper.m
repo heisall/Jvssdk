@@ -161,7 +161,7 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
                 memset(acBuff, 0, sizeof(acBuff));
                 sprintf(acBuff,"%s%d","disk",(acData[i]-'C')/10+1);//盘符
                 if(isCat){
-                    sprintf(acBuff,"%s","/mnt/mics/");//盘符
+                    sprintf(acBuff,"%s","/mnt/misc/");//盘符
                 }
                 NSString *strRemoteDisk = [[NSString alloc] initWithUTF8String:acBuff];
                 [mdicAFile setValue:strRemoteDisk forKey:KJVCYstNetWorkMacroRemotePlayBackDisk];

@@ -812,8 +812,10 @@ void VideoDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, i
             //获取startCode 、宽、高
             [ystNetworkHelperCMObj getBufferOInInfo:pBuffer startCode:&startCode videoWidth:&width videoHeight:&height];
             
+//            NSLog(@"startCode %d",startCode);
             currentChannelObj.nConnectDeviceType = [ystNetworkHelperCMObj checkConnectDeviceModel:startCode];
-            
+//            NSLog(@"nConnectDeviceType %zd",currentChannelObj.nConnectDeviceType);
+
             currentChannelObj.nConnectStartCode  =  startCode;
             currentChannelObj.isNvrDevice        = [ystNetworkHelperCMObj checkDeviceIsNvrDevice:pBuffer];
             
@@ -1482,6 +1484,7 @@ void VoiceIntercomCallBack(int nLocalChannel, unsigned char uchType, char *pBuff
  */
 void RemoteplaybackSearchCallBack(int nLocalChannel,char *pBuffer, int nSize) {
     
+    NSLog(@"pBuffer : %s",pBuffer);
     JVCCloudSEEManagerHelper  *currentChannelObj           = [jvcCloudSEENetworkHelper returnCurrentChannelBynLocalChannel:nLocalChannel];
     
     if (currentChannelObj == nil) {
@@ -1736,7 +1739,7 @@ void RemotePlaybackDataCallBack(int nLocalChannel, unsigned char uchType, char *
  */
 void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer, int nSize){
     
-    NSLog(@"TextChatDataCallBack ================================ pBuffer===");
+    NSLog(@"TextChatDataCallBack ================================ pBuffer=== unchType %x",uchType);
     NSAutoreleasePool                    *pool             = [[NSAutoreleasePool alloc] init];
     
     JVCCloudSEENetworkGeneralHelper *ystNetworkHelperCMObj = [JVCCloudSEENetworkGeneralHelper shareJVCCloudSEENetworkGeneralHelper];
@@ -1773,7 +1776,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                 
                 memcpy(&packetAcDataOffset, stpacket.acData, 4);   //存放acData的偏移量目前只有pac包中nPacketType=RC_LOADDLG时需要做偏移操作
             }
-            
+            NSLog(@"0x%x",stpacket.nPacketCount);
             switch (stpacket.nPacketType) {
                 case RC_EX_DISPLAY:{
                     //                    NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
@@ -1782,7 +1785,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                         
                         [params retain];
-                        NSLog(@"设备基本信息:%@",params);
+                        NSLog(@"RC_EX_DISPLAY 设备基本信息:%@",params);
                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
                         
                         [params release];
@@ -1796,8 +1799,11 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                         
                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                         
+                        char group = (char)[[params objectForKey:@"YSTGROUP"]intValue];
+//                        [currentChannelObj.strYstGroup retain];
+                        currentChannelObj.strYstGroup = [NSString stringWithFormat:@"%c",group];
                         [params retain];
-                        NSLog(@"设备基本信息:%@",params);
+                        NSLog(@"RC_GETPARAM 设备基本信息:%@",params);
                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
                         
                         [params release];
@@ -2072,7 +2078,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:extend->acData+packetAcDataOffset];
                                         
                                         [params retain];
-                                        NSLog(@"猫眼设备基本信息...:%@",params);
+                                        NSLog(@"EX_STORAGE_REFRESH 猫眼设备基本信息...:%@",params);
                                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_getCatShowInfo objYstNetWorkHelpSendData:params];
                                         
                                         [params release];
@@ -2086,7 +2092,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                                         
                                         [params retain];
-                                        NSLog(@"设备基本信息:%@",params);
+                                        NSLog(@"EX_DISPLAY_BELLLIGHT 设备基本信息:%@",params);
                                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_setCatBellLight objYstNetWorkHelpSendData:params];
                                         
                                         [params release];
@@ -2099,7 +2105,7 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                                         
                                         [params retain];
-                                        NSLog(@"设备基本信息:%@",params);
+                                        NSLog(@"default 设备基本信息:%@",params);
                                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];
                                         
                                         [params release];

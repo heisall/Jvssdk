@@ -123,8 +123,8 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
             
             int nIndex = 0;
 //            普通IPC
-            int perUnitSize = 12;
-            BOOL isCat = YES;
+            int perUnitSize = 10;
+            BOOL isCat = NO;
             [ystGroup retain];
             NSLog(@"group %@",ystGroup);
 //            猫眼
@@ -171,14 +171,14 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
                     
                     memset(acBuff, 0, sizeof(acBuff));
                     
-                    sprintf(acBuff,"%c",acData[7]);//缩略图
+                    sprintf(acBuff,"%c",acData[i+7]);//缩略图
                     NSString *strCatThumb = [[NSString alloc] initWithUTF8String:acBuff];
                     [mdicAFile setValue:strCatThumb forKey:KJVCYstNetWorkMacroRemotePlayBackCatImgType];
                     [strCatThumb release];
                     
                     memset(acBuff, 0, sizeof(acBuff));
                     
-                    sprintf(acBuff,"%c",acData[8]);//资源类型
+                    sprintf(acBuff,"%c",acData[i+8]);//资源类型
                     NSString *strCatType = [[NSString alloc] initWithUTF8String:acBuff];
                     [mdicAFile setValue:strCatType forKey:KJVCYstNetWorkMacroRemotePlayBackCatResType];
                     [strCatType release];

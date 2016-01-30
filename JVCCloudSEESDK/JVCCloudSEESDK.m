@@ -1799,6 +1799,9 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                         
                         NSMutableDictionary *params = [ystNetworkHelperCMObj convertpBufferToMDictionary:stpacket.acData+packetAcDataOffset];
                         
+                        char group = (char)[[params objectForKey:@"YSTGROUP"]intValue];
+//                        [currentChannelObj.strYstGroup retain];
+                        currentChannelObj.strYstGroup = [NSString stringWithFormat:@"%c",group];
                         [params retain];
                         NSLog(@"RC_GETPARAM 设备基本信息:%@",params);
                         [jvcCloudSEENetworkHelper.ystNWTDDelegate ystNetWorkHelpTextChatCallBack:currentChannelObj.nShowWindowID+1  withTextDataType:TextChatType_paraInfo objYstNetWorkHelpSendData:params];

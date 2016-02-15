@@ -249,6 +249,7 @@ void cBCSelfDataCallback(unsigned char *pBuffer, int nSize, char chIP[16], int n
 @synthesize jvcSTAModeDelegate;
 @synthesize jvcDeviceNetsDelegate;
 @synthesize jvcModifyDeviceDelegate;
+@synthesize jvcCloudSEEIPCUpdateDelegate;
 @synthesize jvcLanSearchDelegate;
 
 BOOL          isRequestTimeoutSecondFlag;            //远程请求用于跳出请求的标志位 TRUE  :跳出
@@ -2012,34 +2013,91 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                     
                                     EXTEND *extend=(EXTEND*)stpacket.acData;
 
-                                    switch (stpacket.nPacketCount) {
-                                            
-                                        case RC_EX_ACCOUNT:{
-                                            
-                                            switch (extend->nType) {
-                                                    
-                                                case EX_ACCOUNT_REFRESH:{
-//
-                                                }
-                                                    break;
-                                                case EX_ACCOUNT_MODIFY:
-                                                {
-                                                    if (jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate !=nil && [jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate respondsToSelector:@selector(modifyDeviceInfoSuccessCallBack)]) {
-                                                        
-                                                        [jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate modifyDeviceInfoSuccessCallBack ];
-                                                    }
+                                    
+//                                    int	nType;
+//                                    int	nParam1;   //存放的包的个数
+//                                    int	nParam2;
+//                                    int	nParam3;
+                                    
+                                    NSDictionary *dic = @{@"type":[NSString stringWithFormat:@"%d",extend->nType],@"param1":[NSString stringWithFormat:@"%d",extend->nParam1],@"param2":[NSString stringWithFormat:@"%d",extend->nParam2],@"parma3":[NSString stringWithFormat:@"%d",extend->nParam3]};
+                                    if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate&&[jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdate:)]) {
+                                        [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdate:dic];
+                                    }
 
-                                                }
-                                                    break;
-                                                default:
-                                                    break;
+                                    /*
+                                    switch (extend->nType) {
+                                    
+                                        case EX_UPLOAD_CANCEL:{
+                                            
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateFinshed:)]) {
+                                                
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateFinshed:JVCCloudSEEIPCUpdateCancel];
+                                            }
+                                        }
+                                            
+                                            
+                                            break;
+                                            
+                                        case EX_UPLOAD_DATA:{
+                                            
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateProgressCallBack:withType:)]) {
+                                                
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateProgressCallBack:extend->nParam2 withType:extend->nType];
+                                            }
+                                            
+                                        };
+                                            break;
+                                        case EX_UPLOAD_OK:{
+                                            
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateFinshed:)]) {
+                                                
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateFinshed:JVCCloudSEEIPCUpdateFirmStart];
+                                            }
+                                            
+                                            
+                                            
+                                        }
+                                            break;
+                                        case EX_FIRMUP_START:{
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateFinshed:)]) {
+                                                
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateFinshed:JVCCloudSEEIPCUpdateWrite];
+                                            }
+                                        }
+                                            break;
+                                        case EX_FIRMUP_STEP:{
+                                            
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateProgressCallBack:withType:)] ) {
+                                                //
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateProgressCallBack:extend->nParam1 withType:JVCCloudSEEIPCUpdateWrite];
+                                            }
+                                            
+                                            //                                                    [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate writeDownloadPacketWithProgress];
+                                        }
+                                            break;
+                                        case EX_FIRMUP_OK:{
+                                            
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate != nil && [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdateFinshed:)]) {
+                                                
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdateFinshed:JVCCloudSEEIPCUpdateWrite];
                                             }
                                         }
                                             break;
                                             
-                                        default:
-                                            break;
+                                        
                                     }
+                                         */
+//                                    switch (stpacket.nPacketCount) {
+//
+////                                        case RC_EX_ACCOUNT:{
+//
+//
+////                                        }
+////                                            break;
+//                                            
+//                                        default:
+//                                            break;
+//                                    }
                                 }
                                     break;
                                 default:
@@ -3571,15 +3629,30 @@ withShowView:(id)showVew userName:(NSString *)userName password:(NSString *)pass
     unsigned char* buffer = (unsigned char*) malloc(sizeof(unsigned char) * msize);
     memset(buffer, 0, msize);
     JVC_GetHelpYSTNO(buffer, &msize);
+    printf("STBASEYSTNO size %d\n",ssize);
+    printf("Call over size = %d\n",msize);
+    
+//    for(int mm = 0;mm < msize;mm ++)
+//    {
+//        printf("%X ",buffer[mm]);
+//    }
+//    printf("\n ");
+    
+    unsigned char* pBuf = buffer;
     
     int count = msize / ssize;
     for (int i=0; i<count; i++) {
-        STBASEYSTNO *yst = (STBASEYSTNO *)buffer+i*sizeof(STBASEYSTNO);
+        STBASEYSTNO *yst = (STBASEYSTNO *)pBuf;
+        pBuf += sizeof(STBASEYSTNO);
+
 //        NSValue *ystValue = [NSValue value:yst withObjCType:@encode(STBASEYSTNO)];
 //        NSLog(@"yst %d %d",yst->nYSTNO,yst->nConnectStatus);
-        if (yst == NULL) {
-            continue;
-        }
+        
+        printf("m_helper app %d = %d\n",i,yst->nYSTNO);
+//        if (yst == NULL) {
+//            continue;
+//        }
+        
         NSDictionary *dict=[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%s%d",yst->chGroup,yst->nYSTNO],@"nYSTNO",[NSNumber numberWithInt:yst->nConnectStatus],@"nConnectStatus", nil];
     
         [array addObject:dict];

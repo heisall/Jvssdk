@@ -371,7 +371,7 @@ int nChannelIndex ;
  */
 -(NSMutableArray *)getRemoteplaybackSearchFileListInfoByNetworkBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize {
     
-    return [self.playBackDecoderObj convertRemoteplaybackSearchFileListInfoByNetworkBuffer:self.nConnectDeviceType remotePlaybackFileBuffer:remotePlaybackFileBuffer remotePlaybackFileBufferSize:remotePlaybackFileBufferSize nRemoteChannel:self.nRemoteChannel];
+    return [self.playBackDecoderObj convertRemoteplaybackSearchFileListInfoByNetworkBuffer:self.nConnectDeviceType remotePlaybackFileBuffer:remotePlaybackFileBuffer remotePlaybackFileBufferSize:remotePlaybackFileBufferSize ystGroup:self.strYstGroup nRemoteChannel:self.nRemoteChannel];
 }
 
 /**

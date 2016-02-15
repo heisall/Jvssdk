@@ -97,6 +97,8 @@ static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackChannel  = @"remoteC
 static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackDate     = @"time";           //远程回放检索出文件的日期
 static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackDisk     = @"disk";           //远程回放检索出文件存放的磁盘
 static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackType     = @"Type";           //远程回放检索出文件存放的类型（A:报警 M：移动 T:定时 N:手动）
+static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackCatImgType     = @"catImgType";           //猫眼远程回放检索出文件的图片类型(T:缩略图 P:正常图片)
+static  NSString  *  const KJVCYstNetWorkMacroRemotePlayBackCatResType     = @"catResType";           //猫眼远程回放检索出文件的类型（V:视频 P:图像）
 
 #define REQUESTTIMEOUTSECOND  0.5
 

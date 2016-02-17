@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1255E72F4E9ABDCD877DF087F1996286579E4BE5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1255E72F4E9ABDCD877DF087F1996286579E4BE5" : 0,
+    "527915A9A40E4146028043E4BE6DF41062E9CE17" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6C249593-8549-43B8-98A8-06DB8C94FDA9",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1255E72F4E9ABDCD877DF087F1996286579E4BE5" : "JVCCloudSEESDK\/",
+    "527915A9A40E4146028043E4BE6DF41062E9CE17" : "libmp4pkt\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "JVCCloudSEESDK",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "JVCCloudSEESDK.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "182.92.242.230:baoyanmeng\/iOS_JVCCloudSEESDK.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1255E72F4E9ABDCD877DF087F1996286579E4BE5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "182.92.242.230:songkunpeng\/libMP4.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "527915A9A40E4146028043E4BE6DF41062E9CE17"
+    }
+  ]
+}

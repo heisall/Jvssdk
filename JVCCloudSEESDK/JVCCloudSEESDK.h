@@ -28,8 +28,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param connectType         连接返回的类型
  */
 -(void)ConnectMessageCallBackMath:(NSString *)connectCallBackInfo nLocalChannel:(int)nlocalChannel connectResultType:(int)connectResultType;
-
 /**
+ *  视频宽高的回调
+ *
+ *  @param width              视频宽度
+ *  @param height             视频高度
+ */
+-(void)videoDataCallBackWidth:(CGFloat)width height:(CGFloat)height;/**
  *  视频数据的回调
  *
  *  @param nLocalChannel             本地连接的通道号
@@ -53,9 +58,20 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param nStatus       文本聊天的状态
  */
 -(void)RequestTextChatStatusCallBack:(int)nLocalChannel withStatus:(int)nStatus;
-
+/**
+ *  设备场景图片的代理
+ *
+ *  @param imageData      输出的图片
+ *  @param nShowWindowID  显示视频的窗口ID
+ */
+-(void)sceneOutImageDataCallBack:(NSData *)imageData withShowWindowID:(int)nShowWindowID;
 @end
 
+@protocol JVCBCbroadcastDelegate <NSObject>
+
+-(void)broadCast:(NSDictionary *)dic;
+
+@end
 //远程回放协议
 @protocol JVCRemotePlaybackVideoDelegate <NSObject>
 
@@ -77,13 +93,55 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  };
  */
 -(void)remoteplaybackState:(int)remoteplaybackState;
+/**
+ *  视频宽高的回调
+ *
+ *  @param width              视频宽度
+ *  @param height             视频高度
+ */
 
+-(void)videoPlaybackDataCallBackWidth:(CGFloat)width height:(CGFloat)height;
 /**
  *  获取远程回放检索文件列表的回调
  *
  *  @param playbackSearchFileListMArray 远程回放检索文件列表
  */
 -(void)remoteplaybackSearchFileListInfoCallBack:(NSMutableArray *)playbackSearchFileListMArray;
+
+/**
+ *  远程下载文件的回调
+ *
+ *  @param downLoadStatus 下载的状态
+ 
+ JVN_RSP_DOWNLOADOVER  //文件下载完毕
+ JVN_CMD_DOWNLOADSTOP  //停止文件下载
+ JVN_RSP_DOWNLOADE     //文件下载失败
+ JVN_RSP_DLTIMEOUT     //文件下载超时
+ 
+ *  @param path           下载保存的路径
+ */
+-(void)remoteDownLoadCallBack:(int)downLoadStatus withDownloadSavePath:(NSString *)savepath;
+
+@end
+
+//远程下载
+@protocol JVCremoteDownloadDelegate <NSObject>
+
+@optional
+/**
+ *  远程下载文件的回调
+ *
+ *  @param downLoadStatus 下载的状态
+ 
+ JVN_RSP_DOWNLOADOVER  //文件下载完毕
+ JVN_CMD_DOWNLOADSTOP  //停止文件下载
+ JVN_RSP_DOWNLOADE     //文件下载失败
+ JVN_RSP_DLTIMEOUT     //文件下载超时
+ 
+ *  @param filesize           文件大小
+ @param size              下载大小
+ */
+-(void)remoteDownLoadCallBackStatus:(int)status size:(int)size withFilesize:(int )filesize;
 
 @end
 
@@ -107,8 +165,10 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 /**
  *   录像结束的回调函数
  *
+ *  @param isContinue 是否结束后继续录像 YES：继续
  */
--(void)videoEndCallBack;
+-(void)videoEndCallBack:(BOOL)isContinueVideo;
+
 /**
 *   录像开始的回调函数
 *
@@ -221,9 +281,52 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)RemoteOperationAtTextChatResponse:(int)nLocalChannel withResponseDic:(NSDictionary *)dic;
 
 @end
+
+@protocol JVCCloudSEEIPCUpdateDelegate <NSObject>
+
+/**
+ *  连接的回调函数
+ *
+ *  @param connectResultType 连接信息的回调函数
+ */
+-(void)JVCCloudSEEIPCUpdateConnectResult:(int)connectResultType;
+
+/**
+ *  下载（烧写）进度的回调
+ *
+ *  @param value 进度值
+ *  @param nType 烧写或下载
+ */
+-(void)JVCCloudSEEIPCUpdateProgressCallBack:(int)value withType:(int)nType;
+
+/**
+ *
+ */
+-(void)JVCCloudSEEIPCUpdate:(NSDictionary *)dic;
+
+/**
+ *   下载、烧写、取消、重置完成的回调
+ *
+ *  @param nType 完成的类型
+ */
+-(void)JVCCloudSEEIPCUpdateFinshed:(int)nType;
+
+
+/**
+ *  重启设备成功的回调
+ *
+ *  @param strVersion 设备的新版本
+ */
+-(void)JVCCloudSEEIPCUpdateResetFinshed:(NSString *)strVersion;
+
+
+@end
+
 @protocol ystNetWorkHelpRemoteOperationDelegate <NSObject>
 
 @optional
+
+
 
 /**
  *  获取当前连接通道的码流参数以及是否是家用IPC
@@ -243,6 +346,8 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 
 @property(nonatomic,assign)id <JVCCloudSEESDKDelegate>            jvcCloudSEESDKDelegate;         //视频、连接信息
 @property(nonatomic,assign)id <JVCRemotePlaybackVideoDelegate>    jvcRemotePlaybackVideoDelegate; //远程回放
+@property(nonatomic,assign)id <JVCremoteDownloadDelegate>    jvcRemoteDownloadVideoDelegate; //远程下载
+
 @property(nonatomic,assign)id <JVCAudioDelegate>                  jvcAudioDelegate;               //音频代理
 @property(nonatomic,assign)id<jvcVideoSaveDelegate>                   jvcVideoDelegate;
 @property(nonatomic,assign)id<ystNetWorkHelpVideoDelegate>                   videoDelegate;
@@ -256,6 +361,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 @property(nonatomic,assign)id<JVCLanSearchDelegate >                   jvcLanSearchDelegate;//广播的回调
 @property(nonatomic,assign)id <ystNetWorkHelpTextDataDelegate>              ystNWTDDelegate;    //文本聊天
 @property(nonatomic,assign)id <ystNetWorkHelpRemoteOperationDelegate>       ystNWRODelegate;
+@property (nonatomic,assign)id <JVCCloudSEEIPCUpdateDelegate> jvcCloudSEEIPCUpdateDelegate;
+
+
+//猫眼广播的回调
+@property(nonatomic,assign)id <JVCBCbroadcastDelegate>       ystBroadDelegate;
+
+@property(nonatomic,assign)BOOL isStreamChange;
 /**
  *  单例 (所有操作请先初始化SDK)
  *
@@ -268,7 +380,65 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 -(void)initCloudSEESdk;
 
+/**
+ *  设置MTU值
+ */
+-(void)setMTUWithValue:(int)mtuValue;
 
+
+
+enum JVCCloudSEEIPCUpdateCheckNewVersionStatus{
+    
+    JVCCloudSEEIPCUpdateCheckNewVersionNew          = 0,  //存在新版本
+    JVCCloudSEEIPCUpdateCheckNewVersionHighVersion  = 1,  //已经是最新版本
+};
+
+enum JVCCloudSEEIPCUpdateType{
+    
+    JVCCloudSEEIPCUpdateDownload            = 0,  //下载
+    JVCCloudSEEIPCUpdateWrite               = 1,  //烧写
+    JVCCloudSEEIPCUpdateCancel              = 2,  //取消下载
+    JVCCloudSEEIPCUpdateReset               = 3,  //重启设备
+    JVCCloudSEEIPCUpdateFirmStart           , //收到EX_UPLOAD_OK命令反馈，发送烧写命令
+
+};
+
+
+/**
+ *  初始化连接回调的助手类
+ *
+ *  @return 连接回调的助手类
+ */
+-(id)init:(int)deviceType withDeviceModelInt:(int)deviceModelInt withDeviceVersion:(NSString *)strDeviceVersion withYstNumber:(NSString *)ystNumber withLoginUserName:(NSString *)userName;
+
+
+/**
+ *  取消更新
+ *
+ */
+-(void)cancelUpdatePacket;
+
+/**
+ *  烧写更新包完成
+ *
+ */
+-(void)resetDevice;
+
+/**
+ *  跟新设备信息
+ *
+ *  @param deviceString 最新后的升级设备
+ */
+- (void)updateDeviceVersion:(NSString *)deviceString;
+
+/**
+ *  停止小助手
+ */
+-(void)stopHelp;
+/**
+ *  启动小助手
+ */
+-(void)enableHelp;
 /**
  *  检测当前窗口连接是否已存在
  *
@@ -332,6 +502,14 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(BOOL)disconnect:(int)nLocalChannel;
 
 /**
+ *  断开连接（子线程调用）
+ *
+ *  @param nLocalChannel 本地视频窗口编号
+ *
+ *  @return YSE:断开成功 NO:断开失败
+ */
+-(BOOL)disconnectOnly:(int)nLocalChannel;
+/**
  *  远程控制指令(请求)
  *
  *  @param nLocalChannel          视频显示的窗口编号
@@ -382,6 +560,26 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  *  @param withPlayBackPath        远程文件的路径
  */
 -(void)RemoteRequestSendPlaybackVideo:(int)nLocalChannel withPlayBackPath:(NSString *)playBackVideoPath;
+
+/**
+ *  删除门磁和手环报警
+ *
+ *  @param nLocalChannel 本地连接通道号
+ *  @param alarmType     报警的类型
+ *  @param alarmGuid     报警的唯一标示
+ */
+-(void)RemoteDeleteDeviceAlarm:(int)nLocalChannel withAlarmType:(int)alarmType  withAlarmGuid:(int)alarmGuid;
+
+/**
+ *  编辑门磁和手环报警
+ *
+ *  @param nLocalChannel 本地连接通道号
+ *  @param alarmType     报警的类型
+ *  @param alarmGuid     报警的唯一标示
+ *  @param alarmEnable   报警是否开启
+ *  @param alarmName     报警的别名
+ */
+-(void)RemoteEditDeviceAlarm:(int)nLocalChannel withAlarmType:(int)alarmType  withAlarmGuid:(int)alarmGuid withAlarmEnable:(int)alarmEnable withAlarmName:(NSString *)alarmName;
 
 /**
  *  设置安全防护时间段
@@ -593,6 +791,13 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  */
 - (void)MP4PlayerRelease;
 
+/*
+  暂停播放。 */
+-(void)pauseVideo:(int)nLocalChannel;
+
+/*
+  继续播放。 */
+-(void)resumeVideo:(int)nLocalChannel;
 
 /**
  *  播放MP4文件
@@ -608,14 +813,7 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
  * @return   0:成功         其他：失败
  */
 -(int)setSelfServerWithGroup:(NSString*)pGroup service:(NSString *)pServer;
-/**
- *  根据本地通道号返回对应的JVCCloudSEEManagerHelper
- *
- *  @param nLocalChannel 本地通道号
- *
- *  @return 本地通道号返回对应的JVCCloudSEEManagerHelper
- */
--(JVCCloudSEEManagerHelper *)returnCurrentChannelBynLocalChannel:(int)nLocalChannel;
+
 /**
  *  隐藏OpenGL的显示
  *
@@ -624,4 +822,119 @@ static NSString const *kWifiUserName     =  @"wifiUserName";
 -(void)hiddenOpenGLView;
 
 -(void)showOpenGLView;
+
+-(void)showOpenGLViewAtView:(UIView *)view;
+
+/**
+ *  判断一个连接的设备录像是否是Mp4文件
+ *
+ *  @param nLocalChannel 远程本地通道号
+ *
+ *  @return YES：是
+ */
+-(BOOL)isMp4FileOfLoaclChannelID:(int)nLocalChannel;
+
+/**
+ *  远程下载命令
+ *
+ *  @param nLocalChannel 视频显示的窗口编号
+ *  @param downloadPath  视频下载的地址
+ *  @param SavePath      保存的路径
+ */
+-(void)RemoteDownloadFile:(int)nLocalChannel withDownLoadPath:(char *)downloadPath withSavePath:(NSString *)SavePath;
+/**
+ *  获取请求远程回放的一条命令
+ *
+ *  @param requestPlayBackFileInfo   当前选中的远程回放的远程文件信息
+ *  @param requestPlayBackFileDate   远程回放的日期
+ *  @param requestPlayBackFileIndex  当前选中的远程文件列表的索引
+ *  @param requestOutCommand         输出的发送命令
+ */
+-(void)getRequestPlaybackDownloadCommandChannel:(int)nLocalChannel :(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand;
+ 
+/*开启录像
+ *
+ *  @param nLocalChannel      连接的本地通道号
+ *  @param saveLocalVideoPath 录像文件存放的地址
+ */
+-(void)openRecordVideo:(int)nLocalChannel saveLocalVideoPath:(NSString *)saveLocalVideoPath;
+
+/*
+ * 获取当前已知的云视通号码清单
+ * 返回一个数组 ，其存放了结构体STBASEYSTNO的NSValue
+ */
+-(NSMutableArray *)getHelpYSTNO;
+
+
+/**
+ *  远程控制指令
+ *
+ *  @param nLocalChannel          控制本地连接的通道号
+ *  @param remoteOperationType    控制的类型
+ *  @param remoteOperationCommand 控制的命令
+ */
+-(void)RemoteOperationSendDataToDevice:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommand:(int)remoteOperationCommand  speed:(int)speed;
+
+/****************************************************************************
+ *名称  : JVC_StartBroadcastSelfServer
+ *功能  : 开启自定义广播服务
+ *参数  : [IN] nLPort      本地服务端口，<0时为默认9700
+ [IN] nServerPort 设备端服务端口，<=0时为默认9108,建议统一用默认值与服务端匹配
+ [IN] BCSelfData  自定义广播结果回调函数
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+-(BOOL)startBroadcastSelfServer:(int )nLPort :(int)nServerPort;
+
+
+/****************************************************************************
+ *名称  : JVC_StopBroadcastSelfServer
+ *功能  : 停止自定义广播服务
+ *参数  : 无
+ *返回值: 无
+ *其他  : 无
+ *****************************************************************************/
+-(void)stopBroadcastSelfServer;
+
+
+/****************************************************************************
+ *名称  : JVC_BroadcastSelfOnce
+ *功能  : 发送一次广播消息
+ *参数  :
+ [IN] pBuffer     广播净载数据
+ [IN] nSize        广播净载数据长度
+ [IN] nTimeOut  此参数目前可置为0
+ *返回值: TRUE/FALSE
+ *其他  :
+ *****************************************************************************/
+-(BOOL) broadcastSelfOnce:(unsigned char *)pBuffer :(int) nSize :(int) nTimeOut;
+
+
+/****************************************************************************
+ 说明pBuffer发0x8c时表示唤醒 等待ystBroadDelegate中的回调返回0x8c表示成功，此时可以ip连接
+ *名称  : JVC_SendSelfDataOnceFromBC
+ *功能  : 从自定义广播套接字发送一次UDP消息
+ *参数  :
+ [IN] pBuffer     净载数据
+ [IN] nSize       净载数据长度
+ [IN] pchDeviceIP 目的IP地址
+ [IN] nLocalPort	  目的端口
+ *返回值: 无
+ *其他  :
+ 
+ *****************************************************************************/
+-(BOOL) sendSelfDataOnceFromBC:(unsigned char *)pBuffer :(int) nSize :(char *)pchDeviceIP :(int)nDestPort;
+
+
+-(void)releaseCloudSDK;
+
+/**
+ *  猫眼远程控制指令
+ *
+ *  @param nLocalChannel              视频显示的窗口编号
+ *  @param remoteOperationType        控制的类型
+ *  @param remoteOperationCommandData 控制的指令内容
+ */
+-(void)remoteOperationDeviceInfoCat:(int)nLocalChannel remoteOperationType:(int)remoteOperationType remoteOperationCommandStr:(NSString *)remoteOperationCommand;
+
 @end

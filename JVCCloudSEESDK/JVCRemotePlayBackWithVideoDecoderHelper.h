@@ -25,7 +25,7 @@
  *
  *  @return 远程回放文件列表信息
  */
--(NSMutableArray *)convertRemoteplaybackSearchFileListInfoByNetworkBuffer:(int)nConnectDevcieType remotePlaybackFileBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize nRemoteChannel:(int)nRemoteChannel;
+-(NSMutableArray *)convertRemoteplaybackSearchFileListInfoByNetworkBuffer:(int)nConnectDevcieType remotePlaybackFileBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize ystGroup:(NSString*) ystGroup nRemoteChannel:(int)nRemoteChannel;
 
 /**
  *  获取请求远程回放的一条命令

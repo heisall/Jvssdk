@@ -29,7 +29,8 @@
 @synthesize linkModel,nConnectDeviceType,decodeModelObj,isRunDisconnect;
 @synthesize nShowWindowID,isAudioListening,isVoiceIntercom;
 @synthesize isPlaybackVideo,playBackDecoderObj,nConnectStartCode;
-@synthesize isDisplayVideo,jvcQueueHelper,jvConnectDelegate,nSystemVersion;
+@synthesize isDisplayVideo,jvcQueueHelper,jvConnectDelegate,nSystemVersion,jvcRemoteQueueHelper;
+
 @synthesize jvcPlaySound,jvcAudioQueueHelper,jvcVoiceIntercomHelper;
 @synthesize isOnlyIState,isVideoPause;
 @synthesize nConnectType,isHomeIPC,isTcp;
@@ -81,6 +82,8 @@ int nChannelIndex ;
         [jvcPlaySoundObj release];
         
         JVCVoiceIntercomHelper *jvcVoiceIntercomObj   = [[JVCVoiceIntercomHelper alloc] init];
+        helperInstance = jvcVoiceIntercomObj;
+        [jvcVoiceIntercomObj startDNoisePlayer:NO];
         self.jvcVoiceIntercomHelper                   = jvcVoiceIntercomObj;
         [jvcVoiceIntercomObj release];
         
@@ -144,7 +147,7 @@ int nChannelIndex ;
  *  退出缓存队列
  */
 -(void)exitQueue{
-    
+    NSLog(@"managerHelper.......");
     self.jvcQueueHelper.jvcQueueHelperDelegate = nil;
     [self.jvcQueueHelper exitPopDataThread];
     
@@ -169,7 +172,17 @@ int nChannelIndex ;
     JVC_DisConnect(self.nLocalChannel);
 //    DDLogVerbose(@"%s----%d----end",__FUNCTION__,nLocalChannel);
 }
-
+/**
+ *  断开远程连接
+ */
+-(void)disconnectOnly {
+    
+//    [self exitQueue];
+    //    [self.jvcVoiceIntercomHelper setHelperNil];
+    //    DDLogVerbose(@"%s----%d----start",__FUNCTION__,nLocalChannel);
+    JVC_DisConnect(self.nLocalChannel);
+    //    DDLogVerbose(@"%s----%d----end",__FUNCTION__,nLocalChannel);
+}
 #pragma mark ----------------  JVCQueueHelper 处理模块
 
 /**
@@ -177,6 +190,7 @@ int nChannelIndex ;
  */
 -(void)startPopVideoDataThread{
     
+    NSLog(@"start pop video");
     if (!self.jvcQueueHelper) {
         
         JVCQueueHelper      *jvcQueueHelperObj     = [[JVCQueueHelper alloc] init:self.nLocalChannel];
@@ -225,6 +239,7 @@ int nChannelIndex ;
 -(int)popDataCallBack:(void *)bufferData {
     
     
+//    NSLog(@"pop datacallback");
     frame *decodervideoFrame = (frame *)bufferData;
     
     int nDecoderStatus = [self decodeOneVideoFrame:decodervideoFrame];
@@ -356,7 +371,7 @@ int nChannelIndex ;
  */
 -(NSMutableArray *)getRemoteplaybackSearchFileListInfoByNetworkBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize {
     
-    return [self.playBackDecoderObj convertRemoteplaybackSearchFileListInfoByNetworkBuffer:self.nConnectDeviceType remotePlaybackFileBuffer:remotePlaybackFileBuffer remotePlaybackFileBufferSize:remotePlaybackFileBufferSize nRemoteChannel:self.nRemoteChannel];
+    return [self.playBackDecoderObj convertRemoteplaybackSearchFileListInfoByNetworkBuffer:self.nConnectDeviceType remotePlaybackFileBuffer:remotePlaybackFileBuffer remotePlaybackFileBufferSize:remotePlaybackFileBufferSize ystGroup:self.strYstGroup nRemoteChannel:self.nRemoteChannel];
 }
 
 /**
@@ -368,7 +383,7 @@ int nChannelIndex ;
  *  @param requestOutCommand         输出的发送命令
  */
 -(void)getRequestSendPlaybackVideoCommand:(NSMutableDictionary *)requestPlayBackFileInfo requestPlayBackFileDate:(NSDate *)requestPlayBackFileDate nRequestPlayBackFileIndex:(int)nRequestPlayBackFileIndex requestOutCommand:(char *)requestOutCommand{
-    
+
     [requestPlayBackFileInfo retain];
     [requestPlayBackFileDate retain];
     
@@ -451,9 +466,10 @@ int nChannelIndex ;
  *  关闭音频解码
  */
 -(void)closeAudioDecoder{
+    NSLog(@"closeAudioDecoder:managerHelper.......");
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
-    
+    self.jvcPlaySound.isOpenDecoder=NO;
     [self.jvcPlaySound closeAudioDecoder];
     self.isAudioListening = self.jvcPlaySound.isOpenDecoder;
 }
@@ -573,7 +589,7 @@ int nChannelIndex ;
  *  关闭音频解码
  */
 -(void)closeVoiceIntercomDecoder{
-    
+    NSLog(@"closeVoiceIntercomDecoder:managerHelper.......");
     self.jvcAudioQueueHelper.jvcAudioQueueHelperDelegate = nil;
     [self.jvcAudioQueueHelper exitPopDataThread];
     self.jvcAudioQueueHelper = nil;

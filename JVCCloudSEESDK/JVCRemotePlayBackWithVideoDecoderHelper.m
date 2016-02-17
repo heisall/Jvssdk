@@ -30,7 +30,7 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
  *
  *  @return 远程回放文件列表信息
  */
--(NSMutableArray *)convertRemoteplaybackSearchFileListInfoByNetworkBuffer:(int)nConnectDevcieType remotePlaybackFileBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize nRemoteChannel:(int)nRemoteChannel{
+-(NSMutableArray *)convertRemoteplaybackSearchFileListInfoByNetworkBuffer:(int)nConnectDevcieType remotePlaybackFileBuffer:(char *)remotePlaybackFileBuffer remotePlaybackFileBufferSize:(int)remotePlaybackFileBufferSize ystGroup:(NSString *) ystGroup nRemoteChannel:(int)nRemoteChannel{
     
     
     NSMutableArray *mArrayRemotePlaybackFileList = [NSMutableArray arrayWithCapacity:10];
@@ -122,20 +122,30 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
         case DEVICEMODEL_IPC:{
             
             int nIndex = 0;
-            
+//            普通IPC
+            int perUnitSize = 10;
+            BOOL isCat = NO;
+            [ystGroup retain];
+            NSLog(@"group %@",ystGroup);
+//            猫眼
+            if ([ystGroup isEqualToString:@"C"]||[ystGroup isEqualToString:@"c"]) {
+                perUnitSize = 12;
+                isCat = YES;
+            }
+            [ystGroup release];
             memset(remotePlaybackCacheBuffer,0,sizeof(remotePlaybackCacheBuffer));
             
-            for (int i = 0; i<=remotePlaybackFileBufferSize-10; i+=10) {
+            for (int i = 0; i<=remotePlaybackFileBufferSize-perUnitSize; i+=perUnitSize) {
                 
                 NSMutableDictionary *mdicAFile = [[NSMutableDictionary alloc] init];
                 
                 memset(acBuff, 0, sizeof(acBuff));
                 
                 remotePlaybackCacheBuffer[nIndex++] = acData[i];//录像所在盘
-                remotePlaybackCacheBuffer[nIndex++] = acData[i+7];//录像类型
+                remotePlaybackCacheBuffer[nIndex++] = acData[i+perUnitSize-3];//录像类型
 
                 
-                sprintf(acBuff,"%c%c",acData[i+8],acData[i+9]);//通道号
+                sprintf(acBuff,"%c%c",acData[i+perUnitSize-2],acData[i+perUnitSize-1]);//通道号
                 
                 NSString *strRemoteChannel = [[NSString alloc] initWithUTF8String:acBuff];
                 [mdicAFile setValue:strRemoteChannel forKey:KJVCYstNetWorkMacroRemotePlayBackChannel];
@@ -149,14 +159,33 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
                 [strRemoteDate release];
                 
                 memset(acBuff, 0, sizeof(acBuff));
-                
                 sprintf(acBuff,"%s%d","disk",(acData[i]-'C')/10+1);//盘符
+                if(isCat){
+                    sprintf(acBuff,"%s","/mnt/misc/");//盘符
+                }
                 NSString *strRemoteDisk = [[NSString alloc] initWithUTF8String:acBuff];
                 [mdicAFile setValue:strRemoteDisk forKey:KJVCYstNetWorkMacroRemotePlayBackDisk];
                 [strRemoteDisk release];
-                
+//                如果是猫眼 dict 将会多两个Key
+                if (isCat) {
+                    
+                    memset(acBuff, 0, sizeof(acBuff));
+                    
+                    sprintf(acBuff,"%c",acData[i+7]);//缩略图
+                    NSString *strCatThumb = [[NSString alloc] initWithUTF8String:acBuff];
+                    [mdicAFile setValue:strCatThumb forKey:KJVCYstNetWorkMacroRemotePlayBackCatImgType];
+                    [strCatThumb release];
+                    
+                    memset(acBuff, 0, sizeof(acBuff));
+                    
+                    sprintf(acBuff,"%c",acData[i+8]);//资源类型
+                    NSString *strCatType = [[NSString alloc] initWithUTF8String:acBuff];
+                    [mdicAFile setValue:strCatType forKey:KJVCYstNetWorkMacroRemotePlayBackCatResType];
+                    [strCatType release];
+                    
+                }
                 //远程回放文件的类型
-                [mdicAFile setValue:[NSString stringWithFormat:@"%c",acData[i+7]] forKey:KJVCYstNetWorkMacroRemotePlayBackType];
+                [mdicAFile setValue:[NSString stringWithFormat:@"%c",acData[i+perUnitSize-3]] forKey:KJVCYstNetWorkMacroRemotePlayBackType];
                 
                 [mArrayRemotePlaybackFileList  addObject:mdicAFile];
                 
@@ -222,11 +251,11 @@ char          remotePlaybackCacheBuffer[64*1024] = {0}; //存放远程回放数�
             
             if (self.isExistStartCode) {
                 
-                sprintf(acBuff, "./rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.mp4",remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2]-'C',year, month, day,remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
+                sprintf(acBuff, "/progs/rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.mp4",remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2]-'C',year, month, day,remotePlaybackCacheBuffer[nRequestPlayBackFileIndex*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
                 
             }else{
                 
-                sprintf(acBuff, "./rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.sv5",remotePlaybackCacheBuffer[2*2]-'C',year, month, day,remotePlaybackCacheBuffer[2*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
+                sprintf(acBuff, "/progs/rec/%02d/%04d%02d%02d/%c%c%c%c%c%c%c%c%c.sv5",remotePlaybackCacheBuffer[2*2]-'C',year, month, day,remotePlaybackCacheBuffer[2*2+1],acChn[0],acChn[1],acTime[0],acTime[1],acTime[3],acTime[4],acTime[6],acTime[7]);
             }
             
         }

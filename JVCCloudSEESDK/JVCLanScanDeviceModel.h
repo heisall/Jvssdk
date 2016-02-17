@@ -26,7 +26,7 @@
 //    BOOL      iNetMod;             //YES：WIFI功能
 //    NSString    *dname;     //设备的昵称
 
-
+    int  timer_count;
 
 }
 
@@ -43,5 +43,5 @@
 @property(nonatomic,assign)BOOL      iCurMod;
 @property(nonatomic,assign)int       iTimeOut;
 @property(nonatomic,retain)NSString *strDeviceName;
-
+@property(nonatomic,assign)int timer_count;
 @end

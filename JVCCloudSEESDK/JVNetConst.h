@@ -443,6 +443,42 @@ typedef struct
 #define EX_FIRMUP_REBOOT	    0xA0
 #define EX_FIRMUP_RESTORE	    0xA1
 
+
+//猫眼相关
+#define RC_EX_DISPLAY	        0x30//获取显示设置信息
+#define EX_DISPLAY_REFRESH	    0x01//获取显示设置信息
+#define EX_DISPLAY_BELLLIGHT	0x02//门铃按键灯常闭开关：0（打开），1（常闭）
+#define EX_DISPLAY_SUSPENDTIME	0x03//休眠时间：15（秒）、60（秒）、120（秒）、180（秒）、-1（秒，一直待机）
+#define EX_DISPLAY_STARTGUIDE	0x04//开机向导：0（关），1（开）
+//packet.nPacketCount
+#define RC_EX_INTELLIGENCE	    0x31//获取智能设置信息
+#define EX_INTELLIGENCE_ALARMTYPE	0x02//报警文件类型：0（图片），1（视频）
+#define EX_INTELLIGENCE_PIR	    0x03//红外感应开关：0（关），1（开）
+#define EX_INTELLIGENCE_GSENSOR	0x04//重力感应开关：0（关），1（开）
+#define EX_INTELLIGENCE_MDETECT	0x05//移动侦测开关：0（关），1（开）
+#define EX_INTELLIGENCE_REFRESH	0x01
+
+//packet.nPacketCount
+#define RC_EX_ABOUTEYE          0x32//关于猫眼
+//extend->nType
+#define EX_ABOUT_REBOOT         0x02////重启设备
+#define EX_ABOUT_FORMAT         0x03//恢复出厂
+#define EX_ABOUT_SHUTDOWN       0x04//关机
+#define EX_ABOUT_REFRESH        0x01//获取猫眼信息
+
+//packet.nPacketCount
+#define RC_EX_ALARMOUT          0x14 //报警信息
+//extend->nType
+#define EX_STORAGE_RESOLUTION   0x10//nStorageResolution	存储分辨率	0：高清（1280x720） 1：标清（960x540） 2：普通（512x288）
+#define EX_STORAGE_RECORDTIME   0x11//nRecordTime	录像时长	3秒、6秒、9秒、12秒
+#define EX_STORAGE_AUTOSWITCH   0x12//bAutoSwitch	自动覆盖开关	0：关 1：开
+
+//extend->nType
+#define EX_ALARMOUT_ALARM_AUDIO 0x10//点击主控播放报警声音
+
+
+
+
 //升级方法
 #define FIRMUP_HTTP			0x00
 #define FIRMUP_FILE			0x01

@@ -154,6 +154,8 @@ long long currentMillisSec() {
  */
 -(void)startPopDataThread {
     
+    NSLog(@"exit %d",bm_exit);
+    
     if (!bm_exit) {
         
         [NSThread detachNewThreadSelector:@selector(popDataCallBack) toTarget:self withObject:nil];
@@ -165,6 +167,9 @@ long long currentMillisSec() {
  */
 -(void)popDataCallBack{
     
+    
+    NSLog(@"queuer start pop video thread");
+
     playThreadExit = TRUE;
     bm_exit = TRUE;
     
@@ -234,7 +239,7 @@ long long currentMillisSec() {
         
         if(need_jump && !frameBuffer->is_i_frame) {
             
-            //             DDLogInfo(@"%s----need_jump queueFrameCount=%d",__FUNCTION__,queueFrameCount);
+//             NSLog(@"%s----need_jump %d queueFrameCount=%d",__FUNCTION__,need_jump,queueFrameCount);
             
         }else {
             
@@ -244,7 +249,7 @@ long long currentMillisSec() {
                 need_jump = false;
             }
             
-            
+//            NSLog(@" jvcQueueHelperDelegate %@",self.jvcQueueHelperDelegate);
             if (self.jvcQueueHelperDelegate !=nil && [self.jvcQueueHelperDelegate respondsToSelector:@selector(popDataCallBack:)]) {
                 
                 decoderStatus = [self.jvcQueueHelperDelegate popDataCallBack:frameBuffer];

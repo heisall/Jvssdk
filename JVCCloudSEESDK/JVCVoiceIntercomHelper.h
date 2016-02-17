@@ -38,6 +38,16 @@
 @property (nonatomic,assign) id<JVCVoiceIntercomHelperDeleage> jvcVoiceIntercomHelperDeleage;
 //@property (nonatomic,assign) JVCNPlayer *audioNPlayer;
 void fetchd(const unsigned char *data, size_t size, uint64_t ts);
+extern JVCVoiceIntercomHelper *helperInstance ;
+
+
+/*
+ nplayer相关函数 */
+-(void)startDNoisePlayer:(BOOL)isAec;
+-(void)pauseAudio;
+-(void)resumeAudio;
+-(void)stopRecord;
+-(void)startRecord;
 
 /**
  *  打开语音对讲的采集模块

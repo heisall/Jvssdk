@@ -18,7 +18,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 
-//static JVCNPlayer *jvcNPlayer = nil;
+static JVCNPlayer *jvcNPlayer = nil;
 
 #define FRAME_SIZE 640
 #define DUMMY_FILE "org.pcm"
@@ -63,8 +63,8 @@ void nplayer_msleep(int millis) {
 
 void shutdown_audio() {
     if (NULL != player) {
-        player->enable_audio(false);
         player->stop_record_audio();
+        player->enable_audio(false);
         
         nplayer_msleep(150);
         
@@ -76,25 +76,25 @@ void shutdown_audio() {
 //    nplayer::NPlayer::deinit();
 }
 //
-///**
-// *  单例
-// *
-// *  @return 对象
-// */
-//+(JVCNPlayer *)shareJVCNPlayer
-//{
-//    @synchronized(self)
-//    {
-//        if (jvcNPlayer == nil) {
-//            
-//            jvcNPlayer = [[self alloc] init];
-//            
-//        }
-//        return jvcNPlayer;
-//    }
-//    
-//    return jvcNPlayer;
-//}
+/**
+ *  单例
+ *
+ *  @return 对象
+ */
++(JVCNPlayer *)shareJVCNPlayer
+{
+    @synchronized(self)
+    {
+        if (jvcNPlayer == nil) {
+            
+            jvcNPlayer = [[self alloc] init];
+            
+        }
+        return jvcNPlayer;
+    }
+    
+    return jvcNPlayer;
+}
 //
 //+ (id)allocWithZone:(struct _NSZone *)zone
 //{
@@ -143,10 +143,12 @@ void shutdown_audio() {
     player->resume();
     player->enable_audio(true);
     player->adjust_track_volume(adjust_volume);
-    LOGI("adjust_track_volume %f version %s\n",adjust_volume,nplayer::NPlayer::version());
+
+    NSLog(@"adjust_track_volume %f version %s\n",adjust_volume,nplayer::NPlayer::version());
 }
 +(void)initCore{
     nplayer::NPlayer::init();
+    NSLog(@"version %s",nplayer::NPlayer::version());
 }
 
 +(void)deinitCore{
@@ -173,7 +175,7 @@ void shutdown_audio() {
            false == player->append_audio_data(audioData, frameSize)) {
        [NSThread sleepForTimeInterval:0.05];
     }
-    
+//    NSLog(@"append audio data");
 //    player->append_audio_data(audioData, frameSize);
 }
 
@@ -184,6 +186,7 @@ void shutdown_audio() {
     }
     player->resume();
     player->enable_audio(true);
+    
 }
 
 -(void)pauseAudio{
@@ -215,7 +218,11 @@ void shutdown_audio() {
 
 -(void)stopPlayer
 {
+    NSLog(@"stopplayer");
     shutdown_audio();
 }
-
+-(void)soundConfig:(const char *)audioData size:(int)frameSize{
+//    NSLog(<#NSString * _Nonnull format, ...#>)
+    nplayer::NPlayer::gen_sound_config(audioData, frameSize);
+}
 @end

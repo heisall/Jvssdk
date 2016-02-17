@@ -76,5 +76,5 @@ enum playSoundType {
  *  @return 0x1014 播放结束
  */
 -(int)checkOpenAlStatus;
-
+-(void)setNil;
 @end

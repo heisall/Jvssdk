@@ -237,6 +237,7 @@ void propListener(	void *                  inClientData,
     
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(receiveAudioDataCallBack:audioDataSize:)]) {
         
+        NSLog(@"receive audio data");
         [self.delegate receiveAudioDataCallBack:audioData audioDataSize:audioDataSize];
     }
 }

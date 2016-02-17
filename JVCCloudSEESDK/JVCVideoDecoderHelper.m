@@ -28,7 +28,8 @@
 @synthesize IsEnableSceneImages;
 @synthesize delegate;
 
-char  captureImageBuffer[1280*720*3] ={0};
+//char  captureImageBuffer[1920*1280*3] ={0};
+char  captureImageBuffer[3000*2000*3] ={0};
 
 -(void)dealloc {
     
@@ -36,7 +37,6 @@ char  captureImageBuffer[1280*720*3] ={0};
     
     free(outVideoFrame);
     outVideoFrame = NULL;
-    
     [super dealloc];
 }
 
@@ -46,7 +46,6 @@ char  captureImageBuffer[1280*720*3] ={0};
     if (self=[super init]) {
         
         pthread_mutex_init(&videoMutex, nil);
-        
         outVideoFrame = malloc(sizeof(DecoderOutVideoFrame));
         memset(outVideoFrame, 0, sizeof(DecoderOutVideoFrame));
     }
@@ -59,7 +58,7 @@ char  captureImageBuffer[1280*720*3] ={0};
  */
 -(void)videoLock
 {
-	pthread_mutex_lock(&videoMutex);
+    pthread_mutex_lock(&videoMutex);
 }
 
 /**
@@ -67,12 +66,11 @@ char  captureImageBuffer[1280*720*3] ={0};
  */
 -(void)VideoUnlock
 {
-	pthread_mutex_unlock(&videoMutex);
+    pthread_mutex_unlock(&videoMutex);
 }
 
 
 #pragma mark 解码器相关的处理模块
-
 /**
  *  打开解码器 包括H264和H265
  *
@@ -103,36 +101,7 @@ char  captureImageBuffer[1280*720*3] ={0};
                 JVD04_DecodeOpen(self.nVideoWidth ,self.nVideoHeight ,nVideoDecodeID);
             }
             
-        }
-    }
-    else {
-        
-        // DDLogError(@"%s---videoDecoder(解码器编号：%d) 打开失败，原因解码器已存在",__FUNCTION__,nVideoDecodeID);
-    }
-}
-
-/**
- *  打开解码器 包括H264和H265
- *
- *  @param nVideoDecodeID 解码器编号(0~15)
- */
--(void)openVideoDecoderForMP4:(int)nVideoDecodeID wVideoCodecID:(int)wVideoCodecID{
-    
-    
-    if (!self.isOpenDecoder) {
-        
-        if (self.nVideoWidth > 0 && self.nVideoHeight > 0) {
-            
-            self.isOpenDecoder   = TRUE;
-            nDecoderID = nVideoDecodeID;
-            if (self.isDecoderModel) {
-                JVD05_DecodeOpen(nVideoDecodeID, wVideoCodecID);
-                
-            }else {
-                
-                JVD04_DecodeOpen(self.nVideoWidth ,self.nVideoHeight ,nVideoDecodeID);
-            }
-            
+            NSLog(@"%s------openDecoder",__FUNCTION__);
         }
     }
     else {
@@ -149,6 +118,9 @@ char  captureImageBuffer[1280*720*3] ={0};
     
     if (self.isOpenDecoder) {
         
+        self.isOpenDecoder = FALSE;
+        self.isWaitIFrame  = FALSE;
+        
         //05版
         if (self.isDecoderModel) {
             
@@ -163,11 +135,11 @@ char  captureImageBuffer[1280*720*3] ={0};
             [self VideoUnlock];
         }
         
-        self.isOpenDecoder = FALSE;
-        self.isWaitIFrame  = FALSE;
+        NSLog(@"%s------closeDecoder",__FUNCTION__);
         
     }else {
         
+        NSLog(@"%s---videoDecoder(解码器编号：%d) 关闭解码器失败，原因解码器不存在",__FUNCTION__,nDecoderID);
     }
 }
 
@@ -192,12 +164,12 @@ char  captureImageBuffer[1280*720*3] ={0};
         if (self.isWaitIFrame) {
             
             if (self.isDecoderModel) {
-                
+                // return  -1;
                 [self videoLock];
                 
-                
                 ndecoderStatus = JVD05_DecodeOneFrame(nDecoderID,videoFrame->nSize,videoFrame->buf,&outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,0,nSystemVersion,0,&outVideoFrame->nWidth,&outVideoFrame->nHeight);
-                
+                //[self VideoUnlock];
+                //                return -1;
                 if (outVideoFrame->nWidth <=0 || outVideoFrame->nHeight <=0) {
                     
                     ndecoderStatus =  -1;
@@ -230,6 +202,7 @@ char  captureImageBuffer[1280*720*3] ={0};
                 outVideoFrame->nHeight = self.nVideoHeight;
                 outVideoFrame->nWidth  = self.nVideoWidth;
                 
+                
                 ndecoderStatus = JVD04_DecodeOneFrame(videoFrame->buf,videoFrame->nSize, &outVideoFrame->decoder_y,&outVideoFrame->decoder_u,&outVideoFrame->decoder_v,nDecoderID,videoFrame->nFrameType,nSystemVersion);
                 
                 if (self.isCaptureImage || self.IsEnableSceneImages) {
@@ -253,7 +226,7 @@ char  captureImageBuffer[1280*720*3] ={0};
             }
         }
         
-        //NSLog(@"%s-------outVideoFrame->nWidth=%d---outVideoFrame->nHeigh=%d",__FUNCTION__,outVideoFrame->nWidth,outVideoFrame->nHeight);
+        //DDLogVerbose(@"%s-------outVideoFrame->nWidth=%d---outVideoFrame->nHeigh=%d",__FUNCTION__,outVideoFrame->nWidth,outVideoFrame->nHeight);
     }else{
         
         NSLog(@"%s----视频解码失败(解码器编号：%d)，原因解码器未打开",__FUNCTION__,nDecoderID);
@@ -263,7 +236,6 @@ char  captureImageBuffer[1280*720*3] ={0};
     
     return ndecoderStatus;
 }
-
 
 /**
  *  等待I帧处理

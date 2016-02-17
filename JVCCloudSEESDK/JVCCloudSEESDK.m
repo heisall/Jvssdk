@@ -2018,17 +2018,46 @@ void TextChatDataCallBack(int nLocalChannel,unsigned char uchType, char *pBuffer
                                 case RC_EXTEND:{
                                     
                                     EXTEND *extend=(EXTEND*)stpacket.acData;
+                                    
+                                    switch(stpacket.nPacketCount) {
+                                            
+                                        case RC_EX_ACCOUNT:{
+                                            
+                                            switch (extend->nType) {
+                                                case EX_ACCOUNT_REFRESH:{
+                                                    
+                                                }
+                                                break;
+                                                case EX_ACCOUNT_MODIFY:
+                                                {
+                                                    if (jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate !=nil && [jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate respondsToSelector:@selector(modifyDeviceInfoSuccessCallBack)]) {
+                                                        [jvcCloudSEENetworkHelper.jvcModifyDeviceDelegate modifyDeviceInfoSuccessCallBack ];
+                                                            }
+                                                    
+                                                }
+                                                    break;
+                                                default:
+                                                {
 
+                                                }
+                                                            break;
+                                            }
+                                        }
+                                        case RC_EX_FIRMUP:{
+                                            NSDictionary *dic = @{@"type":[NSString stringWithFormat:@"%d",extend->nType],@"param1":[NSString stringWithFormat:@"%d",extend->nParam1],@"param2":[NSString stringWithFormat:@"%d",extend->nParam2],@"parma3":[NSString stringWithFormat:@"%d",extend->nParam3]};
+                                            if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate&&[jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdate:)]) {
+                                                [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdate:dic];
+                                            }
+                                        }
+                                            break;
+                                    }
                                     
 //                                    int	nType;
 //                                    int	nParam1;   //存放的包的个数
 //                                    int	nParam2;
 //                                    int	nParam3;
                                     
-                                    NSDictionary *dic = @{@"type":[NSString stringWithFormat:@"%d",extend->nType],@"param1":[NSString stringWithFormat:@"%d",extend->nParam1],@"param2":[NSString stringWithFormat:@"%d",extend->nParam2],@"parma3":[NSString stringWithFormat:@"%d",extend->nParam3]};
-                                    if (jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate&&[jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate respondsToSelector:@selector(JVCCloudSEEIPCUpdate:)]) {
-                                        [jvcCloudSEENetworkHelper.jvcCloudSEEIPCUpdateDelegate JVCCloudSEEIPCUpdate:dic];
-                                    }
+
 
                                     /*
                                     switch (extend->nType) {
